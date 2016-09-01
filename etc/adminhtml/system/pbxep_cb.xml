@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="pbxep_cb" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <attribute type="expanded">1</attribute>
+        <label>Pay by Bank Card</label>
+
+        <field id="active" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Enable</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <config_path>payment/pbxep_cb/active</config_path>
+        </field>
+        <field id="cctypes" translate="label comment" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Card type</label>
+            <comment><![CDATA[If you disable E-Carte Bleu, contact the Paybox support]]></comment>
+            <config_path>payment/pbxep_cb/cctypes</config_path>
+            <source_model>Paybox\Epayment\Model\Admin\Cards\Cb</source_model>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="title" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Title</label>
+            <config_path>payment/pbxep_cb/title</config_path>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="sort_order" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Sort Order</label>
+            <config_path>payment/pbxep_cb/sort_order</config_path>
+            <frontend_class>validate-number</frontend_class>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="payment_action" translate="label comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Debit type</label>
+            <source_model>Paybox\Epayment\Model\Admin\Payment\Action</source_model>
+            <config_path>payment/pbxep_cb/action</config_path>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="delay" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Delay</label>
+            <config_path>payment/pbxep_cb/delay</config_path>
+            <source_model>Paybox\Epayment\Model\Admin\Payment\Delays</source_model>
+            <depends>
+                <field id="payment_action">deferred</field>
+                <field id="active">1</field>
+            </depends>
+        </field>
+
+        <group id="pbxep_cb_status" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
+            <attribute type="expanded">0</attribute>
+            <label>Payment status</label>
+            <depends>
+                <field id="pbxep_payments/pbxep_cb/active">1</field>
+            </depends>
+            <field id="status_mode" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Mode</label>
+                <config_path>payment/pbxep_cb/status_mode</config_path>
+                <source_model>Paybox\Epayment\Model\Admin\Order\Status\Mode</source_model>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                    <field id="pbxep_payments/pbxep_cb/payment_action">manual</field>
+                </depends>
+            </field>
+            <field id="status_authorized" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Once authorized</label>
+                <config_path>payment/pbxep_cb/status_authorized</config_path>
+                <source_model>Paybox\Epayment\Model\Admin\Order\Status\Pendingpayment</source_model>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                    <field id="pbxep_payments/pbxep_cb/payment_action">manual</field>
+                </depends>
+            </field>
+            <field id="status_paid" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Once paid</label>
+                <config_path>payment/pbxep_cb/status_paid</config_path>
+                <source_model>Paybox\Epayment\Model\Admin\Order\Status\Processing</source_model>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                </depends>
+            </field>
+            <field id="status_auto_capture" translate="label comment" type="select" sortOrder="112" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Automatic capture status</label>
+                <config_path>payment/pbxep_cb/status_auto_capture</config_path>
+                <source_model>Paybox\Epayment\Model\Admin\Order\Status\Autocapture</source_model>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                    <field id="pbxep_payments/pbxep_cb/payment_action">manual</field>
+                    <field id="status_mode">manual</field>
+                </depends>
+            </field>
+            <field id="status_auto_capture_mode" translate="label comment" type="select" sortOrder="112" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Automatic capture status mode</label>
+                <config_path>payment/pbxep_cb/status_auto_capture_mode</config_path>
+                <source_model>Paybox\Epayment\Model\Admin\Order\Status\Status</source_model>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                    <field id="pbxep_payments/pbxep_cb/payment_action">manual</field>
+                    <field id="status_mode">state</field>
+                </depends>
+            </field>
+        </group>
+        <group id="pbxep_cb_conditions" translate="label" showInDefault="1" showInWebsite="1" sortOrder="20">
+            <label>Conditions</label>
+            <depends>
+                <field id="pbxep_payments/pbxep_cb/active">1</field>
+            </depends>
+            <field id="allowspecific" translate="label comment" type="select" sortOrder="210" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Payment from Applicable Countries</label>
+                <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                <config_path>payment/pbxep_cb/allowspecific</config_path>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                </depends>
+            </field>
+            <field id="specificcountry" translate="label comment" type="multiselect" sortOrder="220" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Payment from Specific Countries</label>
+                <source_model>Magento\Paypal\Model\System\Config\Source\BuyerCountry</source_model>
+                <config_path>payment/pbxep_cb/specificcountry</config_path>
+                <depends>
+                    <field id="allowspecific">1</field>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                </depends>
+            </field>
+            <field id="min_order_total" translate="label comment" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Minimum Order Total</label>
+                <config_path>payment/pbxep_cb/min_order_total</config_path>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                </depends>
+            </field>
+            <field id="max_order_total" translate="label comment" type="text" sortOrder="240" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Maximum Order Total</label>
+                <config_path>payment/pbxep_cb/max_order_total</config_path>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                </depends>
+            </field>
+        </group>
+        <group id="pbxep_cb_tds" translate="label" showInDefault="1" showInWebsite="1" sortOrder="30">
+            <label>3-D Secure</label>
+            <depends>
+                <field id="pbxep_payments/pbxep_cb/active">1</field>
+            </depends>
+            <field id="tds_info" translate="label comment" sortOrder="305" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label><![CDATA[Make sure that the contract signed with your bank allows 3-D Secure before proceeding with setup.]]></label>
+                <frontend_model>Paybox\Epayment\Block\Admin\Field\Info</frontend_model>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                </depends>
+            </field>
+            <field id="tds_active" translate="label comment" type="select" sortOrder="310" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Enable 3-D Secure</label>
+                <comment><![CDATA[<span style="color: red;">Warning: your bank may enforce 3-D Secure.<br/>Make sure your setup is coherent with your bank, Paybox and Magento module.</span>]]></comment>
+                <source_model>Paybox\Epayment\Model\Admin\Payment\Use3ds</source_model>
+                <config_path>payment/pbxep_cb/tds_active</config_path>
+                <depends>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                </depends>
+            </field>
+            <field id="tds_min_order_total" translate="label comment" type="text" sortOrder="330" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Minimum Order Amount</label>
+                <config_path>payment/pbxep_cb/tds_min_order_total</config_path>
+                <depends>
+                    <field id="tds_active">condition</field>
+                    <field id="pbxep_payments/pbxep_cb/active">1</field>
+                </depends>
+            </field>
+        </group>
+    </group>
+</include>

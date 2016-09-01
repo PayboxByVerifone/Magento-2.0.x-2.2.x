@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Adminhtml::admin">
+                <resource id="Paybox_Epayment::paybox" title="Index" sortOrder="20">
+                    <resource id="Paybox_Epayment::paybox_capture" title="Invoice" sortOrder="10">
+                        <resource id="Paybox_Epayment::paybox_capture_test" title="Test" sortOrder="10">
+                        </resource>
+                        <resource id="Paybox_Epayment::paybox_partial" title="InvoicePartial" sortOrder="10">
+                            <resource id="Paybox_Epayment::paybox_partial_test" title="TestPartial" sortOrder="10">
+                            </resource>
+                        </resource>
+                    </resource>
+                </resource>
+                <!-- below part of our system configuration settings -->
+            </resource>
+        </resources>
+    </acl>
+</config>

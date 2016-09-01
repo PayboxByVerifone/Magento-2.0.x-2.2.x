@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+	<group id="pbxep_private" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+	    <attribute type="expanded">0</attribute>
+    	<label>Pay by Private Card</label>
+        <field id="pv_active" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>Enable</label>
+            <config_path>payment/pbxep_private/active</config_path>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="cctypes" translate="label comment" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Card type</label>
+            <config_path>payment/pbxep_private/cctypes</config_path>
+            <source_model>Paybox\Epayment\Model\Admin\Cards\PrivateCard</source_model>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="pv_title" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>Title</label>
+            <config_path>payment/pbxep_private/title</config_path>
+        	<depends>
+                <field id="pv_active">1</field>
+            </depends>
+        </field>
+        <field id="pv_sort_order" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>Sort Order</label>
+            <config_path>payment/pbxep_private/sort_order</config_path>
+            <frontend_class>validate-number</frontend_class>
+        	<depends>
+                <field id="pv_active">1</field>
+            </depends>
+        </field>
+        <field id="pv_action" translate="label comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>Debit type</label>
+            <config_path>payment/pbxep_private/action</config_path>
+            <source_model>Paybox\Epayment\Model\Admin\Payment\Action</source_model>
+            <!-- <frontend_model>pbxep/admin_field_select</frontend_model> -->
+        	<depends>
+                <field id="pv_active">1</field>
+            </depends>
+        </field>
+        <field id="pv_delay" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>Delay</label>
+            <config_path>payment/pbxep_private/delay</config_path>
+            <source_model>Paybox\Epayment\Model\Admin\Payment\Delays</source_model>
+        	<depends>
+                <field id="pv_active">1</field>
+                <field id="pv_action">deferred</field>
+            </depends>
+        </field>
+
+        <group id="pbxep_private_status" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <attribute type="expanded">0</attribute>
+        	<label>Payment status</label>
+        	<depends>
+                <field id="pbxep_payments/pbxep_private/pv_active">1</field>
+            </depends>
+	        <field id="pv_status_authorized" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+	        	<label>Once authorized</label>
+	            <config_path>payment/pbxep_private/status_authorized</config_path>
+	            <source_model>Paybox\Epayment\Model\Admin\Order\Status\Pendingpayment</source_model>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_private/pv_active">1</field>
+	                <field id="pbxep_payments/pbxep_private/pv_action">manual</field>
+	            </depends>
+	        </field>
+	        <field id="pv_status_paid" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+	        	<label>Once paid</label>
+	            <config_path>payment/pbxep_private/status_paid</config_path>
+	            <source_model>Paybox\Epayment\Model\Admin\Order\Status\Processing</source_model>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_private/pv_active">1</field>
+	            </depends>
+	        </field>
+	        <field id="pv_status_auto_capture" translate="label comment" type="select" sortOrder="112" showInDefault="1" showInWebsite="1" showInStore="0">
+	        	<label>Automatic capture status</label>
+	            <config_path>payment/pbxep_private/status_auto_capture</config_path>
+	            <source_model>Paybox\Epayment\Model\Admin\Order\Status\Autocapture</source_model>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_private/pv_active">1</field>
+	                <field id="pbxep_payments/pbxep_private/pv_action">manual</field>
+	            </depends>
+	        </field>
+	    </group>
+
+        <group id="pbxep_private_conditions" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <attribute type="expanded">0</attribute>
+        	<label>Conditions</label>
+        	<depends>
+                <field id="pbxep_payments/pbxep_private/pv_active">1</field>
+            </depends>
+
+	        <field id="pv_allowspecific" translate="label comment" type="select" sortOrder="210" showInDefault="1" showInWebsite="1" showInStore="1">
+	        	<label>Payment from Applicable Countries</label>
+	            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_private/pv_active">1</field>
+	            </depends>
+	        </field>
+	        <field id="pv_specificcountry" translate="label comment" type="multiselect" sortOrder="220" showInDefault="1" showInWebsite="1" showInStore="1">
+	        	<label>Payment from Specific Countries</label>
+	            <config_path>payment/pbxep_private/specificcountry</config_path>
+	            <source_model>Magento\Paypal\Model\System\Config\Source\BuyerCountry</source_model>
+	        	<depends>
+	                <field id="pv_allowspecific">1</field>
+	                <field id="pbxep_payments/pbxep_private/pv_active">1</field>
+	            </depends>
+	        </field>
+	        <field id="pv_min_order_total" translate="label comment" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="1">
+	        	<label>Minimum Order Total</label>
+	            <config_path>payment/pbxep_private/min_order_total</config_path>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_private/pv_active">1</field>
+	            </depends>
+	        </field>
+	        <field id="pv_max_order_total" translate="label comment" type="text" sortOrder="240" showInDefault="1" showInWebsite="1" showInStore="1">
+	        	<label>Maximum Order Total</label>
+				<config_path>payment/pbxep_private/max_order_total</config_path>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_private/pv_active">1</field>
+	            </depends>
+	        </field>
+	    </group>
+    </group>
+</include>

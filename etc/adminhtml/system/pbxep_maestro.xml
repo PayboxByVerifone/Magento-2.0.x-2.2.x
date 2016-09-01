@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="pbxep_maestro" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+        <attribute type="expanded">0</attribute>
+        <label>Pay by Maestro</label>
+
+        <field id="maestro_active" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Enable</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <config_path>payment/pbxep_maestro/active</config_path>
+        </field>
+        <field id="maestro_title" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>Title</label>
+        	<config_path>payment/pbxep_maestro/title</config_path>
+        	<depends>
+                <field id="maestro_active">1</field>
+            </depends>
+        </field>
+        <field id="maestro_sort_order" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>Sort Order</label>
+        	<config_path>payment/pbxep_maestro/sort_order</config_path>
+        	<frontend_class>validate-number</frontend_class>
+        	<depends>
+                <field id="maestro_active">1</field>
+            </depends>
+        </field>
+        <field id="maestro_payment_action" translate="label comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>Debit type</label>
+        	<source_model>Paybox\Epayment\Model\Admin\Payment\Action</source_model>
+        	<config_path>payment/pbxep_maestro/action</config_path>
+        	<depends>
+                <field id="maestro_active">1</field>
+            </depends>
+        </field>
+        <field id="maestro_delay" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>Delay</label>
+        	<config_path>payment/pbxep_maestro/delay</config_path>
+        	<source_model>Paybox\Epayment\Model\Admin\Payment\Delays</source_model>
+        	<depends>
+                <field id="maestro_payment_action">deferred</field>
+                <field id="maestro_active">1</field>
+            </depends>
+        </field>
+
+        <group id="pbxep_maestro_status" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
+            <attribute type="expanded">0</attribute>
+        	<label>Payment status</label>
+        	<depends>
+                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+            </depends>
+	        <field id="maestro_status_authorized" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+	        	<label>Once authorized</label>
+	        	<config_path>payment/pbxep_maestro/status_authorized</config_path>
+	        	<source_model>Paybox\Epayment\Model\Admin\Order\Status\Pendingpayment</source_model>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_payment_action">manual</field>
+	            </depends>
+	        </field>
+	        <field id="maestro_status_paid" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+	        	<label>Once paid</label>
+	        	<config_path>payment/pbxep_maestro/status_paid</config_path>
+	        	<source_model>Paybox\Epayment\Model\Admin\Order\Status\Processing</source_model>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+	            </depends>
+	        </field>
+	        <field id="maestro_status_auto_capture" translate="label comment" type="select" sortOrder="112" showInDefault="1" showInWebsite="1" showInStore="0">
+	        	<label>Automatic capture status</label>
+	        	<config_path>payment/pbxep_maestro/status_auto_capture</config_path>
+	        	<source_model>Paybox\Epayment\Model\Admin\Order\Status\Autocapture</source_model>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_payment_action">manual</field>
+	            </depends>
+	        </field>
+	    </group>
+	    <group id="pbxep_maestro_conditions" translate="label" showInDefault="1" showInWebsite="1" sortOrder="20">
+        	<label>Conditions</label>
+        	<depends>
+                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+            </depends>
+	        <field id="maestro_allowspecific" translate="label comment" type="select" sortOrder="210" showInDefault="1" showInWebsite="1" showInStore="1">
+	        	<label>Payment from Applicable Countries</label>
+	        	<source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+	        	<config_path>payment/pbxep_maestro/allowspecific</config_path>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+	            </depends>
+	        </field>
+	        <field id="maestro_specificcountry" translate="label comment" type="multiselect" sortOrder="220" showInDefault="1" showInWebsite="1" showInStore="1">
+	        	<label>Payment from Specific Countries</label>
+	        	<source_model>Magento\Paypal\Model\System\Config\Source\BuyerCountry</source_model>
+	        	<config_path>payment/pbxep_maestro/specificcountry</config_path>
+	        	<depends>
+	                <field id="maestro_allowspecific">1</field>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+	            </depends>
+	        </field>
+	        <field id="maestro_min_order_total" translate="label comment" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="1">
+	        	<label>Minimum Order Total</label>
+	        	<config_path>payment/pbxep_maestro/min_order_total</config_path>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+	            </depends>
+	        </field>
+	        <field id="maestro_max_order_total" translate="label comment" type="text" sortOrder="240" showInDefault="1" showInWebsite="1" showInStore="1">
+	        	<label>Maximum Order Total</label>
+	            <config_path>payment/pbxep_maestro/max_order_total</config_path>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+	            </depends>
+	        </field>
+	    </group>
+	    <group id="pbxep_maestro_tds" translate="label" showInDefault="1" showInWebsite="1" sortOrder="30">
+        	<label>3-D Secure</label>
+        	<depends>
+                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+            </depends>
+	        <field id="maestro_tds_info" translate="label comment" sortOrder="305" showInDefault="1" showInWebsite="1" showInStore="1">
+	        	<label><![CDATA[3-D Secure is mandatory for this payment method.]]></label>
+	            <frontend_model>Paybox\Epayment\Block\Admin\Field\Info</frontend_model>
+	        	<depends>
+	                <field id="pbxep_payments/pbxep_maestro/maestro_active">1</field>
+	            </depends>
+	        </field>
+	    </group>
+    </group>
+</include>

@@ -1,0 +1,132 @@
+    <!-- Payment Method Facade configuration -->
+    <virtualType name="PbxepthreetimeFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">\Paybox\Epayment\Model\Ui\PbxepthreetimeConfigProvider::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">Paybox\Epayment\Block\Checkout\Payment</argument>
+            <argument name="infoBlockType" xsi:type="string">Paybox\Epayment\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">PbxepthreetimeValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">PbxepthreetimeCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Configuration reader -->
+    <virtualType name="PbxepthreetimeConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">\Paybox\Epayment\Model\Ui\PbxepthreetimeConfigProvider::CODE</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Logger, initialized with PbxepthreetimeConfig -->
+    <virtualType name="PbxepthreetimeLogger" type="Magento\Payment\Model\Method\Logger">
+        <arguments>
+            <argument name="config" xsi:type="object">PbxepthreetimeConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Paybox\Epayment\Gateway\Http\Client\ClientMock">
+        <arguments>
+            <argument name="logger" xsi:type="object">PbxepthreetimeLogger</argument>
+        </arguments>
+    </type>
+
+    <!-- Commands infrastructure -->
+    <virtualType name="PbxepthreetimeCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">PbxepthreetimeAuthorizeCommand</item>
+                <item name="capture" xsi:type="string">PbxepthreetimeCaptureCommand</item>
+                <item name="void" xsi:type="string">PbxepthreetimeVoidCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Authorize command -->
+    <virtualType name="PbxepthreetimeAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">PbxepthreetimeAuthorizationRequest</argument>
+            <argument name="handler" xsi:type="object">PbxepthreetimeResponseHandlerComposite</argument>
+            <argument name="transferFactory" xsi:type="object">Paybox\Epayment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Paybox\Epayment\Gateway\Http\Client\ClientMock</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Authorization Request -->
+    <virtualType name="PbxepthreetimeAuthorizationRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="transaction" xsi:type="string">Paybox\Epayment\Gateway\Request\AuthorizationRequest</item>
+                <item name="mockData" xsi:type="string">Paybox\Epayment\Gateway\Request\MockDataRequest</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Paybox\Epayment\Gateway\Request\AuthorizationRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">PbxepthreetimeConfig</argument>
+        </arguments>
+    </type>
+
+    <!-- Capture command -->
+    <virtualType name="PbxepthreetimeCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Paybox\Epayment\Gateway\Request\CaptureRequest</argument>
+            <argument name="handler" xsi:type="object">Paybox\Epayment\Gateway\Response\TxnIdHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Paybox\Epayment\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">Paybox\Epayment\Gateway\Validator\ResponseCodeValidator</argument>
+            <argument name="client" xsi:type="object">Paybox\Epayment\Gateway\Http\Client\ClientMock</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Capture Request -->
+    <type name="Paybox\Epayment\Gateway\Request\CaptureRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">PbxepthreetimeConfig</argument>
+        </arguments>
+    </type>
+
+    <!-- Void command -->
+    <virtualType name="PbxepthreetimeVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Paybox\Epayment\Gateway\Request\VoidRequest</argument>
+            <argument name="handler" xsi:type="object">Paybox\Epayment\Gateway\Response\TxnIdHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Paybox\Epayment\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">Paybox\Epayment\Gateway\Validator\ResponseCodeValidator</argument>
+            <argument name="client" xsi:type="object">Paybox\Epayment\Gateway\Http\Client\ClientMock</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Void Request -->
+    <type name="Paybox\Epayment\Gateway\Request\VoidRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">PbxepthreetimeConfig</argument>
+        </arguments>
+    </type>
+
+    <!-- Response handlers -->
+    <virtualType name="PbxepthreetimeResponseHandlerComposite" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="txnid" xsi:type="string">Paybox\Epayment\Gateway\Response\TxnIdHandler</item>
+                <item name="fraud" xsi:type="string">Paybox\Epayment\Gateway\Response\FraudHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Value handlers infrastructure -->
+    <virtualType name="PbxepthreetimeValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">PbxepthreetimeConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PbxepthreetimeConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">PbxepthreetimeConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Paybox\Epayment\Block\Info">
+        <arguments>
+            <argument name="config" xsi:type="object">PbxepthreetimeConfig</argument>
+        </arguments>
+    </type>

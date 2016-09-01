@@ -1,0 +1,118 @@
+<?php
+/**
+ * Paybox Epayment module for Magento
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * available at : http://opensource.org/licenses/osl-3.0.php
+ *
+ * @package    Paybox_Epayment
+ * @copyright  Copyright (c) 2013-2014 Paybox
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+/**
+ * @see Mage_Payment_Block_Info
+ */
+$requestOb = $this->getObjectManager()->get('Magento\Framework\App\Request\Http'); 
+$controllerName = $requestOb->getControllerName();
+$method = $this->getMethod();
+$data = $this->getPayboxData();
+$debitType = $this->getDebitTypeLabel();
+$threeTime = $this->getThreeTimeLabels();
+?>
+<?php echo $method->getTitle(); ?>
+<?php if ($this->isAuthorized()): ?>
+<table>
+    <tr>
+        <td><?php echo __('Transaction number'); ?></td>
+        <td><?php echo $this->escapeHtml($data['transaction']); ?></td>
+    </tr>
+    <tr>
+        <td><?php echo __('Paybox Back Office Reference'); ?></td>
+        <td><?php echo $this->escapeHtml($data['reference']); ?></td>
+    </tr>
+    <tr>
+        <td><?php echo __('Payment method'); ?></td>
+        <td><img alt="<?php echo $this->escapeHtml($this->getCardImageLabel()); ?>" src="<?php echo $this->escapeHtml($this->getCardImageUrl()); ?>"/></td>
+    </tr>
+<?php if (isset($data['ip'])): ?>
+    <tr>
+        <td><?php echo __('Country of IP'); ?></td>
+        <td><?php echo $this->escapeHtml($data['ip']); ?></td>
+    </tr>
+<?php endif; ?>
+    <tr>
+        <td><?php echo __('Processing date'); ?></td>
+        <td><?php echo $this->escapeHtml(preg_replace('/^([0-9]{2})([0-9]{2})([0-9]{4})$/', '$1/$2/$3', $data['date'])); ?></td>
+    </tr>
+<?php if (!is_null($debitType)): ?>
+    <tr>
+        <td><?php echo __('Debit type'); ?></td>
+        <td><?php echo $this->escapeHtml($debitType); ?></td>
+    </tr>
+<?php endif; ?>
+<?php if (!is_null($threeTime)): ?>
+    <tr>
+        <td><?php echo __('First debit'); ?></td>
+        <td><?php echo $this->escapeHtml($threeTime['first']); ?></td>
+    </tr>
+    <tr>
+        <td><?php echo __('Second debit'); ?></td>
+        <td><?php echo $this->escapeHtml($threeTime['second']); ?></td>
+    </tr>
+    <tr>
+        <td><?php echo __('Third debit'); ?></td>
+        <td><?php echo $this->escapeHtml($threeTime['third']); ?></td>
+    </tr>
+<?php endif; ?>
+<?php if (isset($data['country'])): ?>
+    <tr>
+        <td><?php echo __('Card country'); ?></td>
+        <td><?php echo $this->escapeHtml($data['country']); ?></td>
+    </tr>
+<?php endif; ?>
+<?php if (isset($data['firstNumbers']) && isset($data['lastNumbers'])): ?>
+    <tr>
+        <td><?php echo __('Card numbers'); ?></td>
+        <td><?php echo $this->escapeHtml($data['firstNumbers'].'...'.$data['lastNumbers']); ?></td>
+    </tr>
+<?php endif; ?>
+<?php if (isset($data['validity'])): ?>
+    <tr>
+        <td><?php echo __('Validity date'); ?></td>
+        <td><?php echo $this->escapeHtml(preg_replace('/^([0-9]{2})([0-9]{2})$/', '$2/$1', $data['validity']));?></td>
+    </tr>
+<?php endif; ?>
+<?php if (isset($data['3dsWarranty'])): ?>    <tr>
+        <td><?php echo __('3-D Secure Warranty'); ?></td>
+        <td><?php echo ($data['3dsWarranty'] == 'O' ? __('Yes') : __('No'));?></td>
+    </tr>
+<?php endif; ?>
+	</table>
+
+<?php if (($controllerName == 'order') && $this->canCapture()): ?>
+<button type="button" class="scalable" title="<?php __('Total Debit'); ?>" id="invoicetotal" onclick="setLocation('<?php echo $this->escapeHtml($this->getCaptureUrl()); ?>')">
+    <span>
+        <span><?php echo __('Total Debit'); ?></span>
+    </span>
+</button>
+<!--<button type="button" title="<?php echo __('Partial debit'); ?>" class="scalable" onclick="setLocation('<?php echo $this->escapeHtml($this->getPartialCaptureUrl()); ?>')">
+    <span>
+        <span><?php echo __('Partial debit'); ?></span>
+    </span>
+</button>-->
+<?php endif; ?>
+<?php
+if (($controllerName == 'order') && $this->canRefund()):
+    $url = $this->getRefundUrl();
+    if (!is_null($url)):
+?>
+<button type="button" class="scalable" title="<?php echo __('Refund'); ?>" id="invoicetotal" onclick="setLocation('<?php echo $this->escapeHtml($url); ?>')">
+    <span>
+        <span><?php echo __('Refund'); ?></span>
+    </span>
+</button>
+<?php endif; ?>
+<?php endif; ?>
+<?php endif; ?>
+<?php echo $this->getChildHtml()?>

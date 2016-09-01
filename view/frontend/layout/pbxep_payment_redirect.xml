@@ -1,0 +1,7 @@
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Paybox\Epayment\Block\Redirect" name="pbxep_redirect" template="payment/redirect.phtml" />
+        </referenceContainer>
+    </body>
+</page>

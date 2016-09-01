@@ -1,0 +1,65 @@
+<?php
+/**
+ * Paybox Epayment module for Magento
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * available at : http://opensource.org/licenses/osl-3.0.php
+ *
+ * @package    Paybox_Epayment
+ * @copyright  Copyright (c) 2013-2014 Paybox
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+$cards = $this->getCreditCards();
+$current = $this->getInfoData('cc_type');
+$hasCctypes = $this->getMethod()->getHasCctypes();
+$methodCode = $this->getMethod()->getCode();
+?>
+<ul class="form-list pbxep-payment-detail"
+	id="payment_form_<?php echo $this->getMethodCode(); ?>"
+	style="display: none">
+	<li>
+		<?php
+		// No card selection
+		if (!$hasCctypes):
+		?>
+		<p><?php echo $this->__('After confirmation of your order you will be redirected to the payment page.'); ?></p>
+		<?php
+
+		// Card selection but only one card allowed
+		elseif (count($cards) == 1):
+		?>
+		<p><?php echo $this->__('After confirmation of your order you will be redirected to the payment page.'); ?></p>
+		<?php
+		foreach($cards as $code => $card):
+				$id = $this->htmlEscape('cc_type_'.$methodCode.'_'.preg_replace('#[^a-zA-Z0-9]#', '', strtolower($code)));
+				$value = $this->htmlEscape($code);
+		?>
+		<input type="hidden" name="payment[cc_type]" value="<?php echo $value; ?>" id="<?php echo $id; ?>"/>
+		<?php endforeach; ?>
+		<?php
+
+		// Otherwise
+		else:
+		?>
+		<p><?php echo $this->__('Click to your card\'s logo, after confirmation of your order you will be redirected to the payment page.'); ?></p>
+		<div class="pbxep-payment-cards">
+			<?php
+			foreach($cards as $code => $card):
+				$label = $this->__($card['label']);
+				$image = $this->getSkinUrl($card['image']);
+				$id = $this->htmlEscape('cc_type_'.$methodCode.'_'.preg_replace('#[^a-zA-Z0-9]#', '', strtolower($code)));
+				$selected = ($current == $code ? ' selected="selected"' : '');
+				$value = $this->htmlEscape($code);
+			?>
+			<span class="pbxep-payment-card">
+				<label for="<?php echo $id; ?>">
+					<img src="<?php echo $image; ?>" alt="<?php echo $label; ?>" title="<?php echo $label; ?>" />
+				</label>
+				<input type="radio" name="payment[cc_type]" value="<?php echo $value; ?>" id="<?php echo $id; ?>"<?php echo $selected; ?> />
+			</span>
+			<?php endforeach; ?>
+		</div>
+		<?php endif; ?>
+	</li>
+</ul>

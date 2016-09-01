@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+<!--        <add id="Paybox_Epayment::paybox" title="Paybox" module="Paybox_Epayment" sortOrder="15" dependsOnModule="Paybox_Epayment" resource="Paybox_Epayment::paybox"/>
+        <add id="Paybox_Epayment::paybox_capture" title="Capture" module="Paybox_Epayment" sortOrder="10" parent="Paybox_Epayment::paybox" resource="Paybox_Epayment::paybox" />
+        <add id="Paybox_Epayment::paybox_capture_test" title="Test" module="Paybox_Epayment" sortOrder="10" parent="Paybox_Epayment::paybox_capture" action="paybox/capture" resource="Paybox_Epayment::paybox_capture_test"/>-->
+    </menu>
+</config>

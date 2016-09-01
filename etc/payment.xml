@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Pay.nl All rights reserved.
+ */
+-->
+<payment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
+    <credit_cards>
+        <type id="CB" order="60">
+            <label>CB</label>
+        </type>
+        <type id="VISA" order="61">
+            <label>Visa</label>
+        </type>
+        <type id="EUROCARD_MASTERCARD" order="62">
+            <label>Mastercard</label>
+        </type>
+        <type id="E_CARD" order="63">
+            <label>E-Carte Bleue</label>
+        </type>
+    </credit_cards>
+    <groups>
+        <group id="pbxep">
+            <label>pbxep</label>
+        </group>
+    </groups>
+    <methods>
+        <method name="pbxep_cb">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="pbxep_threetime">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="pbxep_prepaid">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="pbxep_paypal">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="pbxep_paybuttons">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="pbxep_bcmc">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="pbxep_maestro">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="pbxep_financial">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="pbxep_private">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+    </methods>
+</payment>
