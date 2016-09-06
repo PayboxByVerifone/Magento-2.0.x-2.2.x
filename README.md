@@ -2,12 +2,11 @@
 
 Extension Magento2 pour la solution de paiement Paybox by Verifone
 
-## About
+## A propos
 
 En une seule intégration, offrez plusieurs méthodes de paiement, bénéficiez d'une page de paiement personalisée et sécurisée, multi-langues et multi-devises et offrez le paiement à la livraison ou en 3 fois sans frais pour vos clients.
 
-Install
-=======
+## Installation
 
 1. Aller dans le dossier racine de Magento2
 
