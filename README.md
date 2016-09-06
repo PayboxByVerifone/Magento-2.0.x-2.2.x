@@ -1,11 +1,29 @@
 # Paybox by Verifone - Magento2
 
+Extension Magento2 pour la solution de paiement Paybox by Verifone
+
 ## About
 
 En une seule intégration, offrez plusieurs méthodes de paiement, bénéficiez d'une page de paiement personalisée et sécurisée, multi-langues et multi-devises et offrez le paiement à la livraison ou en 3 fois sans frais pour vos clients.
 
-### Requirements
+Install
+=======
 
-Le paramétrage par défaut correpond à l'environnement de test Paybox by Verifone où tous les modes de paiment sont activés et où toutes les cartes sont disponibles, aucun paiement réel ne sera effectué
+1. Aller dans le dossier racine de Magento2
 
-Pour utiliser le module en réel en environnement de production, vous devez avoir souscrit un contrat auprès de Paybox by Verifone, disposer de vos identifiants, configurer les options, moyens de paiement et cartes en fonction de votre contrat.
+2. Exécuter la commande suivante pour la récupération du module (vous aurez besoin de vos identifiants Magento2):
+
+    ```bash    
+	composer require paybox/epayment:dev-master
+    ```
+   Attendre que les dépendances soient mises à jour
+
+3. Exécuter les commandes suivante pour l'installation du module :
+
+    ```bash
+    php bin/magento setup:upgrade
+    php bin/magento cache:clean
+    php bin/magento  setup:static-content:deploy isocode (ex: php bin/magento  setup:static-content:deploy fr_FR)
+    ```
+
+4. Vous pouvez configurer le module via le menu Boutiques \ Configuration \ Paybox
