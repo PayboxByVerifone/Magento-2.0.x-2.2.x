@@ -18,12 +18,12 @@ Install
     ```
    Attendre que les dépendances soient mises à jour
 
-3. Exécuter les commandes suivante pour l'installation du module :
+3. Exécuter les commandes suivantes pour l'installation et l'activation du module :
 
     ```bash
     php bin/magento setup:upgrade
     php bin/magento cache:clean
-    php bin/magento  setup:static-content:deploy isocode (ex: php bin/magento  setup:static-content:deploy fr_FR)
+    php bin/magento setup:static-content:deploy isocode (ex: php bin/magento  setup:static-content:deploy fr_FR)
     ```
 
 4. Vous pouvez configurer le module via le menu Boutiques \ Configuration \ Paybox
