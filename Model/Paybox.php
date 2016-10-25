@@ -444,6 +444,12 @@ class Paybox {
             $values['PBX_REFUSE'] .= $s;
             $values['PBX_REPONDRE_A'] .= $s;
         }
+        
+        //PBX Version
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $productMetadata = $objectManager->get('Magento\Framework\App\ProductMetadataInterface');
+        $moduleInfo = $this->_objectManager->get('Magento\Framework\Module\ModuleList')->getOne('Paybox_Epayment');
+        $values['PBX_VERSION'] = 'Magento_' . $productMetadata->getVersion() . '-' . 'paybox' . '_' . $moduleInfo['setup_version'];
 
         // Sort parameters for simpler debug
         ksort($values);
