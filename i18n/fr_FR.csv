@@ -24,7 +24,7 @@
 "Specific Countries","Certains pays"
 "All Allowed Countries","Tous les pays autorisés"
 "3-D Secure Card validation","Validation de carte 3-D Secure"
-"<span style=""color: red;"">Warning: your bank may enforce 3-D Secure.<br/>Make sure your setup is coherent with your bank, Paybox and Magento module.</span>","<span style=""color: red;"">Attention : votre banque peut vous imposer 3-D Secure.<br/>Assurez-vous que le paramétrage est cohérent entre votre Banque, Paybox et le module Magento.</span>"
+"<span style=""color: red;"">Warning: your bank may enforce 3-D Secure.<br/>Make sure your setup is coherent with your bank, Paybox and Magento module.</span>","<span style=""color: red;"">Attention : votre banque peut vous imposer 3-D Secure et/ou vous interdire le mode Sélectif.<br/>Assurez-vous que le paramétrage est cohérent entre votre Banque, Paybox et le module Magento.</span>"
 "Never","Jamais"
 "Always","Toujours"
 "Conditional","Conditionnel"
@@ -164,3 +164,7 @@
 "Invoice automatically created by Paybox payment module.","Une facture a été automatiquement crée par le module de paiement Paybox."
 
 "Paybox not available. Please try again later.","Paybox n'est actuellement pas disponible. Veuillez réessayer ultérieurement."
+"If multiple currencies are active on your store you can force the payment with the base currency or the currency selected by the customer when ordering.","Si plusieurs devises sont actives sur votre boutique, vous pouvez forcer le paiement avec la devise de base ou avec la devise choisie par le client lors de sa commande."
+"Orders currencies","Devises des commandes"
+"Order currency","Devise choisie par le client"
+"Default store currency","Devise de base de la boutique"

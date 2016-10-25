@@ -196,6 +196,14 @@ class Config extends \Magento\Payment\Model\Config {
         }
         return (int) $value;
     }
+    
+    public function getCurrencyConfig() {
+        $value = $this->_getConfigValue('pbxep/info/currency');
+        if (is_null($value)) {
+            $value = 1;
+        }
+        return (int) $value;
+    }
 
     public function getKwixoDefaultCategory() {
         $value = $this->_getConfigValue('pbxep/kwixo/default_category');

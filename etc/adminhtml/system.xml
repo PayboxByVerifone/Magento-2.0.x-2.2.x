@@ -108,6 +108,13 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <config_path>pbxep/info/show_to_customer</config_path>
                 </field>
+                <field id="currency" translate="label comment" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Orders currencies</label>
+                            <comment><![CDATA[If multiple currencies are active on your store you can force the payment with the base currency or the currency selected by the customer when ordering.]]></comment>
+                    <source_model>Paybox\Epayment\Model\Config\Source\CurrencyYesNo</source_model>
+                    <config_path>pbxep/info/currency</config_path>
+                </field>
             </group>
         </section>
         <section id="pbxep_payments" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
