@@ -16,8 +16,8 @@ class DataAssignObserver extends AbstractDataAssignObserver
      */
     public function execute(Observer $observer)
     {
-        $method = $this->readMethodArgument();
-        $data = $this->readDataArgument();
+        $method = $this->readMethodArgument($observer);
+        $data = $this->readDataArgument($observer);
 
         $paymentInfo = $method->getInfoInstance();
 
