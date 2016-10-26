@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.0.2] - 2016-10-26
+
+### Corrections
+- Observer : paramètres d'appels obligatoires manquants
+- ACL : déclaration BO incorrecte
+
 ## [1.0.1] - 2016-10-25
 ### Ajouts
 - Appels Paybox : ajout paramètre PBX_VERSION pour transmettre les versions Magento et du module
