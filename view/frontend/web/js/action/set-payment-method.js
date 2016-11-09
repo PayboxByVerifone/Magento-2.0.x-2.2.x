@@ -46,10 +46,6 @@ define(
 
             return storage.put(
                 serviceUrl, JSON.stringify(payload)
-            ).done(
-                function () {
-                    $.mage.redirect(url.build('pbxep/payment/redirect/'));
-                }
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);

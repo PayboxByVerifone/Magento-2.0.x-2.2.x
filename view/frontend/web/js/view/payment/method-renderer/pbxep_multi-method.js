@@ -9,9 +9,10 @@ define(
             'jquery',
             'Magento_Checkout/js/view/payment/default',
             'Paybox_Epayment/js/action/set-payment-method',
-            'Magento_Checkout/js/model/full-screen-loader'
+            'Magento_Checkout/js/model/full-screen-loader',
+            'mage/url',
         ],
-        function ($, Component, setPaymentMethodAction, fullScreenLoader) {
+        function ($, Component, setPaymentMethodAction, fullScreenLoader,url) {
             'use strict';
 
             return Component.extend({
@@ -43,13 +44,16 @@ define(
                 getCreditCardType: function () {
                     return jQuery('input[name="payment[cc_type]"]:checked').val();
                 },
-                /** Redirect to Paybox */
                 continueToPaybox: function () {
                     this.redirectAfterPlaceOrder = false;
                     this.selectPaymentMethod(); // save selected payment method in Quote
                     setPaymentMethodAction(this.messageContainer);
                     this.placeOrder();
                     return false;
+                },
+                /** Redirect to Paybox */
+                afterPlaceOrder: function () {
+                    $.mage.redirect(url.build('pbxep/payment/redirect/'));
                 }
             });
         }

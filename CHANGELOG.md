@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.0.3] - 2016-11-09
+
+### Corrections
+- Observer : Correction des problèmes avec "additional_data" depuis la version 2.0.1 de Magento
+- (JS) Redirection :  Modification de la méthode de redirection vers Paybox. Redirection après orderPlaced
+
 ## [1.0.2] - 2016-10-26
 
 ### Corrections

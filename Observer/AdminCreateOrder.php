@@ -29,8 +29,6 @@ class AdminCreateOrder implements ObserverInterface
 	}
 
 	public function execute(EventObserver $observer) {
-            echo 'AdminCreateOrder event';
-            die();
 		$oldOrder = self::$_oldOrder;
 		if (!is_null($oldOrder)) {
 			$order = $observer->getEvent()->getOrder();

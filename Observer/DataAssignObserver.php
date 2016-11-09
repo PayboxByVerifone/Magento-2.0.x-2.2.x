@@ -5,8 +5,10 @@
  */
 namespace Paybox\Epayment\Observer;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Quote\Api\Data\PaymentInterface;
 
 class DataAssignObserver extends AbstractDataAssignObserver
 {
@@ -18,16 +20,23 @@ class DataAssignObserver extends AbstractDataAssignObserver
     {
         $method = $this->readMethodArgument($observer);
         $data = $this->readDataArgument($observer);
+        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+        if (!is_array($additionalData)) {
+            return;
+        }
 
-        $paymentInfo = $method->getInfoInstance();
+        $additionalData = new DataObject($additionalData);
+        $payment = $observer->getPaymentModel();
+        $payment->setCcType($additionalData->getData('cc_type'));
 
-        $cctype = $paymentInfo->getCcType();
+        $cctype = $payment->getCcType();
         if (empty($cctype)) {
             $errorMsg = 'Please select a valid credit card type';
             throw new \LogicException(__($errorMsg));
         }
 
-        $selected = explode(',', $this->_objectManager->get('Paybox\Epayment\Model\Ui\PbxepcbConfig')->getCards());
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $selected = explode(',', $objectManager->get('Paybox\Epayment\Model\Ui\PbxepcbConfig')->getCards());
         if (!in_array($cctype, $selected)) {
             $errorMsg = 'Please select a valid credit card type';
             throw new \LogicException(__($errorMsg));
