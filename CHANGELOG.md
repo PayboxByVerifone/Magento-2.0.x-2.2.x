@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.4] - 2016-11-15
+
+### Corrections
+- Block Redirect : No cache for redirect block and custom registry key by order id
+
 ## [1.0.3] - 2016-11-09
 
 ### Corrections
