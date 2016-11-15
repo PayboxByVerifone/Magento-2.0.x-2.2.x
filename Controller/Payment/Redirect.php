@@ -27,6 +27,7 @@ class Redirect extends \Paybox\Epayment\Controller\Payment
 			$orderId = $session->getCurrentPbxepOrderId();
 		}
 
+
 		// If none, 404
 		if (is_null($orderId)) {
 			return $this->_404();
@@ -62,9 +63,10 @@ class Redirect extends \Paybox\Epayment\Controller\Payment
 		$order->getPayment()->getMethodInstance()->onPaymentRedirect($order);
 
 		// Render form
-		$registry->register('pbxep/order', $order);
+		$registry->register('pbxep/order_' . $orderId, $order);
 
 		$page = $this->resultPageFactory->create();
+
 		return $page;
 	}
 }

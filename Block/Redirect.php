@@ -29,7 +29,7 @@ class Redirect extends \Magento\Framework\View\Element\Template {
 
     public function getFormFields() {
         $registry = $this->_objectManager->get('Magento\Framework\Registry');
-        $order = $registry->registry('pbxep/order');
+        $order = $registry->registry('pbxep/order_'.$_SESSION['checkout']['current_pbxep_order_id']);
         $payment = $order->getPayment()->getMethodInstance();
         $cntr = $this->_objectManager->get('Paybox\Epayment\Model\Paybox');
         return $cntr->buildSystemParams($order, $payment);
