@@ -49,6 +49,15 @@ class Config extends \Magento\Payment\Model\Config {
                 'https://tpeweb1.paybox.com/cgi/MYchoix_pagepaiement.cgi',
             ),
         ),
+        'responsive' => array(
+            'test' => array(
+                'https://preprod-tpeweb.paybox.com/cgi/FramepagepaiementRWD.cgi'
+            ),
+            'production' => array(
+                'https://tpeweb.paybox.com/cgi/FramepagepaiementRWD.cgi',
+                'https://tpeweb1.paybox.com/cgi/FramepagepaiementRWD.cgi',
+            ),
+        ),
         'kwixo' => array(
             'test' => array(
                 'https://preprod-tpeweb.paybox.com/php/'
@@ -157,6 +166,10 @@ class Config extends \Magento\Payment\Model\Config {
         return $this->_getUrls('system', $environment);
     }
 
+    public function getResponsiveUrls($environment = null) {
+        return $this->_getUrls('responsive', $environment);
+    }
+
     public function getKwixoUrls($environment = null) {
         return $this->_getUrls('kwixo', $environment);
     }
@@ -201,6 +214,14 @@ class Config extends \Magento\Payment\Model\Config {
         $value = $this->_getConfigValue('pbxep/info/currency');
         if (is_null($value)) {
             $value = 1;
+        }
+        return (int) $value;
+    }
+
+    public function getResponsiveConfig() {
+        $value = $this->_getConfigValue('pbxep/info/responsive');
+        if (is_null($value)) {
+            $value = 0;
         }
         return (int) $value;
     }

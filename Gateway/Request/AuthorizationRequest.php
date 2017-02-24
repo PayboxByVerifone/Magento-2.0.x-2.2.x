@@ -149,6 +149,8 @@ class AuthorizationRequest implements BuilderInterface
             $values['PBX_SOURCE'] = 'XHTML';
         }
 
+        $values['PBX_SOURCE'] = 'RWD';
+
         // Misc.
         $values['PBX_TIME'] = date('c');
         $values['PBX_HASH'] = strtoupper($config->getHmacAlgo());

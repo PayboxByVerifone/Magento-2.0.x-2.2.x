@@ -168,3 +168,7 @@
 "Orders currencies","Devises des commandes"
 "Order currency","Devise choisie par le client"
 "Default store currency","Devise de base de la boutique"
+
+"Payment page type", "Type de page de paiement"
+"Classic", "Classique"
+"Responsive", "Responsive"

@@ -429,6 +429,40 @@ class Paybox {
             $values['PBX_SOURCE'] = 'XHTML';
         }
 
+        if($config->getResponsiveConfig() == 1){
+            $values['PBX_SOURCE'] = 'RWD';
+        }
+
+        //Paypal Specicif 
+        if ($payment->getCode() == 'pbxep_paypal') {
+            $separator = '#';
+            $address = $order->getBillingAddress();
+            $customer = $this->_objectManager->get('Magento\Customer\Model\Customer')->load($order->getCustomerId());
+            $data_Paypal = $this->cleanForPaypalData($this->getBillingName($order), 32);
+            $data_Paypal .= $separator;
+            $data_Paypal .= $this->cleanForPaypalData($address->getStreet(1),100);
+            $data_Paypal .= $separator;
+            $data_Paypal .= $this->cleanForPaypalData($address->getStreet(2),100);
+            $data_Paypal .= $separator;
+            $data_Paypal .= $this->cleanForPaypalData($address->getCity(),40);
+            $data_Paypal .= $separator;
+            // $data_Paypal .= $this->cleanForPaypalData($address->getRegion(),40);
+            $data_Paypal .= $separator;
+            $data_Paypal .= $this->cleanForPaypalData($address->getPostcode(),20);
+            $data_Paypal .= $separator;
+            $data_Paypal .= $this->cleanForPaypalData($address->getCountry(),2);
+            $data_Paypal .= $separator;
+            $data_Paypal .= $this->cleanForPaypalData($address->getTelephone(),20);
+            $data_Paypal .= $separator;
+            $items = $order->getAllVisibleItems();
+            $products = array();
+            foreach ($items as $item) {
+                $products[] = $item->getName();
+            }
+            $data_Paypal .= $this->cleanForPaypalData(implode('-', $products),127);
+            $values['PBX_PAYPAL_DATA'] = $this->cleanForPaypalData($data_Paypal, 490);
+        }
+
         // Misc.
         $values['PBX_TIME'] = date('c');
         $values['PBX_HASH'] = strtoupper($config->getHmacAlgo());
@@ -461,6 +495,18 @@ class Paybox {
         $values['PBX_HMAC'] = $sign;
 
         return $values;
+    }
+
+    public function cleanForPaypalData($string, $nbCaracter = 0){
+        $filter = new \Magento\Framework\Filter\RemoveAccents();
+        if(is_array($string)){
+            $string = $string[0];
+        }
+        $string = trim(preg_replace("/[^-+#. a-zA-Z0-9]/", " ", $filter->filter($string)));
+        if($nbCaracter > 0){
+            $string = substr($string, 0, $nbCaracter);
+        }
+        return $string;
     }
 
     public function checkUrls(array $urls) {
@@ -636,6 +682,19 @@ class Paybox {
         $urls = $config->getSystemUrls();
         if (empty($urls)) {
             $message = 'Missing URL for Paybox system in configuration';
+            throw new \LogicException(__($message));
+        }
+
+        $url = $this->checkUrls($urls);
+
+        return $url;
+    }
+
+    public function getResponsiveUrl() {
+        $config = $this->getConfig();
+        $urls = $config->getResponsiveUrls();
+        if (empty($urls)) {
+            $message = 'Missing URL for Paybox responsive in configuration';
             throw new \LogicException(__($message));
         }
 

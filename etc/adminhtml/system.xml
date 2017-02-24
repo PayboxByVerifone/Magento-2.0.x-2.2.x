@@ -115,6 +115,12 @@
                     <source_model>Paybox\Epayment\Model\Config\Source\CurrencyYesNo</source_model>
                     <config_path>pbxep/info/currency</config_path>
                 </field>
+                <field id="reponsive" translate="label comment" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Payment page type</label>
+                    <source_model>Paybox\Epayment\Model\Config\Source\ResponsiveYesNo</source_model>
+                    <config_path>pbxep/info/responsive</config_path>
+                </field>
             </group>
         </section>
         <section id="pbxep_payments" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">

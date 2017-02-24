@@ -13,57 +13,66 @@
 $values = $this->getFormFields();
 try {
 	if ($values['PBX_TYPEPAIEMENT'] == 'KWIXO') {
-    	$url = $this->escapeUrl($this->getKwixoUrl());
-    }
-    else if ($this->helper('Paybox\Epayment\Helper\Mobile')->isMobile()) {
-    	$url = $this->escapeUrl($this->getMobileUrl());
-    }
-    else {
-    	$url = $this->escapeUrl($this->getSystemUrl());
-    }
-   	$type = $this->escapeUrl($this->getInputType());
+		$url = $this->escapeUrl($this->getKwixoUrl());
+	}
+	else if ($this->helper('Paybox\Epayment\Helper\Mobile')->isMobile()) {
+		$url = $this->escapeUrl($this->getMobileUrl());
+	}
+	else {
+		if(isset($values['PBX_SOURCE'])){
+			if($values['PBX_SOURCE'] == 'RWD'){
+				$url = $this->escapeUrl($this->getResponsiveUrl());
+			}else{
+				$url = $this->escapeUrl($this->getSystemUrl());
+			}
+		}
+		else{
+			$url = $this->escapeUrl($this->getSystemUrl());
+		}
+	}
+	$type = $this->escapeUrl($this->getInputType());
 }
 catch (Exception $e) {
-    $error = $e;
+	$error = $e;
 }
 
 if (isset($error)) {
-?>
-<p><center><?php echo $error->getMessage(); ?></center></p>
-<?php
+	?>
+	<p><center><?php echo $error->getMessage(); ?></center></p>
+	<?php
 }
 else {
-?>
-<form id="pbxep_form" method="post" action="<?php echo $url; ?>" enctype="application/x-www-form-urlencoded">
-	<?php if ($type != 'hidden'): ?>
-	<p>
-		<?php echo __('This is a debug view. Click continue to be redirected to Epayment payment page.'); ?>
-	</p>
-	<?php else: ?>
-	<p>
-		<?php echo __('You will be redirected to the Epayment payment page. If not, please use the button bellow.'); ?>
-	</p>
-	<?php endif; ?>
-	<center><button><?php echo __('Continue...'); ?></button></center>
-	<?php
-	foreach ($values as $name => $value):
-		$name = $this->escapeHtml($name);
+	?>
+	<form id="pbxep_form" method="post" action="<?php echo $url; ?>" enctype="application/x-www-form-urlencoded">
+		<?php if ($type != 'hidden'): ?>
+			<p>
+				<?php echo __('This is a debug view. Click continue to be redirected to Epayment payment page.'); ?>
+			</p>
+		<?php else: ?>
+			<p>
+				<?php echo __('You will be redirected to the Epayment payment page. If not, please use the button bellow.'); ?>
+			</p>
+		<?php endif; ?>
+		<center><button><?php echo __('Continue...'); ?></button></center>
+		<?php
+		foreach ($values as $name => $value):
+			$name = $this->escapeHtml($name);
 		$value = $this->escapeHtml($value);
 		if ($type != 'hidden'):
-	?>
-	<p><label for="<?php echo $name; ?>"><?php echo $name; ?></label>
+			?>
+		<p><label for="<?php echo $name; ?>"><?php echo $name; ?></label>
+		<?php endif; ?>
+		<input type="<?php echo $type; ?>" id="<?php echo $name; ?>" name="<?php echo $name; ?>" value="<?php echo $value; ?>" />
+		<?php if ($type != 'hidden'): ?>
+		</p>
 	<?php endif; ?>
-	<input type="<?php echo $type; ?>" id="<?php echo $name; ?>" name="<?php echo $name; ?>" value="<?php echo $value; ?>" />
-	<?php if ($type != 'hidden'): ?>
-	</p>
-	<?php endif; ?>
-	<?php endforeach; ?>
+<?php endforeach; ?>
 </form>
 <?php if ($type == 'hidden'): ?>
-<script type="text/javascript">
-	window.setTimeout(function() {
-		document.getElementById('pbxep_form').submit();
-	}, 1);
-</script>
+	<script type="text/javascript">
+		window.setTimeout(function() {
+			document.getElementById('pbxep_form').submit();
+		}, 1);
+	</script>
 <?php endif;
 }

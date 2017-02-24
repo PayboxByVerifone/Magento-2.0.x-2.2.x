@@ -61,4 +61,10 @@ class Redirect extends \Magento\Framework\View\Element\Template {
         return $paybox->checkUrls($urls);
     }
 
+    public function getResponsiveUrl() {
+        $paybox = $this->_objectManager->get('Paybox\Epayment\Model\Paybox');
+        $urls = $paybox->getConfig()->getResponsiveUrls();
+        return $paybox->checkUrls($urls);
+    }
+
 }

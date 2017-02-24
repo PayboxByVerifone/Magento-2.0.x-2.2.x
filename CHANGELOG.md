@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.0.5] - 2016-11-15
+
+### Ajouts
+- Responsive : Selection du type de la page de paiement , classique ou responsive
+- Paypal : variable additionnelle pour garantir une intégration optimale de Paypal
+
 ## [1.0.4] - 2016-11-15
 
 ### Corrections
