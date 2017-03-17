@@ -1,14 +1,23 @@
 <?php
-
 /**
  * Paybox Epayment module for Magento
  *
- * This source file is subject to the Open Software License (OSL 3.0)
- * available at : http://opensource.org/licenses/osl-3.0.php
+ * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * question.
  *
- * @package    Paybox_Epayment
- * @copyright  Copyright (c) 2013-2014 Paybox
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * LICENSE: This source file is subject to the version 3.0 of the Open
+ * Software License (OSL-3.0) that is available through the world-wide-web
+ * at the following URI: http://opensource.org/licenses/OSL-3.0. If
+ * you did not receive a copy of the OSL-3.0 license and are unable
+ * to obtain it through the web, please send a note to
+ * support@paybox.com so we can mail you a copy immediately.
+ *
+ *
+ * @version   1.0.6
+ * @author    BM Services <contact@bm-services.com>
+ * @copyright 2012-2017 Paybox
+ * @license   http://opensource.org/licenses/OSL-3.0
+ * @link      http://www.paybox.com/
  */
 
 namespace Paybox\Epayment\Model\Payment;
@@ -27,8 +36,8 @@ use \Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use \Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use \Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 
-abstract class AbstractPayment extends AbstractMethod {
-
+abstract class AbstractPayment extends AbstractMethod
+{
     const CODE = 'pbxep';
 
     protected $_code = self::CODE;
@@ -110,7 +119,7 @@ abstract class AbstractPayment extends AbstractMethod {
     }
 
     /**
-     * 
+     *
      * @param Mage_Sales_Model_Order $order
      * @param string $type
      * @param array $data
@@ -118,7 +127,8 @@ abstract class AbstractPayment extends AbstractMethod {
      * @param array $infos
      * @return Mage_Sales_Model_Order_Payment_Transaction
      */
-    protected function _addPayboxTransaction(Order $order, $type, array $data, $closed, array $infos = array()) {
+    protected function _addPayboxTransaction(Order $order, $type, array $data, $closed, array $infos = array())
+    {
         $withCapture = $this->getConfigPaymentAction() != AbstractMethod::ACTION_AUTHORIZE;
 
         $payment = $order->getPayment();
@@ -126,7 +136,7 @@ abstract class AbstractPayment extends AbstractMethod {
         $txnId = $this->_createTransactionId($data);
         if (empty($txnId)) {
             if (!empty($parent)) {
-                $txnId = $parent->getAdditionalInformation(self::CALL_NUMBER);
+                $txnId = $parent->getAdditionalInformation(self::TRANSACTION_NUMBER);
             } else {
                 throw new \LogicException('Invalid transaction id ' . $txnId);
             }
@@ -153,7 +163,7 @@ abstract class AbstractPayment extends AbstractMethod {
     }
 
     /**
-     * 
+     *
      * @param Mage_Sales_Model_Order $order
      * @param string $type
      * @param array $data
@@ -161,11 +171,12 @@ abstract class AbstractPayment extends AbstractMethod {
      * @param array $infos
      * @return Mage_Sales_Model_Order_Payment_Transaction
      */
-    protected function _addPayboxDirectTransaction(Order $order, $type, array $data, $closed, array $infos, Transaction $parent) {
+    protected function _addPayboxDirectTransaction(Order $order, $type, array $data, $closed, array $infos, Transaction $parent)
+    {
         $withCapture = $this->getConfigPaymentAction() != AbstractMethod::ACTION_AUTHORIZE;
 
         $payment = $order->getPayment();
-        $txnId = intval($parent->getAdditionalInformation(self::CALL_NUMBER));
+        $txnId = intval($parent->getAdditionalInformation(self::TRANSACTION_NUMBER));
         $now = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $txnId .= '/' . $now->format('dmYHis');
         $payment->setTransactionId($txnId);
@@ -187,12 +198,14 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * Create transaction ID from paybox data
      */
-    protected function _createTransactionId(array $payboxData) {
-        $call = (int) (isset($payboxData['call']) ? $payboxData['call'] : $payboxData['NUMTRANS']);
+    protected function _createTransactionId(array $payboxData)
+    {
+        $call = (int) (isset($payboxData['transaction']) ? $payboxData['transaction'] : $payboxData['NUMTRANS']);
         return $call;
     }
 
-    public function getPayboxTransaction(InfoInterface $payment, $type, $openedOnly = false) {
+    public function getPayboxTransaction(InfoInterface $payment, $type, $openedOnly = false)
+    {
         $order = $payment->getOrder();
 
         // Find transaction
@@ -230,7 +243,8 @@ abstract class AbstractPayment extends AbstractMethod {
      * @return $this
      * @throws LocalizedException
      */
-    public function assignData(DataObject $data) {
+    public function assignData(DataObject $data)
+    {
         parent::assignData($data);
         if (!($data instanceof DataObject)) {
             $data = new DataObject($data);
@@ -250,7 +264,8 @@ abstract class AbstractPayment extends AbstractMethod {
      *
      * @return Mage_Payment_Model_Abstract
      */
-    public function cancel(InfoInterface $payment) {
+    public function cancel(InfoInterface $payment)
+    {
         debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $order = $payment->getOrder();
         $order->addStatusHistoryComment('Call to cancel()');
@@ -267,7 +282,8 @@ abstract class AbstractPayment extends AbstractMethod {
      *
      * @return Mage_Payment_Model_Abstract
      */
-    public function capture(InfoInterface $payment, $amount) {
+    public function capture(InfoInterface $payment, $amount)
+    {
         $order = $payment->getOrder();
         $this->logDebug(sprintf('Order %s: Capture for %f', $order->getIncrementId(), $amount));
 
@@ -378,7 +394,8 @@ abstract class AbstractPayment extends AbstractMethod {
      * @param Mage_Sales_Model_Order $order Order
      * @param array $params Parsed call parameters
      */
-    public function checkIpnParams(Order $order, array $params) {
+    public function checkIpnParams(Order $order, array $params)
+    {
         // Check required parameters
         $requiredParams = array('amount', 'transaction', 'error', 'reference', 'sign', 'date', 'time');
         foreach ($requiredParams as $requiredParam) {
@@ -390,62 +407,76 @@ abstract class AbstractPayment extends AbstractMethod {
         }
     }
 
-    public function getAllowDeferredDebit() {
+    public function getAllowDeferredDebit()
+    {
         return $this->_allowDeferredDebit;
     }
 
-    public function getAllowImmediatDebit() {
+    public function getAllowImmediatDebit()
+    {
         return $this->_allowImmediatDebit;
     }
 
-    public function getAllowManualDebit() {
+    public function getAllowManualDebit()
+    {
         return $this->_allowManualDebit;
     }
 
-    public function getAllowRefund() {
+    public function getAllowRefund()
+    {
         return $this->_allowRefund;
     }
 
-    public function getCards() {
+    public function getCards()
+    {
         return $this->getConfigData('cards');
     }
 
-    public function getConfigPaymentAction() {
+    public function getConfigPaymentAction()
+    {
         if ($this->getPayboxAction() == self::PBXACTION_MANUAL) {
             return AbstractMethod::ACTION_AUTHORIZE;
         }
         return AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
     }
 
-    public function getConfigAuthorizedStatus() {
+    public function getConfigAuthorizedStatus()
+    {
         return $this->getConfigData('status/authorized');
     }
 
-    public function getConfigPaidStatus() {
+    public function getConfigPaidStatus()
+    {
         return $this->getConfigData('status/paid');
     }
 
-    public function getConfigAutoCaptureStatus() {
+    public function getConfigAutoCaptureStatus()
+    {
         return $this->getConfigData('status/auto_capture');
     }
     
-    public function getConfigAutoCaptureMode() {
+    public function getConfigAutoCaptureMode()
+    {
         return $this->getConfigData('status_mode');
     }
     
-    public function getConfigAutoCaptureModeStatus() {
+    public function getConfigAutoCaptureModeStatus()
+    {
         return $this->getConfigData('status_auto_capture_mode');
     }
 
-    public function getHasCctypes() {
+    public function getHasCctypes()
+    {
         return $this->_hasCctypes;
     }
 
-    public function getOrderPlaceRedirectUrl() {
+    public function getOrderPlaceRedirectUrl()
+    {
         return $this->getUrl('pbxep/payment/redirect', array('_secure' => true));
     }
 
-    public function getPayboxAction() {
+    public function getPayboxAction()
+    {
         $config = $this->getPayboxConfig();
         $action = $this->getConfigData('action');
         switch ($action) {
@@ -462,7 +493,7 @@ abstract class AbstractPayment extends AbstractMethod {
                 break;
             case self::PBXACTION_MANUAL:
                 if ((($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER2) &&
-                        ($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER3)) || 
+                        ($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER3)) ||
                         !$this->getAllowManualDebit()) {
                     return self::PBXACTION_IMMEDIATE;
                 }
@@ -476,14 +507,16 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * @return Paybox\Epayment\Model\Config Paybox configuration object
      */
-    public function getPayboxConfig() {
+    public function getPayboxConfig()
+    {
         return $this->_objectManager->get('Paybox\Epayment\Model\Config');
     }
 
     /**
      * @return Paybox\Epayment\Model\Config Paybox configuration object
      */
-    public function getPaybox() {
+    public function getPaybox()
+    {
         return $this->_objectManager->get('Paybox\Epayment\Model\Paybox');
     }
 
@@ -493,7 +526,8 @@ abstract class AbstractPayment extends AbstractMethod {
      * @param Mage_Sales_Model_Quote|null $quote
      * @return bool
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null) {
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    {
         if (parent::isAvailable($quote)) {
             if ($this->getHasCctypes()) {
                 $cctypes = $this->getConfigData('cctypes', ($quote ? $quote->getStoreId() : null));
@@ -511,7 +545,8 @@ abstract class AbstractPayment extends AbstractMethod {
      * @param Mage_Sales_Model_Order $order
      * @return boolean
      */
-    public function is3DSEnabled(Order $order) {
+    public function is3DSEnabled(Order $order)
+    {
         // If 3DS is mandatory, answer is simple
         if ($this->_3dsMandatory) {
             return true;
@@ -542,23 +577,28 @@ abstract class AbstractPayment extends AbstractMethod {
         return false;
     }
 
-    public function logDebug($message) {
+    public function logDebug($message)
+    {
         $this->_logger->debug($message);
     }
 
-    public function logWarning($message) {
+    public function logWarning($message)
+    {
         $this->_logger->warning($message);
     }
 
-    public function logError($message) {
+    public function logError($message)
+    {
         $this->_logger->error($message);
     }
 
-    public function logFatal($message) {
+    public function logFatal($message)
+    {
         $this->_logger->critical($message);
     }
 
-    public function makeCapture(Order $order) {
+    public function makeCapture(Order $order)
+    {
         $payment = $order->getPayment();
         $txn = $this->getPayboxTransaction($payment, Transaction::TYPE_AUTH, true);
 
@@ -596,7 +636,8 @@ abstract class AbstractPayment extends AbstractMethod {
      *
      * @return Mage_Payment_Model_Abstract
      */
-    public function refund(InfoInterface $payment, $amount) {
+    public function refund(InfoInterface $payment, $amount)
+    {
         $order = $payment->getOrder();
 
         // Find capture transaction
@@ -653,7 +694,8 @@ abstract class AbstractPayment extends AbstractMethod {
      *
      * @return  Mage_Payment_Model_Abstract
      */
-    public function validate() {
+    public function validate()
+    {
         parent::validate();
 
         if ($this->getHasCctypes()) {
@@ -682,7 +724,8 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * When the visitor come back from Paybox using the cancel URL
      */
-    public function onPaymentCanceled(Order $order) {
+    public function onPaymentCanceled(Order $order)
+    {
         // Cancel order
         $order->cancel();
 
@@ -699,7 +742,8 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * When the visitor come back from Paybox using the failure URL
      */
-    public function onPaymentFailed(Order $order) {
+    public function onPaymentFailed(Order $order)
+    {
         // Message
         $message = 'Customer is back from Paybox payment page.';
         $message = __($message);
@@ -711,7 +755,8 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * When the visitor is redirected to Paybox
      */
-    public function onPaymentRedirect(Order $order) {
+    public function onPaymentRedirect(Order $order)
+    {
         $info = $this->getInfoInstance();
         $info->setPbxepPaymentAction($this->getConfigPaymentAction());
         $info->setPbxepPayboxAction($this->getPayboxAction());
@@ -728,7 +773,8 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * When the visitor come back from Paybox using the success URL
      */
-    public function onPaymentSuccess(Order $order, array $data) {
+    public function onPaymentSuccess(Order $order, array $data)
+    {
         // Message
         $message = 'Customer is back from Paybox payment page.';
         $message = __($message);
@@ -740,7 +786,8 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * When the IPN is called
      */
-    public function onIPNCalled(Order $order, array $params) {
+    public function onIPNCalled(Order $order, array $params)
+    {
         try {
             // Check parameters
             $this->checkIpnParams($order, $params);
@@ -763,7 +810,7 @@ abstract class AbstractPayment extends AbstractMethod {
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->onIPNError($order, $params, $e);
             throw $e;
         }
@@ -772,7 +819,8 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * When an error has occured in the IPN handler
      */
-    public function onIPNError(Order $order, array $data, \LogicException $e = null) {
+    public function onIPNError(Order $order, array $data, \LogicException $e = null)
+    {
         $withCapture = $this->getConfigPaymentAction() != AbstractMethod::ACTION_AUTHORIZE;
 
         // Message
@@ -787,9 +835,10 @@ abstract class AbstractPayment extends AbstractMethod {
 
         // Transaction
         if (is_null($this->_processingTransaction)) {
-            $type = $withCapture ?
-                    Transaction::TYPE_CAPTURE :
-                    Transaction::TYPE_AUTH;
+            // $type = $withCapture ?
+            //         Transaction::TYPE_CAPTURE :
+            //         Transaction::TYPE_AUTH;
+            $type = Transaction::TYPE_VOID;
             $this->_addPayboxTransaction($order, $type, $data, true);
         } else {
             $this->_processingTransaction->setAdditionalInformation(Transaction::RAW_DETAILS, $data);
@@ -801,7 +850,8 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * When the IPN is called to refuse a payment
      */
-    public function onIPNFailed(Order $order, array $data) {
+    public function onIPNFailed(Order $order, array $data)
+    {
         $withCapture = $this->getConfigPaymentAction() != AbstractMethod::ACTION_AUTHORIZE;
 
         // Message
@@ -813,9 +863,10 @@ abstract class AbstractPayment extends AbstractMethod {
         $this->logDebug(sprintf('Order %s: (IPN) %s', $order->getIncrementId(), $message));
 
         // Transaction
-        $type = $withCapture ?
-                Transaction::TYPE_CAPTURE :
-                Transaction::TYPE_AUTH;
+        // $type = $withCapture ?
+        //         Transaction::TYPE_CAPTURE :
+        //         Transaction::TYPE_AUTH;
+        $type = Transaction::TYPE_VOID;
         $this->_addPayboxTransaction($order, $type, $data, true);
 
         $order->save();
@@ -824,7 +875,8 @@ abstract class AbstractPayment extends AbstractMethod {
     /**
      * When the IPN is called to validate a payment
      */
-    public function onIPNSuccess(Order $order, array $data) {
+    public function onIPNSuccess(Order $order, array $data)
+    {
         $this->logDebug(sprintf('Order %s: Standard IPN', $order->getIncrementId()));
 
         $payment = $order->getPayment();
@@ -891,12 +943,13 @@ abstract class AbstractPayment extends AbstractMethod {
     }
 
     /**
-     * 
+     *
      * @param Mage_Sales_Model_Order $order
      * @param Mage_Sales_Model_Order_Payment_Transaction $txn
      * @return Mage_Sales_Model_Order_Invoice
      */
-    protected function _createInvoice($payment, $order, $txn) {
+    protected function _createInvoice($payment, $order, $txn)
+    {
         $invoice = $order->prepareInvoice();
         $invoice->setRequestedCaptureCase(Invoice::CAPTURE_ONLINE);
         $invoice->setTransactionId($txn->getTransactionId());
@@ -914,5 +967,4 @@ abstract class AbstractPayment extends AbstractMethod {
         $invoice->save();
         return $invoice;
     }
-
 }

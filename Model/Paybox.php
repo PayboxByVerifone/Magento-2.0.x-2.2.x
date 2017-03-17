@@ -1,14 +1,23 @@
 <?php
-
 /**
  * Paybox Epayment module for Magento
  *
- * This source file is subject to the Open Software License (OSL 3.0)
- * available at : http://opensource.org/licenses/osl-3.0.php
+ * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * question.
  *
- * @package    Paybox_Epayment
- * @copyright  Copyright (c) 2013-2014 Paybox
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * LICENSE: This source file is subject to the version 3.0 of the Open
+ * Software License (OSL-3.0) that is available through the world-wide-web
+ * at the following URI: http://opensource.org/licenses/OSL-3.0. If
+ * you did not receive a copy of the OSL-3.0 license and are unable
+ * to obtain it through the web, please send a note to
+ * support@paybox.com so we can mail you a copy immediately.
+ *
+ *
+ * @version   1.0.6
+ * @author    BM Services <contact@bm-services.com>
+ * @copyright 2012-2017 Paybox
+ * @license   http://opensource.org/licenses/OSL-3.0
+ * @link      http://www.paybox.com/
  */
 
 namespace Paybox\Epayment\Model;
@@ -17,8 +26,8 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Paybox\Epayment\Model\Payment\AbstractPayment;
 
-class Paybox {
-
+class Paybox
+{
     private $_currencyDecimals = array(
         '008' => 2,
         '012' => 2,
@@ -252,13 +261,15 @@ class Paybox {
         $this->_storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
     }
 
-    protected function _buildUrl($url) {
+    protected function _buildUrl($url)
+    {
         $url = $this->_urlInterface->getUrl($url, array('_secure' => true));
         $url = $this->_urlInterface->sessionUrlVar($url);
         return $url;
     }
 
-    protected function _callDirect($type, $amount, Order $order, Transaction $transaction) {
+    protected function _callDirect($type, $amount, Order $order, Transaction $transaction)
+    {
         $config = $this->getConfig();
 
         $amountScale = $this->getCurrencyScale($order);
@@ -327,7 +338,8 @@ class Paybox {
         throw new \LogicException(__('Paybox not available. Please try again later.'));
     }
 
-    public function buildSystemParams(Order $order, AbstractPayment $payment) {
+    public function buildSystemParams(Order $order, AbstractPayment $payment)
+    {
         $config = $this->getConfig();
 
         // URLs
@@ -360,10 +372,7 @@ class Paybox {
         $card = $cards[$code];
         $values['PBX_TYPEPAIEMENT'] = $card['payment'];
         $values['PBX_TYPECARTE'] = $card['card'];
-        // if ($card['payment'] == 'KWIXO') {
-        // 	$kwixo = Mage::getSingleton('pbxep/kwixo');
-        // 	$values = $kwixo->buildKwixoParams($order, $values);
-        // }
+        
         // Order information
         $values['PBX_PORTEUR'] = $this->getBillingEmail($order);
         $values['PBX_DEVISE'] = $this->getCurrency($order);
@@ -371,9 +380,9 @@ class Paybox {
 
         // Amount
         $currencies = $this->_storeManager->getStore()->getAvailableCurrencyCodes();
-        if(count($currencies) > 1 && $this->getConfig()->getCurrencyConfig() == 0){
+        if (count($currencies) > 1 && $this->getConfig()->getCurrencyConfig() == 0) {
             $orderAmount = $order->getGrandTotal();
-        }else{
+        } else {
             $orderAmount = $order->getBaseGrandTotal();
         }
         
@@ -395,7 +404,7 @@ class Paybox {
                     $delay = (int) $payment->getConfigData('delay');
                     if ($delay < 1) {
                         $delay = 1;
-                    } else if ($delay > 7) {
+                    } elseif ($delay > 7) {
                         $delay = 7;
                     }
                     $values['PBX_DIFF'] = sprintf('%02d', $delay);
@@ -429,37 +438,37 @@ class Paybox {
             $values['PBX_SOURCE'] = 'XHTML';
         }
 
-        if($config->getResponsiveConfig() == 1){
+        if ($config->getResponsiveConfig() == 1) {
             $values['PBX_SOURCE'] = 'RWD';
         }
 
-        //Paypal Specicif 
+        //Paypal Specicif
         if ($payment->getCode() == 'pbxep_paypal') {
             $separator = '#';
             $address = $order->getBillingAddress();
             $customer = $this->_objectManager->get('Magento\Customer\Model\Customer')->load($order->getCustomerId());
             $data_Paypal = $this->cleanForPaypalData($this->getBillingName($order), 32);
             $data_Paypal .= $separator;
-            $data_Paypal .= $this->cleanForPaypalData($address->getStreet(1),100);
+            $data_Paypal .= $this->cleanForPaypalData($address->getStreet(1), 100);
             $data_Paypal .= $separator;
-            $data_Paypal .= $this->cleanForPaypalData($address->getStreet(2),100);
+            $data_Paypal .= $this->cleanForPaypalData($address->getStreet(2), 100);
             $data_Paypal .= $separator;
-            $data_Paypal .= $this->cleanForPaypalData($address->getCity(),40);
+            $data_Paypal .= $this->cleanForPaypalData($address->getCity(), 40);
             $data_Paypal .= $separator;
             // $data_Paypal .= $this->cleanForPaypalData($address->getRegion(),40);
             $data_Paypal .= $separator;
-            $data_Paypal .= $this->cleanForPaypalData($address->getPostcode(),20);
+            $data_Paypal .= $this->cleanForPaypalData($address->getPostcode(), 20);
             $data_Paypal .= $separator;
-            $data_Paypal .= $this->cleanForPaypalData($address->getCountry(),2);
+            $data_Paypal .= $this->cleanForPaypalData($address->getCountry(), 2);
             $data_Paypal .= $separator;
-            $data_Paypal .= $this->cleanForPaypalData($address->getTelephone(),20);
+            $data_Paypal .= $this->cleanForPaypalData($address->getTelephone(), 20);
             $data_Paypal .= $separator;
             $items = $order->getAllVisibleItems();
             $products = array();
             foreach ($items as $item) {
                 $products[] = $item->getName();
             }
-            $data_Paypal .= $this->cleanForPaypalData(implode('-', $products),127);
+            $data_Paypal .= $this->cleanForPaypalData(implode('-', $products), 127);
             $values['PBX_PAYPAL_DATA'] = $this->cleanForPaypalData($data_Paypal, 490);
         }
 
@@ -471,7 +480,7 @@ class Paybox {
         if (($card['payment'] == 'LEETCHI') && ($card['card'] == 'LEETCHI')) {
             $values['PBX_EFFECTUE'] .= '?R=' . urlencode($values['PBX_CMD']);
             $values['PBX_REFUSE'] .= '?R=' . urlencode($values['PBX_CMD']);
-        } else if (($card['payment'] == 'PREPAYEE') && ($card['card'] == 'IDEAL')) {
+        } elseif (($card['payment'] == 'PREPAYEE') && ($card['card'] == 'IDEAL')) {
             $s = '?C=IDEAL&P=PREPAYEE';
             $values['PBX_ANNULE'] .= $s;
             $values['PBX_EFFECTUE'] .= $s;
@@ -497,19 +506,21 @@ class Paybox {
         return $values;
     }
 
-    public function cleanForPaypalData($string, $nbCaracter = 0){
+    public function cleanForPaypalData($string, $nbCaracter = 0)
+    {
         $filter = new \Magento\Framework\Filter\RemoveAccents();
-        if(is_array($string)){
+        if (is_array($string)) {
             $string = $string[0];
         }
         $string = trim(preg_replace("/[^-+#. a-zA-Z0-9]/", " ", $filter->filter($string)));
-        if($nbCaracter > 0){
+        if ($nbCaracter > 0) {
             $string = substr($string, 0, $nbCaracter);
         }
         return $string;
     }
 
-    public function checkUrls(array $urls) {
+    public function checkUrls(array $urls)
+    {
         // Init client
         $client = new \Magento\Framework\HTTP\ZendClient(null, array(
             'maxredirects' => 0,
@@ -537,7 +548,8 @@ class Paybox {
         throw new \LogicException(__('Paybox not available. Please try again later.'));
     }
 
-    public function computeThreetimePayments($orderAmount, $amountScale) {
+    public function computeThreetimePayments($orderAmount, $amountScale)
+    {
         $values = array();
         // Compute each payment amount
         $step = round($orderAmount * $amountScale / 3);
@@ -559,7 +571,8 @@ class Paybox {
         return $values;
     }
 
-    public function convertParams(array $params) {
+    public function convertParams(array $params)
+    {
         $result = array();
         foreach ($this->_resultMapping as $param => $key) {
             if (isset($params[$param])) {
@@ -573,56 +586,66 @@ class Paybox {
     /**
      * Create transaction ID from Paybox data
      */
-    protected function createTransactionId(array $payboxData) {
-        $call = (int) (isset($payboxData['call']) ? $payboxData['call'] : $payboxData['NUMTRANS']);
+    protected function createTransactionId(array $payboxData)
+    {
+        $transaction = (int) (isset($payboxData['transaction']) ? $payboxData['transaction'] : $payboxData['NUMTRANS']);
         $now = new DateTime('now', new DateTimeZone('Europe/Paris'));
-        return $call . '/' . $now->format('U');
+        return $transaction . '/' . $now->format('U');
     }
 
-    public function directCapture($amount, Order $order, Transaction $transaction) {
+    public function directCapture($amount, Order $order, Transaction $transaction)
+    {
         return $this->_callDirect(2, $amount, $order, $transaction);
     }
 
-    public function directRefund($amount, Order $order, Transaction $transaction) {
+    public function directRefund($amount, Order $order, Transaction $transaction)
+    {
         return $this->_callDirect(14, $amount, $order, $transaction);
     }
 
-    public function getBillingEmail(Order $order) {
+    public function getBillingEmail(Order $order)
+    {
         return $order->getCustomerEmail();
     }
 
-    public function getBillingName(Order $order) {
+    public function getBillingName(Order $order)
+    {
         return trim(preg_replace("/[^-. a-zA-Z0-9]/", " ", $this->_objectManager->get('Magento\Framework\Filter\RemoveAccents')->filter($order->getCustomerName())));
     }
 
     /**
      * @return Paybox\Epayment\Model\Config Paybox configuration object
      */
-    public function getConfig() {
+    public function getConfig()
+    {
         return $this->_objectManager->get('Paybox\Epayment\Model\Config');
     }
 
-    public function getCurrency(Order $order) {
+    public function getCurrency(Order $order)
+    {
         $currencyMapper = $this->_objectManager->get('Paybox\Epayment\Model\Iso4217Currency');
 
         $currencies = $this->_storeManager->getStore()->getAvailableCurrencyCodes();
-        if(count($currencies) > 1 && $this->getConfig()->getCurrencyConfig() == 0){
+        if (count($currencies) > 1 && $this->getConfig()->getCurrencyConfig() == 0) {
             $currency = $order->getOrderCurrencyCode();
-        }else{
+        } else {
             $currency = $order->getBaseCurrencyCode();
         }
         return $currencyMapper->getIsoCode($currency);
     }
 
-    public function getCurrencyDecimals($cartOrOrder) {
+    public function getCurrencyDecimals($cartOrOrder)
+    {
         return $this->_currencyDecimals[$this->getCurrency($cartOrOrder)];
     }
 
-    public function getCurrencyScale($cartOrOrder) {
+    public function getCurrencyScale($cartOrOrder)
+    {
         return pow(10, $this->getCurrencyDecimals($cartOrOrder));
     }
 
-    public function getParams($logParams = false, $checkSign = true) {
+    public function getParams($logParams = false, $checkSign = true)
+    {
         // Retrieves data
         $data = file_get_contents('php://input');
         if (empty($data)) {
@@ -677,7 +700,8 @@ class Paybox {
         return $params;
     }
 
-    public function getSystemUrl() {
+    public function getSystemUrl()
+    {
         $config = $this->getConfig();
         $urls = $config->getSystemUrls();
         if (empty($urls)) {
@@ -690,7 +714,8 @@ class Paybox {
         return $url;
     }
 
-    public function getResponsiveUrl() {
+    public function getResponsiveUrl()
+    {
         $config = $this->getConfig();
         $urls = $config->getResponsiveUrls();
         if (empty($urls)) {
@@ -703,7 +728,8 @@ class Paybox {
         return $url;
     }
 
-    public function getKwixoUrl() {
+    public function getKwixoUrl()
+    {
         $config = $this->getConfig();
         $urls = $config->getKwixoUrls();
         if (empty($urls)) {
@@ -716,23 +742,28 @@ class Paybox {
         return $url;
     }
 
-    public function logDebug($message) {
+    public function logDebug($message)
+    {
         $this->_logger->debug($message);
     }
 
-    public function logWarning($message) {
+    public function logWarning($message)
+    {
         $this->_logger->warning($message);
     }
 
-    public function logError($message) {
+    public function logError($message)
+    {
         $this->_logger->error($message);
     }
 
-    public function logFatal($message) {
+    public function logFatal($message)
+    {
         $this->_logger->critical($message);
     }
 
-    public function signValues(array $values) {
+    public function signValues(array $values)
+    {
         $config = $this->getConfig();
 
         // Serialize values
@@ -756,14 +787,16 @@ class Paybox {
         return strtoupper($sign);
     }
 
-    public function toErrorMessage($code) {
+    public function toErrorMessage($code)
+    {
         if (isset($this->_errorCode[$code])) {
             return $this->_errorCode[$code];
         }
         return 'Unknown error ' . $code;
     }
 
-    public function tokenizeOrder(Order $order) {
+    public function tokenizeOrder(Order $order)
+    {
         $reference = array();
         $reference[] = $order->getRealOrderId();
         $reference[] = $this->getBillingName($order);
@@ -776,7 +809,8 @@ class Paybox {
      * @param string $token Token (@see tokenizeOrder)
      * @return Mage_Sales_Model_Order
      */
-    public function untokenizeOrder($token) {
+    public function untokenizeOrder($token)
+    {
         $parts = explode(' - ', $token, 2);
         if (count($parts) < 2) {
             $message = 'Invalid decrypted token "%s"';
@@ -802,5 +836,4 @@ class Paybox {
 
         return $order;
     }
-
 }
