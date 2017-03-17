@@ -1,14 +1,23 @@
 <?php
-
 /**
  * Paybox Epayment module for Magento
  *
- * This source file is subject to the Open Software License (OSL 3.0)
- * available at : http://opensource.org/licenses/osl-3.0.php
+ * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * question.
  *
- * @package    Paybox_Epayment
- * @copyright  Copyright (c) 2013-2014 Paybox
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * LICENSE: This source file is subject to the version 3.0 of the Open
+ * Software License (OSL-3.0) that is available through the world-wide-web
+ * at the following URI: http://opensource.org/licenses/OSL-3.0. If
+ * you did not receive a copy of the OSL-3.0 license and are unable
+ * to obtain it through the web, please send a note to
+ * support@paybox.com so we can mail you a copy immediately.
+ *
+ *
+ * @version   1.0.0
+ * @author    BM Services <contact@bm-services.com>
+ * @copyright 2012-2017 Paybox
+ * @license   http://opensource.org/licenses/OSL-3.0
+ * @link      http://www.paybox.com/
  */
 
 namespace Paybox\Epayment\Block;
@@ -17,8 +26,8 @@ use Magento\Framework\Phrase;
 use Magento\Payment\Block\ConfigurableInfo;
 use Paybox\Epayment\Gateway\Response\FraudHandler;
 
-class Info extends ConfigurableInfo {
-
+class Info extends ConfigurableInfo
+{
     protected $_object_manager;
 
     /**
@@ -27,7 +36,8 @@ class Info extends ConfigurableInfo {
      * @param string $field
      * @return Phrase
      */
-    protected function getLabel($field) {
+    protected function getLabel($field)
+    {
         return __($field);
     }
 
@@ -38,7 +48,8 @@ class Info extends ConfigurableInfo {
      * @param string $value
      * @return string | Phrase
      */
-    protected function getValueView($field, $value) {
+    protected function getValueView($field, $value)
+    {
         switch ($field) {
             case FraudHandler::FRAUD_MSG_LIST:
                 return implode('; ', $value);
@@ -46,13 +57,15 @@ class Info extends ConfigurableInfo {
         return parent::getValueView($field, $value);
     }
 
-    protected function _construct() {
+    protected function _construct()
+    {
         parent::_construct();
         $this->setTemplate('pbxep/info/default.phtml');
         $this->_object_manager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
-    public function getCreditCards() {
+    public function getCreditCards()
+    {
         $result = array();
         $cards = $this->getMethod()->getCards();
         $selected = explode(',', $this->getMethod()->getConfigData('cctypes'));
@@ -64,31 +77,36 @@ class Info extends ConfigurableInfo {
         return $result;
     }
 
-    public function getPayboxData() {
+    public function getPayboxData()
+    {
         return unserialize($this->getInfo()->getPbxepAuthorization());
     }
 
-    public function getObjectManager() {
+    public function getObjectManager()
+    {
         return $this->_object_manager;
     }
 
-    public function getPayboxConfig() {
+    public function getPayboxConfig()
+    {
         return $this->_object_manager->get('Paybox\Epayment\Model\Config');
     }
 
-    public function getCardImageUrl() {
-         $data = $this->getPayboxData();
-         $cards = $this->getCreditCards();
-         if(!isset($data['cardType'])){
-            return null;
-        }
-         return $this->getViewFileUrl('Paybox_Epayment::' . 'images/' .strtolower($data['cardType']).'.45.png', array('area'  => 'frontend', 'theme' => 'Magento/luma'));
-    }
-
-    public function getCardImageLabel() {
+    public function getCardImageUrl()
+    {
         $data = $this->getPayboxData();
         $cards = $this->getCreditCards();
-        if(!isset($data['cardType'])){
+        if (!isset($data['cardType'])) {
+            return null;
+        }
+        return $this->getViewFileUrl('Paybox_Epayment::' . 'images/' .strtolower($data['cardType']).'.45.png', array('area'  => 'frontend', 'theme' => 'Magento/luma'));
+    }
+
+    public function getCardImageLabel()
+    {
+        $data = $this->getPayboxData();
+        $cards = $this->getCreditCards();
+        if (!isset($data['cardType'])) {
             return null;
         }
         if (!isset($cards[$data['cardType']])) {
@@ -98,13 +116,15 @@ class Info extends ConfigurableInfo {
         return $card['label'];
     }
 
-    public function isAuthorized() {
+    public function isAuthorized()
+    {
         $info = $this->getInfo();
         $auth = $info->getPbxepAuthorization();
         return !empty($auth);
     }
 
-    public function canCapture() {
+    public function canCapture()
+    {
         $info = $this->getInfo();
         $capture = $info->getPbxepCapture();
         $config = $this->getPayboxConfig();
@@ -117,7 +137,8 @@ class Info extends ConfigurableInfo {
         return false;
     }
 
-    public function canRefund() {
+    public function canRefund()
+    {
         $info = $this->getInfo();
         $capture = $info->getPbxepCapture();
         $config = $this->getPayboxConfig();
@@ -127,33 +148,35 @@ class Info extends ConfigurableInfo {
         return false;
     }
 
-     public function getDebitTypeLabel() {
-         $info = $this->getInfo();
-         $action = $info->getPbxepAction();
-         if (is_null($action) || ($action == 'three-time')) {
-             return null;
-         }
+    public function getDebitTypeLabel()
+    {
+        $info = $this->getInfo();
+        $action = $info->getPbxepAction();
+        if (is_null($action) || ($action == 'three-time')) {
+            return null;
+        }
          
-         $action = $info->getPbxepAction();
-         $action_model = new \Paybox\Epayment\Model\Admin\Payment\Action();
-         $actions = $action_model->toOptionArray();
-         foreach($actions as $act){
-             if($act['value'] == $action){
-                 $result = $act['label'];
-             }
-         }
-         if (($info->getPbxepAction() == \Paybox\Epayment\Model\Payment\AbstractPayment::PBXACTION_DEFERRED) && (!is_null($info->getPbxepDelay()))) {
-             $delays = new \Paybox\Epayment\Model\Admin\Payment\Delays();
-             $delays = $delays->toOptionArray();
-             $result .= ' (' . $delays[$info->getPbxepDelay()]['label'] . ')';
-         }
-         return $result;
-     }
+        $action = $info->getPbxepAction();
+        $action_model = new \Paybox\Epayment\Model\Admin\Payment\Action();
+        $actions = $action_model->toOptionArray();
+        foreach ($actions as $act) {
+            if ($act['value'] == $action) {
+                $result = $act['label'];
+            }
+        }
+        if (($info->getPbxepAction() == \Paybox\Epayment\Model\Payment\AbstractPayment::PBXACTION_DEFERRED) && (!is_null($info->getPbxepDelay()))) {
+            $delays = new \Paybox\Epayment\Model\Admin\Payment\Delays();
+            $delays = $delays->toOptionArray();
+            $result .= ' (' . $delays[$info->getPbxepDelay()]['label'] . ')';
+        }
+        return $result;
+    }
     // public function getShowInfoToCustomer() {
     //     $config = $this->getPayboxConfig();
     //     return $config->getShowInfoToCustomer() != 0;
     // }
-     public function getThreeTimeLabels() {
+     public function getThreeTimeLabels()
+     {
          $info = $this->getInfo();
          $action = $info->getPbxepAction();
          if (is_null($action) || ($action != 'three-time')) {
@@ -185,19 +208,22 @@ class Info extends ConfigurableInfo {
          return $result;
      }
 
-    public function getPartialCaptureUrl() {
+    public function getPartialCaptureUrl()
+    {
         $data = $this->getPayboxData();
         $info = $this->getInfo();
         return $this->getUrl('paybox/partial', array('order_id' => $info->getOrder()->getId(), 'transaction' => $data['transaction']));
     }
 
-    public function getCaptureUrl() {
+    public function getCaptureUrl()
+    {
         $data = $this->getPayboxData();
         $info = $this->getInfo();
         return $this->getUrl('paybox/capture', array('order_id' => $info->getOrder()->getId(), 'transaction' => $data['transaction']));
     }
 
-    public function getRefundUrl() {
+    public function getRefundUrl()
+    {
         $info = $this->getInfo();
         $order = $info->getOrder();
         $invoices = $order->getInvoiceCollection();
@@ -208,5 +234,4 @@ class Info extends ConfigurableInfo {
         }
         return null;
     }
-
 }

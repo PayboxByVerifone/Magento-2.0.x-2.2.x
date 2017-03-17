@@ -1,32 +1,44 @@
 <?php
-
 /**
  * Paybox Epayment module for Magento
  *
- * This source file is subject to the Open Software License (OSL 3.0)
- * available at : http://opensource.org/licenses/osl-3.0.php
+ * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * question.
  *
- * @package    Paybox_Epayment
- * @copyright  Copyright (c) 2013-2014 Paybox
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * LICENSE: This source file is subject to the version 3.0 of the Open
+ * Software License (OSL-3.0) that is available through the world-wide-web
+ * at the following URI: http://opensource.org/licenses/OSL-3.0. If
+ * you did not receive a copy of the OSL-3.0 license and are unable
+ * to obtain it through the web, please send a note to
+ * support@paybox.com so we can mail you a copy immediately.
+ *
+ *
+ * @version   1.0.6
+ * @author    BM Services <contact@bm-services.com>
+ * @copyright 2012-2017 Paybox
+ * @license   http://opensource.org/licenses/OSL-3.0
+ * @link      http://www.paybox.com/
  */
 
 namespace Paybox\Epayment\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use \Magento\Framework\Validator\Exception;
 
-class ProcessOrder implements ObserverInterface {
-
+class ProcessOrder implements ObserverInterface
+{
     private static $_oldOrder = null;
     
     protected $logger;
     
-    public function __construct(\Psr\Log\LoggerInterface $loggerInterface) {
-		$this->logger = $loggerInterface;
-	}
+    public function __construct(\Psr\Log\LoggerInterface $loggerInterface)
+    {
+        $this->logger = $loggerInterface;
+    }
 
-    public function onBeforeCreate($observer) {
+    public function onBeforeCreate($observer)
+    {
         $event = $observer->getEvent();
         $session = $event->getSession();
 
@@ -35,8 +47,9 @@ class ProcessOrder implements ObserverInterface {
         }
     }
 
-    public function execute(EventObserver $observer) {
-        $mode = ''; 
+    public function execute(EventObserver $observer)
+    {
+        $mode = '';
         $event = $observer->getEvent();
 
         //Event on shipment action
@@ -70,18 +83,18 @@ class ProcessOrder implements ObserverInterface {
         
         // Paybox Direct must be activated
         $config = $method->getPayboxConfig();
-        if ($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER2 
+        if ($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER2
                 && $config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER3) {
-        	return $this;
+            return $this;
         }
 
 //         Action must be "Manual"
         if ($payment->getPbxepAction() != \Paybox\Epayment\Model\Payment\AbstractPayment::PBXACTION_MANUAL) {
-        	return $this;
+            return $this;
         }
         
-        if($method->getConfigAutoCaptureMode() != \Paybox\Epayment\Model\Payment\AbstractPayment::PBXACTION_MODE_SHIPMENT){
-//            var_dump($method->getConfigAutoCaptureMode());
+        if ($method->getConfigAutoCaptureMode() != \Paybox\Epayment\Model\Payment\AbstractPayment::PBXACTION_MODE_SHIPMENT) {
+            //            var_dump($method->getConfigAutoCaptureMode());
 //            die();
             return $this;
         }
@@ -89,28 +102,21 @@ class ProcessOrder implements ObserverInterface {
         // No capture must be prevously done
         $capture = $payment->getPbxepCapture();
         if (!empty($capture)) {
-        	return $this;
+            return $this;
         }
         
         if (!$order->canInvoice()) {
-			return $this;
-		}
+            return $this;
+        }
         
         $this->logger->debug(sprintf('Order %s: Automatic capture', $order->getIncrementId()));
         $result = false;
         $error = 'Unknown error';
         
         try {
-                $result = $method->makeCapture($order);
-            }
-            catch (Exception $e) {
-                $error = $e->getMessage();
-            }
-                
-        var_dump($result, $error);
-
-
-        die();
+            $result = $method->makeCapture($order);
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+        }
     }
-
 }

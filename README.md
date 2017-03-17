@@ -8,15 +8,17 @@ En une seule intégration, offrez plusieurs méthodes de paiement, bénéficiez 
 
 ## Installation
 
-1. Aller dans le dossier racine de Magento2 en ligne de commande
+1. Assurez-vous de disposer de clés d'authentification Magento pour votre site (http://devdocs.magento.com/guides/v2.0/install-gde/prereq/connect-auth.html)
 
-2. Exécuter la commande suivante pour la récupération des fichiers du module dans le dossier `<your Magento install dir>/vendor` (vous aurez besoin de vos identifiants Magento2) :
+2. Aller dans le dossier racine de Magento2 en ligne de commande (`<your Magento install dir>`)
 
-    ```sh    
+3. Exécuter la commande suivante pour la récupération des fichiers du module via Composer (un dossier `paybox` sera créé dans le sous-dossier `vendor`). Vous aurez besoin de votre `Public key` comme identifiant et de votre `Private key` comme mot de passe :
+
+    ```sh
 	composer require paybox/epayment
     ```
 
-3. Exécuter les commandes suivantes pour l'installation, l'activation et le déploiement du module :
+4. Exécuter les commandes suivantes pour l'installation, l'activation et le déploiement du module :
 
     ```sh
     # Installation du module
@@ -27,10 +29,10 @@ En une seule intégration, offrez plusieurs méthodes de paiement, bénéficiez 
     php bin/magento setup:static-content:deploy <lang> (exemple : fr_FR)
     ```
 
-4. Vous pouvez alors configurer le module dans votre Back Office via le nouvel onglet Paybox du menu Boutiques \ Configuration
+5. Vous pouvez alors configurer le module dans votre Back Office via le nouvel onglet Paybox du menu Boutiques \ Configuration
 
 ## Configuration
 
-Le paramétrage par défaut correpond à l'environnement de test Paybox où tous les modes de paiement sont disponibles et où toutes les cartes sont activables, aucun paiement réel ne sera effectué.
+Le paramétrage par défaut correspond à l'environnement de test Paybox où tous les modes de paiement sont disponibles et où toutes les cartes sont activables, aucun paiement réel ne sera effectué.
 
 Pour utiliser le module en réel en environnement de production, vous devez avoir souscrit un contrat auprès de Paybox, disposer de vos identifiants, configurer les options, modes de paiement et cartes en fonction de votre contrat.

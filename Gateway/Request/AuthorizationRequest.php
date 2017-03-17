@@ -1,8 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * Paybox Epayment module for Magento
+ *
+ * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * question.
+ *
+ * LICENSE: This source file is subject to the version 3.0 of the Open
+ * Software License (OSL-3.0) that is available through the world-wide-web
+ * at the following URI: http://opensource.org/licenses/OSL-3.0. If
+ * you did not receive a copy of the OSL-3.0 license and are unable
+ * to obtain it through the web, please send a note to
+ * support@paybox.com so we can mail you a copy immediately.
+ *
+ *
+ * @version   1.0.6
+ * @author    BM Services <contact@bm-services.com>
+ * @copyright 2012-2017 Paybox
+ * @license   http://opensource.org/licenses/OSL-3.0
+ * @link      http://www.paybox.com/
  */
+
 namespace Paybox\Epayment\Gateway\Request;
 
 use Magento\Payment\Gateway\ConfigInterface;
@@ -16,6 +33,8 @@ class AuthorizationRequest implements BuilderInterface
      */
     private $config;
 
+    protected $_objectManager;
+
     /**
      * @param ConfigInterface $config
      */
@@ -23,6 +42,8 @@ class AuthorizationRequest implements BuilderInterface
         ConfigInterface $config
     ) {
         $this->config = $config;
+
+        $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
     /**
@@ -83,7 +104,7 @@ class AuthorizationRequest implements BuilderInterface
         }
         if (!isset($cards[$code])) {
             $message = 'No card with code %s.';
-            Mage::throwException(Mage::helper('pbxep')->__($message), $code);
+            throw new \LogicException(__($message, $code));
         }
         $card = $cards[$code];
         $values['PBX_TYPEPAIEMENT'] = $card['payment'];
@@ -103,8 +124,7 @@ class AuthorizationRequest implements BuilderInterface
             foreach ($amounts as $k => $v) {
                 $values[$k] = $v;
             }
-        }
-        else {
+        } else {
             $values['PBX_TOTAL'] = sprintf('%03d', round($orderAmount * $amountScale));
             switch ($payment->getPayboxAction()) {
                 case Paybox_Epayment_Model_Payment_Abstract::PBXACTION_MANUAL:
@@ -115,7 +135,7 @@ class AuthorizationRequest implements BuilderInterface
                     $delay = (int) $payment->getConfigData('delay');
                     if ($delay < 1) {
                         $delay = 1;
-                    } else if ($delay > 7) {
+                    } elseif ($delay > 7) {
                         $delay = 7;
                     }
                     $values['PBX_DIFF'] = sprintf('%02d', $delay);
@@ -133,7 +153,7 @@ class AuthorizationRequest implements BuilderInterface
         $values['PBX_RUF1'] = 'POST';
 
         // Choose correct language
-        $lang = Mage::app()->getLocale();
+        $lang = $manager->get('Magento\Framework\Locale\Resolver');
         if (!empty($lang)) {
             $lang = preg_replace('#_.*$#', '', $lang->getLocaleCode());
         }
@@ -145,7 +165,7 @@ class AuthorizationRequest implements BuilderInterface
         $values['PBX_LANGUE'] = $lang;
 
         // Choose page format depending on browser/devise
-        if (Mage::helper('pbxep/mobile')->isMobile()) {
+        if ($this->_objectManager->get('Paybox\Epayment\Helper\Mobile')->isMobile()) {
             $values['PBX_SOURCE'] = 'XHTML';
         }
 
@@ -159,8 +179,7 @@ class AuthorizationRequest implements BuilderInterface
         if (($card['payment'] == 'LEETCHI') && ($card['card'] == 'LEETCHI')) {
             $values['PBX_EFFECTUE'] .= '?R='.urlencode($values['PBX_CMD']);
             $values['PBX_REFUSE'] .= '?R='.urlencode($values['PBX_CMD']);
-        }
-        else if (($card['payment'] == 'PREPAYEE') && ($card['card'] == 'IDEAL')) {
+        } elseif (($card['payment'] == 'PREPAYEE') && ($card['card'] == 'IDEAL')) {
             $s =  '?C=IDEAL&P=PREPAYEE';
             $values['PBX_ANNULE'] .= $s;
             $values['PBX_EFFECTUE'] .= $s;

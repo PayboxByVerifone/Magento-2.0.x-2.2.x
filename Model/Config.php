@@ -1,20 +1,29 @@
 <?php
-
 /**
  * Paybox Epayment module for Magento
  *
- * This source file is subject to the Open Software License (OSL 3.0)
- * available at : http://opensource.org/licenses/osl-3.0.php
+ * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * question.
  *
- * @package    Paybox_Epayment
- * @copyright  Copyright (c) 2013-2014 Paybox
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * LICENSE: This source file is subject to the version 3.0 of the Open
+ * Software License (OSL-3.0) that is available through the world-wide-web
+ * at the following URI: http://opensource.org/licenses/OSL-3.0. If
+ * you did not receive a copy of the OSL-3.0 license and are unable
+ * to obtain it through the web, please send a note to
+ * support@paybox.com so we can mail you a copy immediately.
+ *
+ *
+ * @version   1.0.5
+ * @author    BM Services <contact@bm-services.com>
+ * @copyright 2012-2017 Paybox
+ * @license   http://opensource.org/licenses/OSL-3.0
+ * @link      http://www.paybox.com/
  */
 
 namespace Paybox\Epayment\Model;
 
-class Config extends \Magento\Payment\Model\Config {
-
+class Config extends \Magento\Payment\Model\Config
+{
     protected $_dataStorage;
     protected $_scopeConfig;
     protected $_objectManager;
@@ -96,22 +105,23 @@ class Config extends \Magento\Payment\Model\Config {
         $this->_objectManager = $objectManager;
     }
 
-    public function __call($name, $args) {
+    public function __call($name, $args)
+    {
         if (preg_match('#^get(.)(.*)$#', $name, $matches)) {
             $prop = strtolower($matches[1]) . $matches[2];
             if (isset($this->_configCache[$prop])) {
                 return $this->_configCache[$prop];
-            } else if (isset($this->_configMapping[$prop])) {
+            } elseif (isset($this->_configMapping[$prop])) {
                 $key = 'pbxep/' . $this->_configMapping[$prop];
                 $value = $this->_getConfigValue($key);
                 $this->_configCache[$prop] = $value;
                 return $value;
             }
-        } else if (preg_match('#^is(.)(.*)$#', $name, $matches)) {
+        } elseif (preg_match('#^is(.)(.*)$#', $name, $matches)) {
             $prop = strtolower($matches[1]) . $matches[2];
             if (isset($this->_configCache[$prop])) {
                 return $this->_configCache[$prop] == 1;
-            } else if (isset($this->_configMapping[$prop])) {
+            } elseif (isset($this->_configMapping[$prop])) {
                 $key = 'pbxep/' . $this->_configMapping[$prop];
                 $value = $this->_getConfigValue($key);
                 $this->_configCache[$prop] = $value;
@@ -121,7 +131,8 @@ class Config extends \Magento\Payment\Model\Config {
         throw new \LogicException('No function ' . $name);
     }
 
-    public function getStore() {
+    public function getStore()
+    {
         if (is_null($this->_store)) {
             $manager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
             $this->_store = $manager->getStore();
@@ -129,11 +140,13 @@ class Config extends \Magento\Payment\Model\Config {
         return $this->_store;
     }
 
-    private function _getConfigValue($name) {
+    private function _getConfigValue($name)
+    {
         return $this->_scopeConfig->getValue($name, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
-    protected function _getUrls($type, $environment = null) {
+    protected function _getUrls($type, $environment = null)
+    {
         if (is_null($environment)) {
             $environment = $this->getEnvironment();
         }
@@ -144,57 +157,70 @@ class Config extends \Magento\Payment\Model\Config {
         return array();
     }
 
-    public function getEnvironment() {
+    public function getEnvironment()
+    {
         return $this->_getConfigValue('pbxep/merchant/environment');
     }
 
-    public function getSubscription() {
+    public function getSubscription()
+    {
         return $this->_getConfigValue('pbxep/merchant/subscription');
     }
 
-    public function getHmacKey() {
+    public function getHmacKey()
+    {
         $value = $this->_getConfigValue('pbxep/merchant/hmackey');
         return $this->_objectManager->get('Magento\Framework\Encryption\Encryptor')->decrypt($value);
     }
 
-    public function getPassword() {
+    public function getPassword()
+    {
         $value = $this->_getConfigValue('pbxep/merchant/password');
         return $this->_objectManager->get('Magento\Framework\Encryption\Encryptor')->decrypt($value);
     }
 
-    public function getSystemUrls($environment = null) {
+    public function getSystemUrls($environment = null)
+    {
         return $this->_getUrls('system', $environment);
     }
 
-    public function getResponsiveUrls($environment = null) {
+    public function getResponsiveUrls($environment = null)
+    {
         return $this->_getUrls('responsive', $environment);
     }
 
-    public function getKwixoUrls($environment = null) {
+    public function getKwixoUrls($environment = null)
+    {
         return $this->_getUrls('kwixo', $environment);
     }
 
-    public function getMobileUrls($environment = null) {
+    public function getMobileUrls($environment = null)
+    {
         return $this->_getUrls('mobile', $environment);
     }
 
-    public function getDirectUrls($environment = null) {
+    public function getDirectUrls($environment = null)
+    {
         return $this->_getUrls('direct', $environment);
     }
 
-    public function getDefaultNewOrderStatus() {
+    public function getDefaultNewOrderStatus()
+    {
         return $this->_getConfigValue('pbxep/defaultoption/new_order_status');
     }
 
-    public function getDefaultCapturedStatus() {
+    public function getDefaultCapturedStatus()
+    {
         return $this->_getConfigValue('pbxep/defaultoption/payment_captured_status');
     }
 
-    public function getDefaultAuthorizedStatus() {
+    public function getDefaultAuthorizedStatus()
+    {
         return $this->_getConfigValue('pbxep/defaultoption/payment_authorized_status');
     }
 
-    public function getAutomaticInvoice() {
+    public function getAutomaticInvoice()
+    {
         $value = $this->_getConfigValue('pbxep/automatic_invoice');
         if (is_null($value)) {
             $value = 0;
@@ -202,7 +228,8 @@ class Config extends \Magento\Payment\Model\Config {
         return (int) $value;
     }
 
-    public function getShowInfoToCustomer() {
+    public function getShowInfoToCustomer()
+    {
         $value = $this->_getConfigValue('pbxep/info_to_customer');
         if (is_null($value)) {
             $value = 1;
@@ -210,7 +237,8 @@ class Config extends \Magento\Payment\Model\Config {
         return (int) $value;
     }
     
-    public function getCurrencyConfig() {
+    public function getCurrencyConfig()
+    {
         $value = $this->_getConfigValue('pbxep/info/currency');
         if (is_null($value)) {
             $value = 1;
@@ -218,7 +246,8 @@ class Config extends \Magento\Payment\Model\Config {
         return (int) $value;
     }
 
-    public function getResponsiveConfig() {
+    public function getResponsiveConfig()
+    {
         $value = $this->_getConfigValue('pbxep/info/responsive');
         if (is_null($value)) {
             $value = 0;
@@ -226,7 +255,8 @@ class Config extends \Magento\Payment\Model\Config {
         return (int) $value;
     }
 
-    public function getKwixoDefaultCategory() {
+    public function getKwixoDefaultCategory()
+    {
         $value = $this->_getConfigValue('pbxep/kwixo/default_category');
         if (is_null($value)) {
             $value = 1;
@@ -234,7 +264,8 @@ class Config extends \Magento\Payment\Model\Config {
         return (int) $value;
     }
 
-    public function getKwixoDefaultCarrierType() {
+    public function getKwixoDefaultCarrierType()
+    {
         $value = $this->_getConfigValue('pbxep/kwixo/default_carrier_type');
         if (is_null($value)) {
             $value = 4;
@@ -242,12 +273,12 @@ class Config extends \Magento\Payment\Model\Config {
         return (int) $value;
     }
 
-    public function getKwixoDefaultCarrierSpeed() {
+    public function getKwixoDefaultCarrierSpeed()
+    {
         $value = $this->_getConfigValue('pbxep/kwixo/default_carrier_speed');
         if (is_null($value)) {
             $value = 2;
         }
         return (int) $value;
     }
-
 }

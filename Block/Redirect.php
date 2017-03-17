@@ -1,20 +1,29 @@
 <?php
-
 /**
  * Paybox Epayment module for Magento
  *
- * This source file is subject to the Open Software License (OSL 3.0)
- * available at : http://opensource.org/licenses/osl-3.0.php
+ * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * question.
  *
- * @package    Paybox_Epayment
- * @copyright  Copyright (c) 2013-2014 Paybox
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * LICENSE: This source file is subject to the version 3.0 of the Open
+ * Software License (OSL-3.0) that is available through the world-wide-web
+ * at the following URI: http://opensource.org/licenses/OSL-3.0. If
+ * you did not receive a copy of the OSL-3.0 license and are unable
+ * to obtain it through the web, please send a note to
+ * support@paybox.com so we can mail you a copy immediately.
+ *
+ *
+ * @version   1.0.6
+ * @author    BM Services <contact@bm-services.com>
+ * @copyright 2012-2017 Paybox
+ * @license   http://opensource.org/licenses/OSL-3.0
+ * @link      http://www.paybox.com/
  */
 
 namespace Paybox\Epayment\Block;
 
-class Redirect extends \Magento\Framework\View\Element\Template {
-
+class Redirect extends \Magento\Framework\View\Element\Template
+{
     protected $_objectManager;
     protected $_helper;
 
@@ -27,15 +36,18 @@ class Redirect extends \Magento\Framework\View\Element\Template {
         $this->_helper = $helper;
     }
 
-    public function getFormFields() {
+    public function getFormFields()
+    {
         $registry = $this->_objectManager->get('Magento\Framework\Registry');
-        $order = $registry->registry('pbxep/order_'.$_SESSION['checkout']['current_pbxep_order_id']);
+        $current_order_id = $this->_objectManager->get('Magento\Checkout\Model\Session')->getCurrentPbxepOrderId();
+        $order = $registry->registry('pbxep/order_'.$current_order_id);
         $payment = $order->getPayment()->getMethodInstance();
         $cntr = $this->_objectManager->get('Paybox\Epayment\Model\Paybox');
         return $cntr->buildSystemParams($order, $payment);
     }
 
-    public function getInputType() {
+    public function getInputType()
+    {
         $config = $this->_objectManager->get('Paybox\Epayment\Model\Config');
         if ($config->isDebug()) {
             return 'text';
@@ -43,28 +55,31 @@ class Redirect extends \Magento\Framework\View\Element\Template {
         return 'hidden';
     }
 
-    public function getKwixoUrl() {
+    public function getKwixoUrl()
+    {
         $paybox = $this->_objectManager->get('Paybox\Epayment\Model\Paybox');
         $urls = $paybox->getConfig()->getKwixoUrls();
         return $paybox->checkUrls($urls);
     }
 
-    public function getMobileUrl() {
+    public function getMobileUrl()
+    {
         $paybox = $this->_objectManager->get('Paybox\Epayment\Model\Paybox');
         $urls = $paybox->getConfig()->getMobileUrls();
         return $paybox->checkUrls($urls);
     }
 
-    public function getSystemUrl() {
+    public function getSystemUrl()
+    {
         $paybox = $this->_objectManager->get('Paybox\Epayment\Model\Paybox');
         $urls = $paybox->getConfig()->getSystemUrls();
         return $paybox->checkUrls($urls);
     }
 
-    public function getResponsiveUrl() {
+    public function getResponsiveUrl()
+    {
         $paybox = $this->_objectManager->get('Paybox\Epayment\Model\Paybox');
         $urls = $paybox->getConfig()->getResponsiveUrls();
         return $paybox->checkUrls($urls);
     }
-
 }

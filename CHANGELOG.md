@@ -1,5 +1,14 @@
 # Change Log
 
+## [1.0.6] - 2017-03-09
+
+### Corrections
+- Traitement de l'échec du paiement : statut de la commande "VOID"
+- Changement des données transaction et appel
+- Corrections pour soumission au marketplace
+- Passage à la norme PSR2
+- Nettoyage du panier et de la commande en cas de paiement refusé ou annulé
+
 ## [1.0.5] - 2016-11-15
 
 ### Ajouts
