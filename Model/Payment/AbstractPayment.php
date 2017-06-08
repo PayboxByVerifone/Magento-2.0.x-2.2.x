@@ -270,8 +270,7 @@ abstract class AbstractPayment extends AbstractMethod
         $order = $payment->getOrder();
         $order->addStatusHistoryComment('Call to cancel()');
         $order->save();
-        die();
-        return $this;
+        return;
     }
 
     /**
