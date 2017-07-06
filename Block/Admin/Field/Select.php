@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -26,7 +25,7 @@ class Select extends \Magento\Config\Block\System\Config\Form\Field
 {
     protected function _getOptionHtmlAttributes()
     {
-        return array('type', 'name', 'class', 'style', 'checked', 'onclick', 'onchange', 'disabled');
+        return ['type', 'name', 'class', 'style', 'checked', 'onclick', 'onchange', 'disabled'];
     }
 
     protected function _optionToHtml($option, $selected)
@@ -59,15 +58,16 @@ class Select extends \Magento\Config\Block\System\Config\Form\Field
 
         $value = $element->getValue();
         if (!is_array($value)) {
-            $value = array($value);
+            $value = [$value];
         }
 
         if ($values = $element->getValues()) {
             foreach ($values as $key => $option) {
                 if (!is_array($option)) {
-                    $html.= $this->_optionToHtml(array(
+                    $html.= $this->_optionToHtml(
+                        [
                         'value' => $key,
-                        'label' => $option),
+                        'label' => $option],
                         $value
                     );
                 } elseif (is_array($option['value'])) {

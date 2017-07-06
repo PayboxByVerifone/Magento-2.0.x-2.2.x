@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.6
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -82,18 +81,20 @@ class Threetime extends AbstractPayment
         $this->logDebug(sprintf('Order %s: Threetime IPN', $order->getIncrementId()));
 
         $this->logDebug(sprintf('onIPNSuccess :', $order->getIncrementId()));
-        
+
         $payment = $order->getPayment();
 
         // Message
 
         // Create transaction
         $type = Transaction::TYPE_CAPTURE;
-        $txn = $this->_addPayboxTransaction($order, $type, $data, true, array(
+        $txn = $this->_addPayboxTransaction(
+            $order, $type, $data, true, array(
             self::CALL_NUMBER => $data['call'],
             self::TRANSACTION_NUMBER => $data['transaction'],
-        ));
-        
+            )
+        );
+
         if (is_null($payment->getPbxepFirstPayment())) {
             $this->logDebug(sprintf('Order %s: First payment', $order->getIncrementId()));
 
@@ -115,7 +116,7 @@ class Threetime extends AbstractPayment
             } else {
                 $order->addStatusHistoryComment($message);
             }
-            
+
             // Additional informations
             $payment->setPbxepFirstPayment(serialize($data));
             $payment->setPbxepAuthorization(serialize($data));
@@ -148,7 +149,7 @@ class Threetime extends AbstractPayment
 
         // Associate data to payment
         $payment->setPbxepAction('three-time');
-        
+
         $payment->save();
         $order->save();
     }

@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.6
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -25,7 +24,7 @@ namespace Paybox\Epayment\Controller\Adminhtml\Capture;
 class Index extends \Magento\Backend\App\Action
 {
     public function __construct(
-    \Magento\Backend\App\Action\Context $context, \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Backend\App\Action\Context $context, \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
@@ -35,16 +34,16 @@ class Index extends \Magento\Backend\App\Action
     {
         $orderId = $this->getRequest()->getParam('order_id');
         $order = $this->_objectManager->get('Magento\Sales\Model\Order')->load($orderId);
-        
+
         $payment = $order->getPayment();
         $method = $payment->getMethodInstance();
 
         $result = $method->makeCapture($order);
-        
+
         if (!$result) {
             $this->_objectManager->get('Magento\Backend\Model\Session')->setCommentText($this->__('Unable to create an invoice.'));
         }
-        
-        $this->_redirect('*/sales/order/view', array('order_id' => $orderId));
+
+        $this->_redirect('*/sales/order/view', ['order_id' => $orderId]);
     }
 }

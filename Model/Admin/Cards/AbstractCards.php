@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -33,10 +32,28 @@ abstract class AbstractCards extends AbstractMethod
     abstract public function getConfigNodeName();
 
     public function __construct(
-    \Magento\Framework\Model\Context $context, \Magento\Framework\Registry $registry, \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory, \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory, \Magento\Payment\Helper\Data $paymentData, \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig, \Magento\Payment\Model\Method\Logger $logger, \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null, \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null, array $data = []
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Payment\Model\Method\Logger $logger,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         parent::__construct(
-                $context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $resource, $resourceCollection, $data
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $paymentData,
+            $scopeConfig,
+            $logger,
+            $resource,
+            $resourceCollection,
+            $data
         );
         $this->_scopeConfig = $scopeConfig;
         $this->_store = $this->getStore();
@@ -49,7 +66,7 @@ abstract class AbstractCards extends AbstractMethod
 
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if (null === $this->_store) {
             $ObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $manager = $ObjectManager->get('Magento\Store\Model\StoreManagerInterface');
             $this->_store = $manager->getStore();

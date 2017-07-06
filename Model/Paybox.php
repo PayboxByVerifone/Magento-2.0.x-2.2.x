@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.6
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -251,13 +250,13 @@ class Paybox
     protected $_logger = null;
 
     public function __construct(
-    \Magento\Framework\ObjectManagerInterface $objectManager, \Magento\Framework\UrlInterface $urlInterface, \Paybox\Epayment\Helper\Data $helper, \Psr\Log\LoggerInterface $logger
+        \Magento\Framework\ObjectManagerInterface $objectManager, \Magento\Framework\UrlInterface $urlInterface, \Paybox\Epayment\Helper\Data $helper, \Psr\Log\LoggerInterface $logger
     ) {
         $this->_objectManager = $objectManager;
         $this->_urlInterface = $urlInterface;
         $this->_helper = $helper;
         $this->_logger = $logger;
-        
+
         $this->_storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
     }
 
@@ -307,20 +306,22 @@ class Paybox
         // Specific Paypal
         $details = $transaction->getAdditionalInformation(Transaction::RAW_DETAILS);
         switch ($details['cardType']) {
-            case 'PAYPAL':
-                $fields['ACQUEREUR'] = 'PAYPAL';
-                break;
+        case 'PAYPAL':
+            $fields['ACQUEREUR'] = 'PAYPAL';
+            break;
         }
 
         $urls = $config->getDirectUrls();
         $url = $this->checkUrls($urls);
 
         // Init client
-        $clt = new \Magento\Framework\HTTP\ZendClient($url, array(
+        $clt = new \Magento\Framework\HTTP\ZendClient(
+            $url, array(
             'maxredirects' => 0,
             'useragent' => 'Magento Paybox module',
             'timeout' => 5,
-        ));
+            )
+        );
         $clt->setMethod(\Magento\Framework\HTTP\ZendClient::POST);
         $clt->setRawData(http_build_query($fields));
 
@@ -372,7 +373,7 @@ class Paybox
         $card = $cards[$code];
         $values['PBX_TYPEPAIEMENT'] = $card['payment'];
         $values['PBX_TYPECARTE'] = $card['card'];
-        
+
         // Order information
         $values['PBX_PORTEUR'] = $this->getBillingEmail($order);
         $values['PBX_DEVISE'] = $this->getCurrency($order);
@@ -385,7 +386,7 @@ class Paybox
         } else {
             $orderAmount = $order->getBaseGrandTotal();
         }
-        
+
         $amountScale = $this->_currencyDecimals[$values['PBX_DEVISE']];
         $amountScale = pow(10, $amountScale);
         if ($payment->getCode() == 'pbxep_threetime') {
@@ -396,19 +397,19 @@ class Paybox
         } else {
             $values['PBX_TOTAL'] = sprintf('%03d', round($orderAmount * $amountScale));
             switch ($payment->getPayboxAction()) {
-                case AbstractPayment::PBXACTION_MANUAL:
-                    $values['PBX_AUTOSEULE'] = 'O';
-                    break;
+            case AbstractPayment::PBXACTION_MANUAL:
+                $values['PBX_AUTOSEULE'] = 'O';
+                break;
 
-                case AbstractPayment::PBXACTION_DEFERRED:
-                    $delay = (int) $payment->getConfigData('delay');
-                    if ($delay < 1) {
-                        $delay = 1;
-                    } elseif ($delay > 7) {
-                        $delay = 7;
-                    }
-                    $values['PBX_DIFF'] = sprintf('%02d', $delay);
-                    break;
+            case AbstractPayment::PBXACTION_DEFERRED:
+                $delay = (int) $payment->getConfigData('delay');
+                if ($delay < 1) {
+                    $delay = 1;
+                } elseif ($delay > 7) {
+                    $delay = 7;
+                }
+                $values['PBX_DIFF'] = sprintf('%02d', $delay);
+                break;
             }
         }
 
@@ -487,7 +488,7 @@ class Paybox
             $values['PBX_REFUSE'] .= $s;
             $values['PBX_REPONDRE_A'] .= $s;
         }
-        
+
         //PBX Version
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $productMetadata = $objectManager->get('Magento\Framework\App\ProductMetadataInterface');
@@ -522,11 +523,13 @@ class Paybox
     public function checkUrls(array $urls)
     {
         // Init client
-        $client = new \Magento\Framework\HTTP\ZendClient(null, array(
+        $client = new \Magento\Framework\HTTP\ZendClient(
+            null, array(
             'maxredirects' => 0,
             'useragent' => 'Magento Paybox module',
             'timeout' => 5,
-        ));
+            )
+        );
         $client->setMethod(\Magento\Framework\HTTP\ZendClient::GET);
 
         $error = null;
@@ -806,7 +809,8 @@ class Paybox
 
     /**
      * Load order from the $token
-     * @param string $token Token (@see tokenizeOrder)
+     *
+     * @param  string $token Token (@see tokenizeOrder)
      * @return Mage_Sales_Model_Order
      */
     public function untokenizeOrder($token)

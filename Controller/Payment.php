@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.6
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -33,7 +32,7 @@ class Payment extends \Magento\Framework\App\Action\Action
     protected $_logger;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context                        $context
      * @param \Magento\Framework\View\Result\PageFactory resultPageFactory
      */
     public function __construct(
@@ -58,13 +57,13 @@ class Payment extends \Magento\Framework\App\Action\Action
         $this->messageManager->getMessages(true);
 
         $storeId = $order->getStore()->getId();
-        
+
         if ($success) {
             $this->_getCheckout()->setLastQuoteId($order->getQuoteId())
-                                ->setLastSuccessQuoteId($order->getQuoteId())
-                                ->setLastOrderId($order->getId())
-                                ->setLastRealOrderId($order->getIncrementId())
-                                ->setLastOrderStatus($order->getStatus());
+                ->setLastSuccessQuoteId($order->getQuoteId())
+                ->setLastOrderId($order->getId())
+                ->setLastRealOrderId($order->getIncrementId())
+                ->setLastOrderStatus($order->getStatus());
 
             $this->logDebug('Redirecting to success page.');
             $this->_redirect('checkout/onepage/success');
@@ -82,7 +81,7 @@ class Payment extends \Magento\Framework\App\Action\Action
             }
 
             $this->logDebug('Redirecting to cart page.');
-            $this->_redirect('checkout/cart', array('_store' => $storeId));
+            $this->_redirect('checkout/cart', ['_store' => $storeId]);
         }
     }
 
@@ -97,7 +96,7 @@ class Payment extends \Magento\Framework\App\Action\Action
 
         // Retrieves quote
         $quote = $this->_objectManager->get('Magento\Quote\Model\Quote')->load($quoteId);
-        if (empty($quote) || is_null($quote->getId())) {
+        if (empty($quote) || null === $quote->getId()) {
             $message = 'Not existing quote id associated with the order %d';
             throw new \LogicException(__($message, $order->getId()));
         }

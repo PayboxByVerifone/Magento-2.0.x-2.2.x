@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.6
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -83,7 +82,7 @@ class Redirect extends \Paybox\Epayment\Controller\Payment
         // Keep track of order for security check
         $orders = $session->getPbxepOrders();
         if (is_null($orders)) {
-            $orders = array();
+            $orders = [];
         }
 
         $orders[$encryptor->encrypt($orderId)] = true;
@@ -111,14 +110,14 @@ class Redirect extends \Paybox\Epayment\Controller\Payment
 
         // add history comment and save it
         $order->addStatusHistoryComment(__('Paybox - Client sent to Paybox payment page.'), false)
-                ->setIsCustomerNotified(false)
-                ->save();
+            ->setIsCustomerNotified(false)
+            ->save();
 
         // clear quote data
         $this->_getCheckout()->unsLastQuoteId()
-                            ->unsLastSuccessQuoteId()
-                            ->clearHelperData();
-        
+            ->unsLastSuccessQuoteId()
+            ->clearHelperData();
+
         return $page;
     }
 }

@@ -172,3 +172,6 @@
 "Payment page type", "Type de page de paiement"
 "Classic", "Classique"
 "Responsive", "Responsive"
+
+"You notified customer about invoice #%1.","Le client a été notifié de la création de la facture #%1."
+"Captured amount of %1 online.","Montant capturé de %1 en ligne."

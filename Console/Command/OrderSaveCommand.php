@@ -12,14 +12,13 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
  * @link      http://www.paybox.com/
  */
- 
+
 namespace Paybox\Epayment\Console\Command;
 
 use Magento\Framework\App\ObjectManager\ConfigLoader;
@@ -36,7 +35,7 @@ class OrderSaveCommand extends Command
 {
     protected $objectManager;
     protected $_order;
-    
+
     public function __construct(
         ObjectManagerFactory $objectManagerFactory
     ) {
@@ -46,7 +45,7 @@ class OrderSaveCommand extends Command
         $this->objectManager = $objectManagerFactory->create($params);
         parent::__construct();
     }
-    
+
     protected function configure()
     {
         $this->setName('paybox:saveorder')
@@ -54,12 +53,12 @@ class OrderSaveCommand extends Command
             ->setDefinition($this->getInputList());
         parent::configure();
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->addArguments($input);
         $output->writeln('<info>Starting Paybox SaveOrder Test</info>');
-        
+
         if (!empty($this->_order)) {
             $output->writeln("Order = {$this->_order}");
             $order = $this->objectManager->get('Magento\Sales\Model\Order');
@@ -68,15 +67,15 @@ class OrderSaveCommand extends Command
             $order->save();
             $output->writeln("Order Saved");
         }
-        
+
         $output->writeln('<info>End Paybox SaveOrder Test</info>');
     }
-    
+
     public function addArguments($input)
     {
         $this->_order = intval($input->getArgument("order"));
     }
-    
+
     public function getInputList()
     {
         $inputList = [];

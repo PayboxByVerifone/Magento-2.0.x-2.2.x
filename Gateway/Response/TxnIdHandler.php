@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -32,8 +31,8 @@ class TxnIdHandler implements HandlerInterface
     /**
      * Handles transaction id
      *
-     * @param array $handlingSubject
-     * @param array $response
+     * @param  array $handlingSubject
+     * @param  array $response
      * @return void
      */
     public function handle(array $handlingSubject, array $response)
@@ -44,12 +43,12 @@ class TxnIdHandler implements HandlerInterface
             throw new \InvalidArgumentException('Payment data object should be provided');
         }
 
-        /** @var PaymentDataObjectInterface $paymentDO */
+        // @var PaymentDataObjectInterface $paymentDO
         $paymentDO = $handlingSubject['payment'];
 
         $payment = $paymentDO->getPayment();
 
-        /** @var $payment \Magento\Sales\Model\Order\Payment */
+        // @var $payment \Magento\Sales\Model\Order\Payment
         $payment->setTransactionId($response[self::TXN_ID]);
         $payment->setIsTransactionClosed(false);
     }

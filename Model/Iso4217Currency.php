@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -207,7 +206,7 @@ class Iso4217Currency
     /**
      * Return ISO 4217 currency code from Magento currency code
      *
-     * @param string$code Magento currency code
+     * @param  string $code Magento currency code
      * @return string ISO 4217 currency code
      */
     public function getIsoCode($magentoCode, $default = null)

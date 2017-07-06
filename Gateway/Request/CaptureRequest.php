@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.6
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -46,7 +45,7 @@ class CaptureRequest implements BuilderInterface
     /**
      * Builds ENV request
      *
-     * @param array $buildSubject
+     * @param  array $buildSubject
      * @return array
      */
     public function build(array $buildSubject)
@@ -57,7 +56,7 @@ class CaptureRequest implements BuilderInterface
             throw new \InvalidArgumentException('Payment data object should be provided');
         }
 
-        /** @var PaymentDataObjectInterface $paymentDO */
+        // @var PaymentDataObjectInterface $paymentDO
         $paymentDO = $buildSubject['payment'];
 
         $order = $paymentDO->getOrder();
@@ -82,36 +81,34 @@ class CaptureRequest implements BuilderInterface
         $this->logDebug(sprintf('Order %s: Capture for %f', $order->getIncrementId(), $amount));
 
         // Currently processing a transaction ? Use it.
-        if (!is_null($this->_processingTransaction)) {
+        if (null !== $this->_processingTransaction) {
             $txn = $this->_processingTransaction;
 
             switch ($txn->getTxnType()) {
                 // Already captured
-                case Transaction::TYPE_CAPTURE:
-                    $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
-                    if (!is_array($trxData)) {
-                        throw new \LogicException('No transaction found.');
-                    }
+            case Transaction::TYPE_CAPTURE:
+                $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
+                if (!is_array($trxData)) {
+                    throw new \LogicException('No transaction found.');
+                }
 
-                    $payment->setTransactionId($txn->getTransactionId());
-                    // $payment->setSkipTransactionCreation(true);
-                    $payment->setIsTransactionClosed(0);
-                    return $this;
+                $payment->setTransactionId($txn->getTransactionId());
+                $payment->setIsTransactionClosed(0);
+                return $this;
 
-                case Transaction::TYPE_AUTH:
-                    // Nothing to do
-                    break;
+            case Transaction::TYPE_AUTH:
+                // Nothing to do
+                break;
 
-                default:
-                    throw new \LogicException('Unsupported transaction type '.$txn->getTxnType());
+            default:
+                throw new \LogicException('Unsupported transaction type '.$txn->getTxnType());
             }
         }
-
-        // Otherwise, find the good transaction
         else {
+            // Otherwise, find the good transaction
             // Find capture transaction
             $txn = $this->getPayboxTransaction($payment, Transaction::TYPE_CAPTURE);
-            if (!is_null($txn)) {
+            if (null !== $txn) {
                 // Find Paybox data
                 $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
                 if (!is_array($trxData)) {
@@ -120,14 +117,13 @@ class CaptureRequest implements BuilderInterface
 
                 // Already captured
                 $payment->setTransactionId($txn->getTransactionId());
-                // $payment->setSkipTransactionCreation(true);
                 $payment->setIsTransactionClosed(0);
                 return $this;
             }
 
             // Find authorization transaction
             $txn = $this->getPayboxTransaction($payment, Transaction::TYPE_AUTH, true);
-            if (is_null($txn)) {
+            if (null === $txn) {
                 throw new \LogicException('Payment never authorized.');
             }
         }
@@ -153,10 +149,12 @@ class CaptureRequest implements BuilderInterface
 
         // Transaction
         $type = Transaction::TYPE_CAPTURE;
-        $captureTxn = $this->_addPayboxDirectTransaction($order, $type, $data, $close, array(
-            self::CALL_NUMBER => $data['NUMTRANS'],
-            self::TRANSACTION_NUMBER => $data['NUMAPPEL'],
-                ), $txn);
+        $captureTxn = $this->_addPayboxDirectTransaction(
+            $order, $type, $data, $close, [
+                self::CALL_NUMBER => $data['NUMTRANS'],
+                self::TRANSACTION_NUMBER => $data['NUMAPPEL'],
+            ], $txn
+        );
         $captureTxn->save();
         if ($close) {
             $captureTxn->close();
@@ -164,7 +162,6 @@ class CaptureRequest implements BuilderInterface
         }
 
         // Avoid automatic transaction creation
-        // $payment->setSkipTransactionCreation(true);
         $payment->setIsTransactionClosed(0);
         $payment->save();
 

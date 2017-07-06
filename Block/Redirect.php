@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.6
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -28,7 +27,9 @@ class Redirect extends \Magento\Framework\View\Element\Template
     protected $_helper;
 
     public function __construct(
-    \Magento\Framework\View\Element\Template\Context $context, array $data = [], \Paybox\Epayment\Helper\Data $helper
+        \Magento\Framework\View\Element\Template\Context $context,
+        array $data = [],
+        \Paybox\Epayment\Helper\Data $helper
     ) {
         parent::__construct($context, $data);
 

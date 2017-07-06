@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -56,7 +55,7 @@ class ClientMock implements ClientInterface
     /**
      * Places request to gateway. Returns result as ENV array
      *
-     * @param TransferInterface $transferObject
+     * @param  TransferInterface $transferObject
      * @return array
      */
     public function placeRequest(TransferInterface $transferObject)
@@ -119,7 +118,7 @@ class ClientMock implements ClientInterface
     /**
      * Returns result code
      *
-     * @param TransferInterface $transfer
+     * @param  TransferInterface $transfer
      * @return int
      */
     private function getResultCode(TransferInterface $transfer)
@@ -136,14 +135,14 @@ class ClientMock implements ClientInterface
     /**
      * Returns response fields for result code
      *
-     * @param int $resultCode
+     * @param  int $resultCode
      * @return array
      */
     private function getFieldsBasedOnResponseType($resultCode)
     {
         switch ($resultCode) {
-            case self::FAILURE:
-                return [
+        case self::FAILURE:
+            return [
                     'FRAUD_MSG_LIST' => [
                         'Stolen card',
                         'Customer location differs'

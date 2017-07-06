@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -26,9 +25,9 @@ class Environment implements \Magento\Framework\Option\ArrayInterface
 {
     public function toOptionArray()
     {
-        return array(
-            array('value' => 'PRODUCTION', 'label' => __('Production')),
-            array('value' => 'TEST', 'label' => __('Test')),
-        );
+        return [
+            ['value' => 'PRODUCTION', 'label' => __('Production')],
+            ['value' => 'TEST', 'label' => __('Test')],
+        ];
     }
 }

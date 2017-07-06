@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -41,7 +40,7 @@ class Payment
 
     public function getCreditCards()
     {
-        $result = array();
+        $result = [];
         $cards = $this->getMethod()->getCards();
         $selected = explode(',', $this->getMethod()->getConfigData('cctypes'));
         foreach ($cards as $code => $card) {
@@ -51,10 +50,10 @@ class Payment
         }
         return $result;
     }
-    
+
     public function getCards()
     {
-        $result = array();
+        $result = [];
         $cards = $this->getMethod()->getCards();
         $selected = explode(',', $this->getMethod()->getConfigData('cctypes'));
         foreach ($cards as $code => $card) {
@@ -68,7 +67,7 @@ class Payment
     public function getMethodLabelAfterHtml()
     {
         $cards = $this->getCreditCards();
-        $html = array();
+        $html = [];
         foreach ($cards as $card) {
             $url = $this->htmlEscape($this->getSkinUrl($card['image']));
             $alt = $this->htmlEscape($card['label']);

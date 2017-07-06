@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -25,7 +24,7 @@ namespace Paybox\Epayment\Helper;
 class Mobile extends \Magento\Framework\App\Helper\AbstractHelper
 {
     protected $_objectManager = null;
- 
+
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {

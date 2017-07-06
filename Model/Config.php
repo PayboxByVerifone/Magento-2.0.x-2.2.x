@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.5
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -97,7 +96,7 @@ class Config extends \Magento\Payment\Model\Config
     );
 
     public function __construct(
-    \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig, \Magento\Payment\Model\Method\Factory $paymentMethodFactory, \Magento\Framework\Locale\ResolverInterface $localeResolver, \Magento\Framework\Config\DataInterface $dataStorage, \Magento\Framework\Stdlib\DateTime\DateTime $date, \Magento\Framework\ObjectManagerInterface $objectManager
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig, \Magento\Payment\Model\Method\Factory $paymentMethodFactory, \Magento\Framework\Locale\ResolverInterface $localeResolver, \Magento\Framework\Config\DataInterface $dataStorage, \Magento\Framework\Stdlib\DateTime\DateTime $date, \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         parent::__construct($scopeConfig, $paymentMethodFactory, $localeResolver, $dataStorage, $date);
         $this->_dataStorage = $dataStorage;
@@ -236,7 +235,7 @@ class Config extends \Magento\Payment\Model\Config
         }
         return (int) $value;
     }
-    
+
     public function getCurrencyConfig()
     {
         $value = $this->_getConfigValue('pbxep/info/currency');

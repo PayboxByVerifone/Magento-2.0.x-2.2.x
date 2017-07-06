@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -26,10 +25,10 @@ class Subscription implements \Magento\Framework\Option\ArrayInterface
 {
     public function toOptionArray()
     {
-        return array(
-            array('value' => 'essential', 'label' => __('Paybox System (Essential Pack)')),
-            array('value' => 'flexible', 'label' => __('Paybox System + Paybox Direct (Flexible Pack)')),
-            array('value' => 'plus', 'label' => __('Paybox System + Paybox Direct Plus (Flexible Pack)')),
-        );
+        return [
+            ['value' => 'essential', 'label' => __('Paybox System (Essential Pack)')],
+            ['value' => 'flexible', 'label' => __('Paybox System + Paybox Direct (Flexible Pack)')],
+            ['value' => 'plus', 'label' => __('Paybox System + Paybox Direct Plus (Flexible Pack)')],
+        ];
     }
 }

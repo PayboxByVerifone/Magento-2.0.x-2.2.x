@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -25,25 +24,25 @@ namespace Paybox\Epayment\Model\Admin\Order\Status;
 class Mode extends \Paybox\Epayment\Model\Admin\Order\Status
 {
     //	protected $_stateStatuses = array(
-//		\Magento\Sales\Model\Order::STATE_NEW,
-//		\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT,
-//	);
-        
-        public function toOptionArray()
-        {
-            $options = parent::toOptionArray();
-            $options[0] = array(
+    //		\Magento\Sales\Model\Order::STATE_NEW,
+    //		\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT,
+    //	);
+
+    public function toOptionArray()
+    {
+        $options = parent::toOptionArray();
+        $options[0] = [
             'value' => 'manual',
             'label' => __('Manual capture only'),
-        );
-//    	$options[1] = array(
-//    		'value' => 'state',
-//    		'label' => __('On order state change'),
-//    	);
-        $options[2] = array(
+        ];
+        //    	$options[1] = array(
+        //    		'value' => 'state',
+        //    		'label' => __('On order state change'),
+        //    	);
+        $options[2] = [
             'value' => 'shipment',
             'label' => __('On order shipment'),
-        );
-            return $options;
-        }
+        ];
+        return $options;
+    }
 }

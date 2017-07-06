@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -31,33 +30,33 @@ class Threetime extends AbstractCards
 
     public function toOptionArray()
     {
-        $result = array();
+        $result = [];
         $configPath = $this->getConfigPath();
         $cards = $this->_getConfigValue($configPath);
         if (!empty($cards)) {
             foreach ($cards as $code => $card) {
-                $result[] = array(
+                $result[] = [
                     'label' => __($card['label']),
                     'value' => $code,
-                );
+                ];
             }
         } else {
-            $result[] = array(
+            $result[] = [
                 'label' => __('CB'),
                 'value' => 'CB',
-            );
-            $result[] = array(
+            ];
+            $result[] = [
                 'label' => __('Visa'),
                 'value' => 'VISA',
-            );
-            $result[] = array(
+            ];
+            $result[] = [
                 'label' => __('Mastercard'),
                 'value' => 'EUROCARD_MASTERCARD',
-            );
-            $result[] = array(
+            ];
+            $result[] = [
                 'label' => __('E-Carte Bleue'),
                 'value' => 'E_CARD',
-            );
+            ];
         }
         return $result;
     }

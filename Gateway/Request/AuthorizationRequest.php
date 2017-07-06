@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.6
+ * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -49,7 +48,7 @@ class AuthorizationRequest implements BuilderInterface
     /**
      * Builds ENV request
      *
-     * @param array $buildSubject
+     * @param  array $buildSubject
      * @return array
      */
     public function build(array $buildSubject)
@@ -60,11 +59,13 @@ class AuthorizationRequest implements BuilderInterface
             throw new \InvalidArgumentException('Payment data object should be provided');
         }
 
-        /** @var PaymentDataObjectInterface $payment */
+        /**
+         * @var PaymentDataObjectInterface $payment
+         */
         $payment = $buildSubject['payment'];
         $order = $payment->getOrder();
         $address = $order->getShippingAddress();
-        
+
         // return [
         //     'TXN_TYPE' => 'A',
         //     'INVOICE' => $order->getOrderIncrementId(),
@@ -77,17 +78,16 @@ class AuthorizationRequest implements BuilderInterface
         //     )
         // ];
 
-
         $config = $this->getConfig();
 
         // URLs
         $baseUrl = 'pbxep/payment';
-        $values = array(
+        $values = [
             'PBX_ANNULE' => $this->_buildUrl($baseUrl . '/cancel'),
             'PBX_EFFECTUE' => $this->_buildUrl($baseUrl . '/success'),
             'PBX_REFUSE' => $this->_buildUrl($baseUrl . '/failed'),
             'PBX_REPONDRE_A' => $this->_buildUrl($baseUrl . '/ipn'),
-        );
+        ];
 
         // Merchant information
         $values['PBX_SITE'] = $config->getSite();
@@ -127,19 +127,19 @@ class AuthorizationRequest implements BuilderInterface
         } else {
             $values['PBX_TOTAL'] = sprintf('%03d', round($orderAmount * $amountScale));
             switch ($payment->getPayboxAction()) {
-                case Paybox_Epayment_Model_Payment_Abstract::PBXACTION_MANUAL:
-                    $values['PBX_AUTOSEULE'] = 'O';
-                    break;
+            case Paybox_Epayment_Model_Payment_Abstract::PBXACTION_MANUAL:
+                $values['PBX_AUTOSEULE'] = 'O';
+                break;
 
-                case Paybox_Epayment_Model_Payment_Abstract::PBXACTION_DEFERRED:
-                    $delay = (int) $payment->getConfigData('delay');
-                    if ($delay < 1) {
-                        $delay = 1;
-                    } elseif ($delay > 7) {
-                        $delay = 7;
-                    }
-                    $values['PBX_DIFF'] = sprintf('%02d', $delay);
-                    break;
+            case Paybox_Epayment_Model_Payment_Abstract::PBXACTION_DEFERRED:
+                $delay = (int) $payment->getConfigData('delay');
+                if ($delay < 1) {
+                    $delay = 1;
+                } elseif ($delay > 7) {
+                    $delay = 7;
+                }
+                $values['PBX_DIFF'] = sprintf('%02d', $delay);
+                break;
             }
         }
 
