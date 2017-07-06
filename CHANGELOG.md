@@ -1,12 +1,19 @@
 # Change Log
 
+## [1.0.7] - 2017-07-04
+
+### Corrections
+- Envoi de la facture par e-mail
+- FO - Paiement : erreur déclenchée par le module lors du choix d'une autre méthode de paiement
+- Code : corrections PSR-2 / Magento 2 coding standards
+
 ## [1.0.6] - 2017-03-09
 
 ### Corrections
 - Traitement de l'échec du paiement : statut de la commande "VOID"
-- Changement des données transaction et appel
+- Changement des données 'transaction' et 'appel'
 - Corrections pour soumission au marketplace
-- Passage à la norme PSR2
+- Passage à la norme PSR-2
 - Nettoyage du panier et de la commande en cas de paiement refusé ou annulé
 
 ## [1.0.5] - 2016-11-15
@@ -33,6 +40,7 @@
 - ACL : déclaration BO incorrecte
 
 ## [1.0.1] - 2016-10-25
+
 ### Ajouts
 - Appels Paybox : ajout paramètre PBX_VERSION pour transmettre les versions Magento et du module
 - Multi-devise : configuration pour forcer l'utilisation de la devise de base ou celle de la commande
