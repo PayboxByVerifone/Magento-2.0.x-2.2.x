@@ -12,8 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.6
+ * @version   1.0.7
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Paybox
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -28,7 +27,7 @@ use \Magento\Sales\Model\Order\Payment\Transaction;
 use \Magento\Framework\Validator\Exception;
 use \Magento\Framework\DataObject;
 use \Magento\Payment\Model\Method\AbstractMethod;
-#use \Magento\Payment\Model\Method\Adapter;
+// use \Magento\Payment\Model\Method\Adapter;
 use \Magento\Payment\Model\InfoInterface;
 use \Magento\Framework\Event\ManagerInterface;
 use \Magento\Payment\Gateway\Command\CommandPoolInterface;
@@ -93,10 +92,10 @@ abstract class AbstractPayment extends AbstractMethod
     protected $_logger = null;
 
     public function __construct(
-    \Magento\Framework\Model\Context $context, \Magento\Framework\Registry $registry, \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory, \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory, \Magento\Payment\Helper\Data $paymentData, \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig, \Magento\Payment\Model\Method\Logger $logger, \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null, \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null, array $data = []
+        \Magento\Framework\Model\Context $context, \Magento\Framework\Registry $registry, \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory, \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory, \Magento\Payment\Helper\Data $paymentData, \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig, \Magento\Payment\Model\Method\Logger $logger, \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null, \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null, array $data = []
     ) {
         parent::__construct(
-                $context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $resource, $resourceCollection, $data
+            $context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $resource, $resourceCollection, $data
         );
 
         $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -121,10 +120,10 @@ abstract class AbstractPayment extends AbstractMethod
     /**
      *
      * @param Mage_Sales_Model_Order $order
-     * @param string $type
-     * @param array $data
-     * @param type $closed
-     * @param array $infos
+     * @param string                 $type
+     * @param array                  $data
+     * @param type                   $closed
+     * @param array                  $infos
      * @return Mage_Sales_Model_Order_Payment_Transaction
      */
     protected function _addPayboxTransaction(Order $order, $type, array $data, $closed, array $infos = array())
@@ -132,7 +131,7 @@ abstract class AbstractPayment extends AbstractMethod
         $withCapture = $this->getConfigPaymentAction() != AbstractMethod::ACTION_AUTHORIZE;
 
         $payment = $order->getPayment();
-        
+
         $txnId = $this->_createTransactionId($data);
         if (empty($txnId)) {
             if (!empty($parent)) {
@@ -141,13 +140,13 @@ abstract class AbstractPayment extends AbstractMethod
                 throw new \LogicException('Invalid transaction id ' . $txnId);
             }
         }
-        
+
         $payment->setTransactionId($txnId);
         $payment->setParentTransactionId(null);
         $transaction = $type;
         $transaction = $payment->addTransaction($transaction);
         $transaction->setAdditionalInformation(Transaction::RAW_DETAILS, $data);
-        
+
         foreach ($infos as $key => $value) {
             $transaction->setAdditionalInformation($key, $value);
         }
@@ -165,10 +164,10 @@ abstract class AbstractPayment extends AbstractMethod
     /**
      *
      * @param Mage_Sales_Model_Order $order
-     * @param string $type
-     * @param array $data
-     * @param type $closed
-     * @param array $infos
+     * @param string                 $type
+     * @param array                  $data
+     * @param type                   $closed
+     * @param array                  $infos
      * @return Mage_Sales_Model_Order_Payment_Transaction
      */
     protected function _addPayboxDirectTransaction(Order $order, $type, array $data, $closed, array $infos, Transaction $parent)
@@ -210,9 +209,9 @@ abstract class AbstractPayment extends AbstractMethod
 
         // Find transaction
         $collection = $this->_objectManager->get('Magento\Sales\Model\Order\Payment\Transaction')->getCollection()
-                ->setOrderFilter($order)
-                ->addPaymentIdFilter($payment->getId())
-                ->addTxnTypeFilter($type);
+            ->setOrderFilter($order)
+            ->addPaymentIdFilter($payment->getId())
+            ->addTxnTypeFilter($type);
 
         if ($collection->getSize() == 0) {
             return null;
@@ -239,7 +238,7 @@ abstract class AbstractPayment extends AbstractMethod
     /**
      * Assign corresponding data
      *
-     * @param \Magento\Framework\DataObject|mixed $data
+     * @param  \Magento\Framework\DataObject|mixed $data
      * @return $this
      * @throws LocalizedException
      */
@@ -277,7 +276,7 @@ abstract class AbstractPayment extends AbstractMethod
      * Capture payment
      *
      * @param Varien_Object $payment
-     * @param float $amount
+     * @param float         $amount
      *
      * @return Mage_Payment_Model_Abstract
      */
@@ -292,23 +291,23 @@ abstract class AbstractPayment extends AbstractMethod
 
             switch ($txn->getTxnType()) {
                 // Already captured
-                case Transaction::TYPE_CAPTURE:
-                    $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
-                    if (!is_array($trxData)) {
-                        throw new \LogicException('No transaction found.');
-                    }
+            case Transaction::TYPE_CAPTURE:
+                $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
+                if (!is_array($trxData)) {
+                    throw new \LogicException('No transaction found.');
+                }
 
-                    $payment->setTransactionId($txn->getTransactionId());
-                    // $payment->setSkipTransactionCreation(true);
-                    $payment->setIsTransactionClosed(0);
-                    return $this;
+                $payment->setTransactionId($txn->getTransactionId());
+                // $payment->setSkipTransactionCreation(true);
+                $payment->setIsTransactionClosed(0);
+                return $this;
 
-                case Transaction::TYPE_AUTH:
-                    // Nothing to do
-                    break;
+            case Transaction::TYPE_AUTH:
+                // Nothing to do
+                break;
 
-                default:
-                    throw new \LogicException('Unsupported transaction type ' . $txn->getTxnType());
+            default:
+                throw new \LogicException('Unsupported transaction type ' . $txn->getTxnType());
             }
         }
 
@@ -358,10 +357,12 @@ abstract class AbstractPayment extends AbstractMethod
 
         // Transaction
         $type = Transaction::TYPE_CAPTURE;
-        $captureTxn = $this->_addPayboxDirectTransaction($order, $type, $data, $close, array(
+        $captureTxn = $this->_addPayboxDirectTransaction(
+            $order, $type, $data, $close, array(
             self::CALL_NUMBER => $data['NUMTRANS'],
             self::TRANSACTION_NUMBER => $data['NUMAPPEL'],
-                ), $txn);
+            ), $txn
+        );
         $captureTxn->save();
         if ($close) {
             $captureTxn->close();
@@ -390,8 +391,9 @@ abstract class AbstractPayment extends AbstractMethod
 
     /**
      * Checks parameter send by Paybox to IPN.
-     * @param Mage_Sales_Model_Order $order Order
-     * @param array $params Parsed call parameters
+     *
+     * @param Mage_Sales_Model_Order $order  Order
+     * @param array                  $params Parsed call parameters
      */
     public function checkIpnParams(Order $order, array $params)
     {
@@ -453,12 +455,12 @@ abstract class AbstractPayment extends AbstractMethod
     {
         return $this->getConfigData('status/auto_capture');
     }
-    
+
     public function getConfigAutoCaptureMode()
     {
         return $this->getConfigData('status_mode');
     }
-    
+
     public function getConfigAutoCaptureModeStatus()
     {
         return $this->getConfigData('status_auto_capture_mode');
@@ -479,26 +481,27 @@ abstract class AbstractPayment extends AbstractMethod
         $config = $this->getPayboxConfig();
         $action = $this->getConfigData('action');
         switch ($action) {
-            case self::PBXACTION_DEFERRED:
-                if (!$this->getAllowDeferredDebit()) {
-                    return self::PBXACTION_IMMEDIATE;
-                }
-                break;
-            case self::PBXACTION_IMMEDIATE:
-                if (!$this->getAllowImmediatDebit()) {
-                    // Not possible
-                    throw new \LogicException('Unexpected condition in getPayboxAction');
-                }
-                break;
-            case self::PBXACTION_MANUAL:
-                if ((($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER2) &&
-                        ($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER3)) ||
-                        !$this->getAllowManualDebit()) {
-                    return self::PBXACTION_IMMEDIATE;
-                }
-                break;
-            default:
-                $action = self::PBXACTION_IMMEDIATE;
+        case self::PBXACTION_DEFERRED:
+            if (!$this->getAllowDeferredDebit()) {
+                return self::PBXACTION_IMMEDIATE;
+            }
+            break;
+        case self::PBXACTION_IMMEDIATE:
+            if (!$this->getAllowImmediatDebit()) {
+                // Not possible
+                throw new \LogicException('Unexpected condition in getPayboxAction');
+            }
+            break;
+        case self::PBXACTION_MANUAL:
+            if ((($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER2)
+                && ($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER3))
+                || !$this->getAllowManualDebit()
+            ) {
+                return self::PBXACTION_IMMEDIATE;
+            }
+            break;
+        default:
+            $action = self::PBXACTION_IMMEDIATE;
         }
         return $action;
     }
@@ -522,7 +525,7 @@ abstract class AbstractPayment extends AbstractMethod
     /**
      * Check whether there are CC types set in configuration
      *
-     * @param Mage_Sales_Model_Quote|null $quote
+     * @param  Mage_Sales_Model_Quote|null $quote
      * @return bool
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
@@ -541,7 +544,7 @@ abstract class AbstractPayment extends AbstractMethod
     /**
      * Check whether 3DS is enabled
      *
-     * @param Mage_Sales_Model_Order $order
+     * @param  Mage_Sales_Model_Order $order
      * @return boolean
      */
     public function is3DSEnabled(Order $order)
@@ -558,18 +561,18 @@ abstract class AbstractPayment extends AbstractMethod
 
         // Otherwise lets see the configuration
         switch ($this->getConfigData('tds_active')) {
-            case 'always':
-                return true;
-            case 'condition':
-                // Minimum order total
-                $value = $this->getConfigData('tds_min_order_total');
-                if (!empty($value)) {
-                    $total = round($order->getGrandTotal(), 2);
-                    if ($total >= round($value, 2)) {
-                        return true;
-                    }
+        case 'always':
+            return true;
+        case 'condition':
+            // Minimum order total
+            $value = $this->getConfigData('tds_min_order_total');
+            if (!empty($value)) {
+                $total = round($order->getGrandTotal(), 2);
+                if ($total >= round($value, 2)) {
+                    return true;
                 }
-                return false;
+            }
+            return false;
         }
 
         // Always off
@@ -617,12 +620,12 @@ abstract class AbstractPayment extends AbstractMethod
         $invoice->register();
         $invoice->pay();
 
-//        var_dump('makeCapture');
-//        die();
-//        $transactionSave = $this->_objectManager->get('Magento\Framework\Model\ResourceModel\Db\TransactionManager')
-//                ->addObject($invoice)
-//                ->addObject($order);
-//        $transactionSave->save();
+        //        var_dump('makeCapture');
+        //        die();
+        //        $transactionSave = $this->_objectManager->get('Magento\Framework\Model\ResourceModel\Db\TransactionManager')
+        //                ->addObject($invoice)
+        //                ->addObject($order);
+        //        $transactionSave->save();
 
         return true;
     }
@@ -631,7 +634,7 @@ abstract class AbstractPayment extends AbstractMethod
      * Refund specified amount for payment
      *
      * @param Varien_Object $payment
-     * @param float $amount
+     * @param float         $amount
      *
      * @return Mage_Payment_Model_Abstract
      */
@@ -641,9 +644,9 @@ abstract class AbstractPayment extends AbstractMethod
 
         // Find capture transaction
         $collection = $this->_objectManager->get('Magento\Sales\Model\Order\Payment\Transaction')->getCollection()
-                ->setOrderFilter($order)
-                ->addPaymentIdFilter($payment->getId())
-                ->addTxnTypeFilter(Transaction::TYPE_CAPTURE);
+            ->setOrderFilter($order)
+            ->addPaymentIdFilter($payment->getId())
+            ->addTxnTypeFilter(Transaction::TYPE_CAPTURE);
         if ($collection->getSize() == 0) {
             // If none, error
             throw new \LogicException('No payment or capture transaction. Unable to refund.');
@@ -691,7 +694,7 @@ abstract class AbstractPayment extends AbstractMethod
     /**
      * Validate payment method information object
      *
-     * @return  Mage_Payment_Model_Abstract
+     * @return Mage_Payment_Model_Abstract
      */
     public function validate()
     {
@@ -884,7 +887,7 @@ abstract class AbstractPayment extends AbstractMethod
 
         // Message
         if ($withCapture) {
-            $message = 'Payment was authorized and captured by Paybox".';
+            $message = 'Payment was authorized and captured by Paybox.';
             $status = $this->getConfigPaidStatus();
             $state = Order::STATE_PROCESSING;
             $allowedStates = array(
@@ -911,10 +914,12 @@ abstract class AbstractPayment extends AbstractMethod
         $type = $withCapture ?
                 Transaction::TYPE_CAPTURE :
                 Transaction::TYPE_AUTH;
-        $txn = $this->_addPayboxTransaction($order, $type, $data, $withCapture, array(
+        $txn = $this->_addPayboxTransaction(
+            $order, $type, $data, $withCapture, array(
             self::CALL_NUMBER => $data['call'],
             self::TRANSACTION_NUMBER => $data['transaction'],
-        ));
+            )
+        );
 
         // Associate data to payment
         $payment->setPbxepAction($this->getPayboxAction());
@@ -922,20 +927,19 @@ abstract class AbstractPayment extends AbstractMethod
         $payment->setPbxepAuthorization(serialize($data));
         if ($withCapture) {
             $payment->setPbxepCapture(serialize($data));
-            $this->_createInvoice($payment, $order, $txn);
         }
 
         // Set status
         if (in_array($current, $allowedStates)) {
             $order->setState($state);
             $this->logDebug(sprintf('Order %s: Change status to %s', $order->getIncrementId(), $state));
-        } else {
-            $order->addStatusHistoryComment($message);
         }
+        $order->addStatusHistoryComment($message);
         $this->logDebug(sprintf('Order %s: %s', $order->getIncrementId(), $message));
 
-        $orderSender = $this->_objectManager->get('Magento\Sales\Model\Order\Email\Sender\OrderSender');
-        $orderSender->send($order);
+        if ($withCapture) {
+            $this->_createInvoice($payment, $order, $txn);
+        }
 
         $payment->save();
         $order->save();
@@ -943,7 +947,7 @@ abstract class AbstractPayment extends AbstractMethod
 
     /**
      *
-     * @param Mage_Sales_Model_Order $order
+     * @param Mage_Sales_Model_Order                     $order
      * @param Mage_Sales_Model_Order_Payment_Transaction $txn
      * @return Mage_Sales_Model_Order_Invoice
      */
@@ -954,16 +958,18 @@ abstract class AbstractPayment extends AbstractMethod
         $invoice->setTransactionId($txn->getTransactionId());
         $invoice->register();
         $invoice->pay();
+        $invoice->save();
 
-        if ($invoice && !$order->getEmailSent()) {
-            $order->addStatusHistoryComment(
-                    __('You notified customer about invoice #%1.', $invoice->getIncrementId())
-            )->setIsCustomerNotified(
-                    true
-            )->save();
+        if ($invoice && !$invoice->getEmailSent()) {
+            $invoiceSender = $this->_objectManager->get('Magento\Sales\Model\Order\Email\Sender\InvoiceSender');
+            $invoiceSender->send($invoice);
+
+            $order->addRelatedObject($invoice);
+            $order->addStatusHistoryComment(__('You notified customer about invoice #%1.', $invoice->getIncrementId()))
+                ->setIsCustomerNotified(true)
+                ->save();
         }
 
-        $invoice->save();
         return $invoice;
     }
 }
