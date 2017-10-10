@@ -43,7 +43,6 @@ class Payment extends \Magento\Framework\App\Action\Action
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Psr\Log\LoggerInterface $loggerInteface,
-        \Magento\Framework\Message\ManagerInterface $managerInterface,
         \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Paybox\Epayment\Model\Config $payboxConfig,
@@ -54,7 +53,7 @@ class Payment extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
 
         $this->_logger = $loggerInteface;
-        $this->_messageManager = $managerInterface;
+        $this->_messageManager = $context->getMessageManager();
         $this->_quoteRepository = $cartRepositoryInterface;
         $this->_checkoutSession = $checkoutSession;
         $this->_payboxConfig = $payboxConfig;
