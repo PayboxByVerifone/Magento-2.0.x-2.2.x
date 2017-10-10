@@ -41,4 +41,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Layout">
+        <plugin name="pbxep_layout_plugin" type="Paybox\Epayment\Plugin\Framework\View\LayoutPlugin" sortOrder="1" />
+    </type>
 </config>

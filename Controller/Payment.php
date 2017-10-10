@@ -33,6 +33,7 @@ class Payment extends \Magento\Framework\App\Action\Action
     protected $_checkoutSession;
     protected $_payboxConfig;
     protected $_paybox;
+    protected $_registry;
 
     /**
      * @param \Magento\Framework\App\Action\Context                        $context
@@ -46,7 +47,8 @@ class Payment extends \Magento\Framework\App\Action\Action
         \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Paybox\Epayment\Model\Config $payboxConfig,
-        \Paybox\Epayment\Model\Paybox $paybox
+        \Paybox\Epayment\Model\Paybox $paybox,
+        \Magento\Framework\Registry $registry
     ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
@@ -57,6 +59,7 @@ class Payment extends \Magento\Framework\App\Action\Action
         $this->_checkoutSession = $checkoutSession;
         $this->_payboxConfig = $payboxConfig;
         $this->_paybox = $paybox;
+        $this->_registry = $registry;
     }
 
     public function execute()
@@ -99,6 +102,7 @@ class Payment extends \Magento\Framework\App\Action\Action
 
     protected function _404()
     {
+        $this->_registry->register('pbxep_forward_nocache', true);
         $this->_forward('defaultNoRoute');
     }
 
