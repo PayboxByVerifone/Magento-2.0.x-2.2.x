@@ -30,6 +30,9 @@ class Payment extends \Magento\Framework\App\Action\Action
     protected $resultPageFactory;
     protected $_quoteRepository;
     protected $_logger;
+    protected $_checkoutSession;
+    protected $_payboxConfig;
+    protected $_paybox;
 
     /**
      * @param \Magento\Framework\App\Action\Context                        $context
@@ -37,14 +40,23 @@ class Payment extends \Magento\Framework\App\Action\Action
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Psr\Log\LoggerInterface $loggerInteface,
+        \Magento\Framework\Message\ManagerInterface $managerInterface,
+        \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Paybox\Epayment\Model\Config $payboxConfig,
+        \Paybox\Epayment\Model\Paybox $paybox
     ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
 
-        $this->_logger = $this->_objectManager->get('Psr\Log\LoggerInterface');
-        $this->_messageManager = $this->_objectManager->get('Magento\Framework\Message\ManagerInterface');
-        $this->_quoteRepository = $this->_objectManager->create('Magento\Quote\Api\CartRepositoryInterface');
+        $this->_logger = $loggerInteface;
+        $this->_messageManager = $managerInterface;
+        $this->_quoteRepository = $cartRepositoryInterface;
+        $this->_checkoutSession = $checkoutSession;
+        $this->_payboxConfig = $payboxConfig;
+        $this->_paybox = $paybox;
     }
 
     public function execute()
@@ -95,7 +107,7 @@ class Payment extends \Magento\Framework\App\Action\Action
         $quoteId = $order->getQuoteId();
 
         // Retrieves quote
-        $quote = $this->_objectManager->get('Magento\Quote\Model\Quote')->load($quoteId);
+        $quote = $this->_quoteRepository->get($quoteId);
         if (empty($quote) || null === $quote->getId()) {
             $message = 'Not existing quote id associated with the order %d';
             throw new \LogicException(__($message, $order->getId()));
@@ -111,7 +123,7 @@ class Payment extends \Magento\Framework\App\Action\Action
      */
     protected function _getCheckout()
     {
-        return $this->_objectManager->get('Magento\Checkout\Model\Session');
+        return $this->_checkoutSession;
     }
 
     protected function _getOrderFromParams(array $params)
@@ -127,17 +139,17 @@ class Payment extends \Magento\Framework\App\Action\Action
 
     public function getConfig()
     {
-        return $this->_objectManager->get('Paybox\Epayment\Model\Config');
+        return $this->_payboxConfig;
     }
 
     public function getPaybox()
     {
-        return $this->_objectManager->get('Paybox\Epayment\Model\Paybox');
+        return $this->_paybox;
     }
 
     public function getSession()
     {
-        return $this->_objectManager->get('Magento\Checkout\Model\Session');
+        return $this->_checkoutSession;
     }
 
     public function logDebug($message)
