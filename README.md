@@ -1,6 +1,6 @@
-# Paybox by Verifone - Magento2
+# Verifone e-commerce - Magento 2
 
-Extension Magento2 pour la solution de paiement Paybox by Verifone
+Extension Magento 2 pour la solution de paiement Verifone e-commerce
 
 ## A propos
 

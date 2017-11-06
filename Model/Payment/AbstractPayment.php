@@ -1,8 +1,8 @@
 <?php
 /**
- * Paybox Epayment module for Magento
+ * Verifone e-commerce Epayment module for Magento
  *
- * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * Feel free to contact Verifone e-commerce at support@paybox.com for any
  * question.
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
@@ -14,7 +14,7 @@
  *
  * @version   1.0.7
  * @author    BM Services <contact@bm-services.com>
- * @copyright 2012-2017 Paybox
+ * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
  * @link      http://www.paybox.com/
  */
@@ -78,7 +78,7 @@ abstract class AbstractPayment extends AbstractMethod
     protected $_infoBlockType = 'Paybox\Epayment\Block\Info';
 
     /**
-     * Paybox specific options
+     * Verifone e-commerce specific options
      */
     protected $_3dsAllowed = false;
     protected $_3dsMandatory = false;
@@ -316,7 +316,7 @@ abstract class AbstractPayment extends AbstractMethod
             // Find capture transaction
             $txn = $this->getPayboxTransaction($payment, Transaction::TYPE_CAPTURE);
             if (!is_null($txn)) {
-                // Find Paybox data
+                // Find Verifone e-commerce data
                 $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
                 if (!is_array($trxData)) {
                     throw new \LogicException('No transaction found.');
@@ -338,7 +338,7 @@ abstract class AbstractPayment extends AbstractMethod
 
         $this->logDebug(sprintf('Order %s: Capture - transaction %d', $order->getIncrementId(), $txn->getTransactionId()));
 
-        // Call Paybox Direct
+        // Call Verifone e-commerce Direct
         $paybox = $this->getPaybox();
         $this->logDebug(sprintf('Order %s: Capture - calling directCapture with amount of %f', $order->getIncrementId(), $amount));
         $data = $paybox->directCapture($amount, $order, $txn);
@@ -346,10 +346,10 @@ abstract class AbstractPayment extends AbstractMethod
 
         // Message
         if ($data['CODEREPONSE'] == '00000') {
-            $message = 'Payment was captured by Paybox.';
+            $message = 'Payment was captured by Verifone e-commerce.';
             $close = true;
         } else {
-            $message = 'Paybox direct error (' . $data['CODEREPONSE'] . ': ' . $data['COMMENTAIRE'] . ')';
+            $message = 'Verifone e-commerce direct error (' . $data['CODEREPONSE'] . ': ' . $data['COMMENTAIRE'] . ')';
             $close = false;
         }
         $data['status'] = $message;
@@ -374,7 +374,7 @@ abstract class AbstractPayment extends AbstractMethod
         $payment->setIsTransactionClosed(0);
         $payment->save();
 
-        // If Paybox returned an error, throw an exception
+        // If Verifone e-commerce returned an error, throw an exception
         if ($data['CODEREPONSE'] != '00000') {
             throw new \Exception($message);
         }
@@ -390,7 +390,7 @@ abstract class AbstractPayment extends AbstractMethod
     }
 
     /**
-     * Checks parameter send by Paybox to IPN.
+     * Checks parameter send by Verifone e-commerce to IPN.
      *
      * @param Mage_Sales_Model_Order $order  Order
      * @param array                  $params Parsed call parameters
@@ -401,7 +401,7 @@ abstract class AbstractPayment extends AbstractMethod
         $requiredParams = array('amount', 'transaction', 'error', 'reference', 'sign', 'date', 'time');
         foreach ($requiredParams as $requiredParam) {
             if (!isset($params[$requiredParam])) {
-                $message = __('Missing ' . $requiredParam . ' parameter in Paybox call');
+                $message = __('Missing ' . $requiredParam . ' parameter in Verifone e-commerce call');
                 $this->logFatal(sprintf('Order %s: (IPN) %s', $order->getIncrementId(), $message));
                 throw new \Exception($message);
             }
@@ -507,7 +507,7 @@ abstract class AbstractPayment extends AbstractMethod
     }
 
     /**
-     * @return Paybox\Epayment\Model\Config Paybox configuration object
+     * @return Paybox\Epayment\Model\Config Verifone e-commerce configuration object
      */
     public function getPayboxConfig()
     {
@@ -515,7 +515,7 @@ abstract class AbstractPayment extends AbstractMethod
     }
 
     /**
-     * @return Paybox\Epayment\Model\Config Paybox configuration object
+     * @return Paybox\Epayment\Model\Config Verifone e-commerce configuration object
      */
     public function getPaybox()
     {
@@ -660,15 +660,15 @@ abstract class AbstractPayment extends AbstractMethod
             throw new \LogicException('Payment was not fully captured. Unable to refund.');
         }
 
-        // Call Paybox Direct
+        // Call Verifone e-commerce Direct
         $connector = $this->getPaybox();
         $data = $connector->directRefund((float) $amount, $order, $txn);
 
         // Message
         if ($data['CODEREPONSE'] == '00000') {
-            $message = 'Payment was refund by Paybox.';
+            $message = 'Payment was refund by Verifone e-commerce.';
         } else {
-            $message = 'Paybox direct error (' . $data['CODEREPONSE'] . ': ' . $data['COMMENTAIRE'] . ')';
+            $message = 'Verifone e-commerce direct error (' . $data['CODEREPONSE'] . ': ' . $data['COMMENTAIRE'] . ')';
         }
         $data['status'] = $message;
 
@@ -680,7 +680,7 @@ abstract class AbstractPayment extends AbstractMethod
         // $payment->setSkipTransactionCreation(true);
         $payment->setIsTransactionClosed(0);
 
-        // If Paybox returned an error, throw an exception
+        // If Verifone e-commerce returned an error, throw an exception
         if ($data['CODEREPONSE'] != '00000') {
             throw new \Exception($message);
         }
@@ -724,7 +724,7 @@ abstract class AbstractPayment extends AbstractMethod
     }
 
     /**
-     * When the visitor come back from Paybox using the cancel URL
+     * When the visitor come back from Verifone e-commerce using the cancel URL
      */
     public function onPaymentCanceled(Order $order)
     {
@@ -732,7 +732,7 @@ abstract class AbstractPayment extends AbstractMethod
         $order->cancel();
 
         // Add a message
-        $message = 'Payment was canceled by user on Paybox payment page.';
+        $message = 'Payment was canceled by user on Verifone e-commerce payment page.';
         $message = __($message);
         $status = $order->addStatusHistoryComment($message);
 
@@ -742,12 +742,12 @@ abstract class AbstractPayment extends AbstractMethod
     }
 
     /**
-     * When the visitor come back from Paybox using the failure URL
+     * When the visitor come back from Verifone e-commerce using the failure URL
      */
     public function onPaymentFailed(Order $order)
     {
         // Message
-        $message = 'Customer is back from Paybox payment page.';
+        $message = 'Customer is back from Verifone e-commerce payment page.';
         $message = __($message);
         $status = $order->addStatusHistoryComment($message);
 
@@ -755,7 +755,7 @@ abstract class AbstractPayment extends AbstractMethod
     }
 
     /**
-     * When the visitor is redirected to Paybox
+     * When the visitor is redirected to Verifone e-commerce
      */
     public function onPaymentRedirect(Order $order)
     {
@@ -764,7 +764,7 @@ abstract class AbstractPayment extends AbstractMethod
         $info->setPbxepPayboxAction($this->getPayboxAction());
         $info->save();
         // Keep track of this redirection in order history
-        $message = 'Redirecting customer to Paybox payment page.';
+        $message = 'Redirecting customer to Verifone e-commerce payment page.';
         $status = $order->addStatusHistoryComment(__($message));
 
         $this->logDebug(sprintf('Order %s: %s', $order->getIncrementId(), $message));
@@ -773,12 +773,12 @@ abstract class AbstractPayment extends AbstractMethod
     }
 
     /**
-     * When the visitor come back from Paybox using the success URL
+     * When the visitor come back from Verifone e-commerce using the success URL
      */
     public function onPaymentSuccess(Order $order, array $data)
     {
         // Message
-        $message = 'Customer is back from Paybox payment page.';
+        $message = 'Customer is back from Verifone e-commerce payment page.';
         $message = __($message);
         $status = $order->addStatusHistoryComment($message);
 
@@ -826,7 +826,7 @@ abstract class AbstractPayment extends AbstractMethod
         $withCapture = $this->getConfigPaymentAction() != AbstractMethod::ACTION_AUTHORIZE;
 
         // Message
-        $message = 'An unexpected error have occured while processing Paybox payment (%s).';
+        $message = 'An unexpected error have occured while processing Verifone e-commerce payment (%s).';
         $error = is_null($e) ? 'unknown error' : $e->getMessage();
         $error = __($error);
         $message = $this->__($message, $error);
@@ -857,7 +857,7 @@ abstract class AbstractPayment extends AbstractMethod
         $withCapture = $this->getConfigPaymentAction() != AbstractMethod::ACTION_AUTHORIZE;
 
         // Message
-        $message = 'Payment was refused by Paybox (%s).';
+        $message = 'Payment was refused by Verifone e-commerce (%s).';
         $error = $this->getPaybox()->toErrorMessage($data['error']);
         $message = __($message, $error);
         $data['status'] = $message;
@@ -887,7 +887,7 @@ abstract class AbstractPayment extends AbstractMethod
 
         // Message
         if ($withCapture) {
-            $message = 'Payment was authorized and captured by Paybox.';
+            $message = 'Payment was authorized and captured by Verifone e-commerce.';
             $status = $this->getConfigPaidStatus();
             $state = Order::STATE_PROCESSING;
             $allowedStates = array(
@@ -896,7 +896,7 @@ abstract class AbstractPayment extends AbstractMethod
                 Order::STATE_PROCESSING,
             );
         } else {
-            $message = 'Payment was authorized by Paybox.';
+            $message = 'Payment was authorized by Verifone e-commerce.';
             $status = $this->getConfigAuthorizedStatus();
             $state = Order::STATE_PENDING_PAYMENT;
             $allowedStates = array(

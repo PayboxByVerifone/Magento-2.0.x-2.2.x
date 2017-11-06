@@ -1,22 +1,21 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Paybox Epayment module for Magento
+ * Verifone e-commerce Epayment module for Magento
  *
- * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * Feel free to contact Verifone e-commerce at support@paybox.com for any
  * question.
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0. If
- * you did not receive a copy of the OSL-3.0 license and are unable 
+ * you did not receive a copy of the OSL-3.0 license and are unable
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
  * @version   1.0.0
  * @author    BM Services <contact@bm-services.com>
- * @copyright 2012-2017 Paybox
+ * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
  * @link      http://www.paybox.com/
  */
@@ -27,7 +26,7 @@
     	<label>Pay by Card Three Times</label>
 
         <field id="tt_info" translate="label comment" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-        	<label><![CDATA[Check your Paybox contract before enabling this option.]]></label>
+        	<label><![CDATA[Check your Verifone e-commerce contract before enabling this option.]]></label>
             <frontend_model>Paybox\Epayment\Block\Admin\Field\Info</frontend_model>
         	<depends>
                 <field id="tt_active">1</field>
@@ -40,7 +39,7 @@
         </field>
         <field id="tt_cctypes" translate="label comment" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Card type</label>
-            <comment><![CDATA[If you disable E-Carte Bleu, contact the Paybox support]]></comment>
+            <comment><![CDATA[If you disable E-Carte Bleu, contact the Verifone e-commerce support]]></comment>
             <config_path>payment/pbxep_threetime/cctypes</config_path>
             <source_model>Paybox\Epayment\Model\Admin\Cards\Threetime</source_model>
             <depends>
@@ -130,7 +129,7 @@
 	        </field>
 	        <field id="tt_tds_active" translate="label comment" type="select" sortOrder="310" showInDefault="1" showInWebsite="1" showInStore="1">
 	        	<label>Enable 3-D Secure</label>
-	            <comment><![CDATA[<span style="color: red;">Warning: your bank may enforce 3-D Secure.<br/>Make sure your setup is coherent with your bank, Paybox and Magento module.</span>]]></comment>
+	            <comment><![CDATA[<span style="color: red;">Warning: your bank may enforce 3-D Secure.<br/>Make sure your setup is coherent with your bank, Verifone e-commerce and Magento module.</span>]]></comment>
 	            <config_path>payment/pbxep_threetime/tds_active</config_path>
 	            <source_model>Paybox\Epayment\Model\Admin\Payment\Use3ds</source_model>
 	        	<depends>

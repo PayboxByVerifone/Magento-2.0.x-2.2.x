@@ -1,49 +1,52 @@
 # Change Log
 
-## [1.0.7] - 2017-07-04
+## [1.0.7] 2017-07-04
 
 ### Corrections
-- Envoi de la facture par e-mail
-- FO - Paiement : erreur déclenchée par le module lors du choix d'une autre méthode de paiement
-- Code : corrections PSR-2 / Magento 2 coding standards
+- Facturation : envoi de l'e-mail lors de la capture
+- FO - Paiement : suppression erreur sur validation du module si un autre moyen de paiement est choisi
 
-## [1.0.6] - 2017-03-09
+### Modifications
+- Code : nettoyage PSR-2 et adaptations pour validation MarketPlace Magento
+
+## [1.0.6] 2017-03-09
 
 ### Corrections
-- Traitement de l'échec du paiement : statut de la commande "VOID"
-- Changement des données 'transaction' et 'appel'
-- Corrections pour soumission au marketplace
-- Passage à la norme PSR-2
-- Nettoyage du panier et de la commande en cas de paiement refusé ou annulé
+- IPN : mise en conformité des paramètres "Call number" / "Transaction"
+- IPN : modification de l'enregistrements des transactions non valides (saisie de coordonnées bancaires invalides, ...) pour création de transaction vide => correction du problème d'actions Back Office qui avant cela utilisaient la 1ère transaction invalide de capture comme transaction parente
+- Paiement : nettoyage du panier et de la commande en cas de paiement refusé ou annulé
 
-## [1.0.5] - 2016-11-15
+### Modifications
+- Code : nettoyage PSR-2 et adaptations pour validation MarketPlace Magento
+
+## [1.0.5] 2016-11-15
 
 ### Ajouts
-- Responsive : Selection du type de la page de paiement , classique ou responsive
-- Paypal : variable additionnelle pour garantir une intégration optimale de Paypal
+- Paiement : possibilité d'utiliser la page de paiement Verifone e-commerce RWD
+- PayPal : paramétrage spécifique lors de l'appel à la plateforme de paiement
 
-## [1.0.4] - 2016-11-15
-
-### Corrections
-- Block Redirect : No cache for redirect block and custom registry key by order id
-
-## [1.0.3] - 2016-11-09
+## [1.0.4] 2016-11-15
 
 ### Corrections
-- Observer : Correction des problèmes avec "additional_data" depuis la version 2.0.1 de Magento
-- (JS) Redirection :  Modification de la méthode de redirection vers Paybox. Redirection après orderPlaced
+- Bloc Redirect : pas de cache et registre spécifique
 
-## [1.0.2] - 2016-10-26
+## [1.0.3] 2016-11-09
+
+### Corrections
+- Observer : correction des problèmes avec "additional_data" depuis la version 2.0.1 de Magento
+- JS Redirect :  modification de la méthode de redirection vers Paybox. Redirection après orderPlaced
+
+## [1.0.2] 2016-10-26
 
 ### Corrections
 - Observer : paramètres d'appels obligatoires manquants
 - ACL : déclaration BO incorrecte
 
-## [1.0.1] - 2016-10-25
+## [1.0.1] 2016-10-25
 
 ### Ajouts
-- Appels Paybox : ajout paramètre PBX_VERSION pour transmettre les versions Magento et du module
-- Multi-devise : configuration pour forcer l'utilisation de la devise de base ou celle de la commande
+- Paiement : ajout du paramètre de version pour suivi des transactions par Verifone e-commerce
+- Configuration : gestion du multi-devise pour le paiement avec possibilité de forcer le paiement avec la devise par défaut ou de laisser le choix au client parmi les devises disponibles
 
 ### Modifications
 - Traductions

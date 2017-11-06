@@ -1,8 +1,8 @@
 <?php
 /**
- * Paybox Epayment module for Magento
+ * Verifone e-commerce Epayment module for Magento
  *
- * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * Feel free to contact Verifone e-commerce at support@paybox.com for any
  * question.
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
@@ -14,7 +14,7 @@
  *
  * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
- * @copyright 2012-2017 Paybox
+ * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
  * @link      http://www.paybox.com/
  */
@@ -318,7 +318,7 @@ class Paybox
         $clt = new \Magento\Framework\HTTP\ZendClient(
             $url, array(
             'maxredirects' => 0,
-            'useragent' => 'Magento Paybox module',
+            'useragent' => 'Magento Verifone e-commerce module',
             'timeout' => 5,
             )
         );
@@ -336,7 +336,7 @@ class Paybox
         }
 
         // Here, there's a problem
-        throw new \LogicException(__('Paybox not available. Please try again later.'));
+        throw new \LogicException(__('Verifone e-commerce not available. Please try again later.'));
     }
 
     public function buildSystemParams(Order $order, AbstractPayment $payment)
@@ -418,7 +418,7 @@ class Paybox
             $values['PBX_3DS'] = 'N';
         }
 
-        // Paybox => Magento
+        // Verifone e-commerce => Magento
         $values['PBX_RETOUR'] = 'M:M;R:R;T:T;A:A;B:B;C:C;D:D;E:E;F:F;G:G;H:H;I:I;J:J;N:N;O:O;P:P;Q:Q;S:S;W:W;Y:Y;K:K';
         $values['PBX_RUF1'] = 'POST';
 
@@ -489,7 +489,7 @@ class Paybox
             $values['PBX_REPONDRE_A'] .= $s;
         }
 
-        //PBX Version
+        // PBX_VERSION
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $productMetadata = $objectManager->get('Magento\Framework\App\ProductMetadataInterface');
         $moduleInfo = $this->_objectManager->get('Magento\Framework\Module\ModuleList')->getOne('Paybox_Epayment');
@@ -526,7 +526,7 @@ class Paybox
         $client = new \Magento\Framework\HTTP\ZendClient(
             null, array(
             'maxredirects' => 0,
-            'useragent' => 'Magento Paybox module',
+            'useragent' => 'Magento Verifone e-commerce module',
             'timeout' => 5,
             )
         );
@@ -548,7 +548,7 @@ class Paybox
         }
 
         // Here, there's a problem
-        throw new \LogicException(__('Paybox not available. Please try again later.'));
+        throw new \LogicException(__('Verifone e-commerce not available. Please try again later.'));
     }
 
     public function computeThreetimePayments($orderAmount, $amountScale)
@@ -587,7 +587,7 @@ class Paybox
     }
 
     /**
-     * Create transaction ID from Paybox data
+     * Create transaction ID from Verifone e-commerce data
      */
     protected function createTransactionId(array $payboxData)
     {
@@ -617,7 +617,7 @@ class Paybox
     }
 
     /**
-     * @return Paybox\Epayment\Model\Config Paybox configuration object
+     * @return Paybox\Epayment\Model\Config Verifone e-commerce configuration object
      */
     public function getConfig()
     {
@@ -656,7 +656,7 @@ class Paybox
         }
         if (empty($data)) {
             throw new \LogicException("Error Processing Request");
-            (__('An unexpected error in Paybox call has occured: no parameters.'));
+            (__('An unexpected error in Verifone e-commerce call has occured: no parameters.'));
         }
 
         // Log params if needed
@@ -670,7 +670,7 @@ class Paybox
             $matches = array();
             if (!preg_match('#^(.*)&K=(.*)$#', $data, $matches)) {
                 throw new \LogicException("Error Processing Request");
-                (__('An unexpected error in Paybox call has occured: missing signature.'));
+                (__('An unexpected error in Verifone e-commerce call has occured: missing signature.'));
             }
 
             // Check signature
@@ -686,7 +686,7 @@ class Paybox
 
                 if (!$res) {
                     throw new \LogicException("Error Processing Request");
-                    (__('An unexpected error in Paybox call has occured: invalid signature.'));
+                    (__('An unexpected error in Verifone e-commerce call has occured: invalid signature.'));
                 }
             }
         }
@@ -697,7 +697,7 @@ class Paybox
         // Decrypt params
         $params = $this->convertParams($rawParams);
         if (empty($params)) {
-            throw new \LogicException(__('An unexpected error in Paybox call has occured.'));
+            throw new \LogicException(__('An unexpected error in Verifone e-commerce call has occured.'));
         }
 
         return $params;
@@ -708,7 +708,7 @@ class Paybox
         $config = $this->getConfig();
         $urls = $config->getSystemUrls();
         if (empty($urls)) {
-            $message = 'Missing URL for Paybox system in configuration';
+            $message = 'Missing URL for Verifone e-commerce system in configuration';
             throw new \LogicException(__($message));
         }
 
@@ -722,7 +722,7 @@ class Paybox
         $config = $this->getConfig();
         $urls = $config->getResponsiveUrls();
         if (empty($urls)) {
-            $message = 'Missing URL for Paybox responsive in configuration';
+            $message = 'Missing URL for Verifone e-commerce responsive in configuration';
             throw new \LogicException(__($message));
         }
 
@@ -736,7 +736,7 @@ class Paybox
         $config = $this->getConfig();
         $urls = $config->getKwixoUrls();
         if (empty($urls)) {
-            $message = 'Missing URL for Paybox system in configuration';
+            $message = 'Missing URL for Verifone e-commerce system in configuration';
             throw new \LogicException(__($message));
         }
 

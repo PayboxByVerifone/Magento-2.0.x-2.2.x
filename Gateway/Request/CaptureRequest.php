@@ -1,8 +1,8 @@
 <?php
 /**
- * Paybox Epayment module for Magento
+ * Verifone e-commerce Epayment module for Magento
  *
- * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * Feel free to contact Verifone e-commerce at support@paybox.com for any
  * question.
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
@@ -14,7 +14,7 @@
  *
  * @version   1.0.7-psr
  * @author    BM Services <contact@bm-services.com>
- * @copyright 2012-2017 Paybox
+ * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
  * @link      http://www.paybox.com/
  */
@@ -56,7 +56,9 @@ class CaptureRequest implements BuilderInterface
             throw new \InvalidArgumentException('Payment data object should be provided');
         }
 
-        // @var PaymentDataObjectInterface $paymentDO
+        /**
+         * @var PaymentDataObjectInterface $paymentDO
+         */
         $paymentDO = $buildSubject['payment'];
 
         $order = $paymentDO->getOrder();
@@ -109,7 +111,7 @@ class CaptureRequest implements BuilderInterface
             // Find capture transaction
             $txn = $this->getPayboxTransaction($payment, Transaction::TYPE_CAPTURE);
             if (null !== $txn) {
-                // Find Paybox data
+                // Find Verifone e-commerce data
                 $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
                 if (!is_array($trxData)) {
                     throw new \LogicException('No transaction found.');
@@ -130,7 +132,7 @@ class CaptureRequest implements BuilderInterface
 
         $this->logDebug(sprintf('Order %s: Capture - transaction %d', $order->getIncrementId(), $txn->getTransactionId()));
 
-        // Call Paybox Direct
+        // Call Verifone e-commerce Direct
         $paybox = $this->getPaybox();
         $this->logDebug(sprintf('Order %s: Capture - calling directCapture with amount of %f', $order->getIncrementId(), $amount));
         $data = $paybox->directCapture($amount, $order, $txn);
@@ -138,10 +140,10 @@ class CaptureRequest implements BuilderInterface
 
         // Message
         if ($data['CODEREPONSE'] == '00000') {
-            $message = 'Payment was captured by Paybox.';
+            $message = 'Payment was captured by Verifone e-commerce.';
             $close = true;
         } else {
-            $message = 'Paybox direct error ('.$data['CODEREPONSE'].': '.$data['COMMENTAIRE'].')';
+            $message = 'Verifone e-commerce direct error ('.$data['CODEREPONSE'].': '.$data['COMMENTAIRE'].')';
             $close = false;
         }
         $data['status'] = $message;
@@ -165,7 +167,7 @@ class CaptureRequest implements BuilderInterface
         $payment->setIsTransactionClosed(0);
         $payment->save();
 
-        // If Paybox returned an error, throw an exception
+        // If Verifone e-commerce returned an error, throw an exception
         if ($data['CODEREPONSE'] != '00000') {
             throw new \LogicException($message);
         }

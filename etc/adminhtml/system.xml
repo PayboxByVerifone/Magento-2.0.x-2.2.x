@@ -1,22 +1,21 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Paybox Epayment module for Magento
+ * Verifone e-commerce Epayment module for Magento
  *
- * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * Feel free to contact Verifone e-commerce at support@paybox.com for any
  * question.
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0. If
- * you did not receive a copy of the OSL-3.0 license and are unable 
+ * you did not receive a copy of the OSL-3.0 license and are unable
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
  * @version   1.0.5
  * @author    BM Services <contact@bm-services.com>
- * @copyright 2012-2017 Paybox
+ * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
  * @link      http://www.paybox.com/
  */
@@ -25,7 +24,7 @@
         xsi:noNamespaceSchemaLocation="../../../../Magento/Config/etc/system_file.xsd">
     <system>
         <tab id="paybox" translate="label" sortOrder="400">
-            <label>paybox</label>
+            <label>Verifone e-commerce</label>
         </tab>
         <section id="pbxep_pres" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Presentation</label>
@@ -59,42 +58,42 @@
                 <label>Account settings</label>
                 <field id="subscription" translate="label comment" type="select" sortOrder="0" showInDefault="1"
                        showInWebsite="1" showInStore="1">
-                    <label>Subscribed Paybox Solution</label>
+                    <label>Subscribed Verifone e-commerce Solution</label>
                     <source_model>Paybox\Epayment\Model\Admin\Subscription</source_model>
                     <config_path>pbxep/merchant/subscription</config_path>
                 </field>
                 <field id="site" translate="label comment" type="text" sortOrder="10" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Site number</label>
-                    <comment><![CDATA[Site number provided by Paybox.]]></comment>
+                    <comment><![CDATA[Site number provided by Verifone e-commerce.]]></comment>
                     <validate>required-entry validate-digits validate-exact-length length-7</validate>
                     <config_path>pbxep/merchant/site</config_path>
                 </field>
                 <field id="rank" translate="label comment" type="text" sortOrder="20" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Rank number</label>
-                    <comment><![CDATA[Rank number provided by Paybox (last 2 digits).]]></comment>
+                    <comment><![CDATA[Rank number provided by Verifone e-commerce (last 2 digits).]]></comment>
                     <validate>required-entry validate-digits validate-exact-length length-2</validate>
                     <config_path>pbxep/merchant/rank</config_path>
                 </field>
                 <field id="identifier" translate="label comment" type="text" sortOrder="30" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Login</label>
-                    <comment><![CDATA[Internal login provided by Paybox.]]></comment>
+                    <comment><![CDATA[Internal login provided by Verifone e-commerce.]]></comment>
                     <validate>required-entry validate-digits validate-length maximum-length-9</validate>
                     <config_path>pbxep/merchant/identifier</config_path>
                 </field>
                 <field id="hmackey" translate="label comment" type="text" sortOrder="50" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>HMAC</label>
-                    <comment><![CDATA[Secrete HMAC key to create using the Paybox interface.]]></comment>
+                    <comment><![CDATA[Secrete HMAC key to create using the Verifone e-commerce interface.]]></comment>
                     <validate>required-entry</validate>
                     <config_path>pbxep/merchant/hmackey</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="password" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Paybox Back Office password</label>
-                    <comment><![CDATA[Back Office password provided by Paybox.]]></comment>
+                    <label>Verifone e-commerce Back Office password</label>
+                    <comment><![CDATA[Back Office password provided by Verifone e-commerce.]]></comment>
                     <validate>required-entry</validate>
                     <depends>
                         <field id="subscription">essential</field>
@@ -103,8 +102,8 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="passwordplus" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Paybox Back Office password</label>
-                    <comment><![CDATA[Back Office password provided by Paybox.]]></comment>
+                    <label>Verifone e-commerce Back Office password</label>
+                    <comment><![CDATA[Back Office password provided by Verifone e-commerce.]]></comment>
                     <validate>required-entry</validate>
                     <depends>
                         <field id="subscription">plus</field>
@@ -120,7 +119,7 @@
                 <field id="customer_info" translate="label comment" type="select" sortOrder="10" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Show payment information to customers</label>
-                    <comment><![CDATA[Paybox module can show payment information to customer. You can disable this feature here.]]></comment>
+                    <comment><![CDATA[Verifone e-commerce module can show payment information to customer. You can disable this feature here.]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <config_path>pbxep/info/show_to_customer</config_path>
                 </field>

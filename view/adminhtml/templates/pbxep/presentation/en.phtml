@@ -1,8 +1,8 @@
 <?php
 /**
- * Paybox Epayment module for Magento
+ * Verifone e-commerce Epayment module for Magento
  *
- * Feel free to contact Paybox by Verifone at support@paybox.com for any
+ * Feel free to contact Verifone e-commerce at support@paybox.com for any
  * question.
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
@@ -12,104 +12,215 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- *
- * @version   1.0.0
+ * @version   1.0.8
  * @author    BM Services <contact@bm-services.com>
- * @copyright 2012-2017 Paybox
+ * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
  * @link      http://www.paybox.com/
  */
-
 ?>
 <style type="text/css">
-    div#paybox-pres p {
-        margin-top: 15px;
-    }
-    div#paybox-pres h3 {
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
-    div#paybox-pres p.before-list {
-        margin-bottom: 0px;
-    }
-    div#paybox-pres strong {
-        color: #ea7601;
-    }
-    div#paybox-pres ul.check-list {
-        list-style-image: none;
-        margin-left: 20px;
-    }
-    div#paybox-pres ul.check-list em {
-        color: #ea7601;
-        padding-right: 10px;
-    }
-    div#paybox-pres ol {
-        margin-left: 40px;
-        list-style: decimal;
-        color : #000;
-    }
-    div#paybox-pres ol span {
-        color : #000;
-    }
-    div#paybox-pres thead {
-        background-color: #ea7601;
-        height: 50px;
-        color : #FFFFFF;
-        font-style: italic;
-    }
-    div#paybox-pres thead th {
-        text-align: center;
-        vertical-align: middle;
-    }
-    div#paybox-pres tr.grisfonce {
-        background-color: #E4E5E5;
-    }
-    div#paybox-pres tr.grisclair {
-        background-color: #F2F2F2;
-    }
-    div#paybox-pres td {
-        padding: 3px;
-    }
-    div#paybox-pres th {
-        padding: 2px 6px;
-    }
-    div#paybox-pres td.check {
-        text-align: center;
-        color: #ea7601;
-        vertical-align: middle;
-    }
-    div#paybox-pres td.option {
-        text-align: center;
-        font-style: italic;
-        font-weight: bold;
-        vertical-align: middle;
-    }
-    div#paybox-pres td.dash {
-        text-align: center;
-        vertical-align: middle;
-    }
-    div#paybox-pres div.blocks {
-        width: 840px;
-        margin: auto;
-    }
-    div#paybox-pres div.blocks div {
-        width: 380px;
-        float: left;
-        height: 100px;
-        border: 1px solid black;
-        padding: 6px;
-        margin: 4px;
-    }
-    div#paybox-pres div.blocks p {
-        padding: 0;
-        margin: 0;
-    }
-    div#paybox-pres div.blocks ul {
-        list-style: none;
-        margin-left: 20px;
-    }
-    div#paybox-pres div.blocks .clear {
-        clear: both;
-    }
+   div#paybox-pres p {
+   margin-top: 15px;
+   }
+   div#paybox-pres h3 {
+   margin-top: 20px;
+   margin-bottom: 10px;
+   }
+   div#paybox-pres p.before-list {
+   margin-bottom: 0px;
+   }
+   div#paybox-pres strong {
+   color: #ea7601;
+   }
+   div#paybox-pres ul.check-list {
+   list-style-image: none;
+   margin-left: 20px;
+   }
+   div#paybox-pres ul.check-list em {
+   color: #ea7601;
+   padding-right: 10px;
+   }
+   div#paybox-pres ol {
+   margin-left: 40px;
+   list-style: decimal;
+   color : #000;
+   }
+   div#paybox-pres ol span {
+   color : #000;
+   }
+   div#paybox-pres thead {
+   background-color: #ea7601;
+   height: 50px;
+   color : #FFFFFF;
+   font-style: italic;
+   }
+   div#paybox-pres thead th {
+   text-align: center;
+   vertical-align: middle;
+   }
+   div#paybox-pres tr.grisfonce {
+   background-color: #E4E5E5;
+   }
+   div#paybox-pres tr.grisclair {
+   background-color: #F2F2F2;
+   }
+   div#paybox-pres td {
+   padding: 3px;
+   }
+   div#paybox-pres th {
+   padding: 2px 6px;
+   }
+   div#paybox-pres td.check {
+   text-align: center;
+   color: #ea7601;
+   vertical-align: middle;
+   }
+   div#paybox-pres td.option {
+   text-align: center;
+   font-style: italic;
+   font-weight: bold;
+   vertical-align: middle;
+   }
+   div#paybox-pres td.dash {
+   text-align: center;
+   vertical-align: middle;
+   }
+   div#paybox-pres div.blocks {
+   width: 840px;
+   margin: auto;
+   }
+   div#paybox-pres div.blocks div {
+   width: 380px;
+   float: left;
+   height: 100px;
+   border: 1px solid black;
+   padding: 6px;
+   margin: 4px;
+   }
+   div#paybox-pres div.blocks p {
+   padding: 0;
+   margin: 0;
+   }
+   div#paybox-pres div.blocks ul {
+   list-style: none;
+   margin-left: 20px;
+   }
+   div#paybox-pres div.blocks .clear {
+   clear: both;
+   }
 </style>
-<div id="paybox-pres">	<div class="col-xs-4 col-md-3 col-lg-2">		<img width="20%" height="20%" src="<?php echo $this->getViewFileUrl('Paybox_Epayment::images/paybox-lg.png'); ?>">	</div></div>	<div class="pbx_clear">&nbsp;</div><div id="paybox-pres">	<div class="col-lg-6">		<p><em>Avec Paybox, proposez de nombreux moyens de paiement en une seule   installation, disposez d’une page de paiement sécurisée personnalisée,   multi-langues et multi-devises et proposez du débit à validation de   commande ou à l’expédition et du 3 fois sans frais à vos clients.</em></p>        <h2>Paybox vous propose</h2>        <ul  class="check-list">          <li><em>&#10004;</em><strong>La liberté de choix de votre banque</strong> pour créditer vos ventes, en France et dans de nombreux pays européens.</li>          <li><em>&#10004;</em><strong>De nombreux moyens de paiement</strong>,   sans module complémentaire à installer : CB, Visa, Mastercard, American   Express, Paypal, Kwixo, Leetchi, Bancontact/Mistercash,   Maestro, Cofinoga, iDeal, etc.</li>          <li><em>&#10004;</em><strong>Une flexibilité de débit</strong> partiel / total à la validation de commande / à l’expédition , depuis le Back-Office Magento.</li>          <li><em>&#10004;</em><strong>Une fonction de remboursement</strong> partiel ou total d’une commande à partir du Back-Office Magento</li>          <li><em>&#10004;</em><strong>Des outils anti-fraude</strong> à la carte : <strong>3-D Secure sélectif selon montant</strong>, Filtres sur nationalités Carte ou de l'IP.</li>          <li><em>&#10004;</em>La possibilité de <strong>prise de paiement par téléphone</strong> (via le Back-Office Paybox).</li>          <li><em>&#10004;</em>La fonctionnalité de <strong>paiement en 3 fois sans frais selon montant de commande</strong> pour vos clients </li>		  <li><em>&#10004;</em><strong>Un accès Back-Office Paybox</strong> avec des fonctions de   reporting : suivi transactions temps réel et export de journaux   d’encaissement.</li>        </ul>        <br><h2>Comment souscrire ?</h2>        <ol>          <li>Demander <strong>un contrat VAD</strong> à la banque de votre choix.</li>          <li>Accéder à <strong>un compte test</strong> gratuit via le module.</li>          <li>Migrer du compte de test à votre <strong>compte en production</strong> avec les identifiants que vous communiquera Paybox à l’ouverture de votre compte</li>        </ol>          <div class="col-sm-6"><div class="pbx_bloc">            <br><h2>Une question ?</h2>            L'équipe Paybox est à votre écoute du lundi au vendredi de 9h à 18h :            <ul>              <li>Par téléphone : <strong>01 61 37 05 70</strong></li>              <li>Par email : <a href="mailto:contact@paybox.com">contact@paybox.com</a></li>              <li>Via le formulaire de contact sur le site <a href="http://www.paybox.com/">http://www.paybox.com/</a></li>            </ul>			Support module : <a href="mailto:magento@paybox.com">magento@paybox.com</a>          </div></div>          <div class="col-sm-6"><div class="pbx_bloc">            <br><h2>Nouveauté !</h2>            <p>Pilotez vos débits et remboursements de commande directement depuis votre Back-Office Magento ! <br>Ce service est disponible dans le Pack Flexible (Paybox System + Paybox Direct).</p>          </div></div>  	</div>	<div class="col-lg-6">		<table class="pbx_offers">			<thead>				<tr>					<th>MODULE PAYBOX<br/>pour Magento</th>					<th class="pbx_pack">Pack Essentiel<br/>(Paybox System)</th>					<th class="pbx_pack">Pack Flexible<br/>(Paybox System + Paybox Direct)</th>				</tr>			</thead>			<tbody>				<tr class="grisclair">					<td><h4>100 transactions offertes chaque mois</h4></td>					<td class="check">&#10004;</td>					<td class="check">&#10004;</td>				</tr>				<tr class="grisfonce">					<td><strong>Page de paiement Web & Mobile</strong></td>					<td class="check">&#10004;</td>					<td class="check">&#10004;</td>				</tr>				<tr class="grisclair">					<td>Acceptation <strong>CB, Visa, Mastercard</strong> (Contrat VAD toute banque) et <strong>changement de banque gratuit</strong></td>					<td class="check">&#10004;</td>					<td class="check">&#10004;</td>				</tr>				<tr class="grisfonce">					<td><strong>Personnalisation page de paiement</strong> (logo, boutons, langues, devises)</td>					<td class="check">&#10004;</td>					<td class="check">&#10004;</td>				</tr>				<tr class="grisclair">					<td><strong>Back-Office Paybox</strong></td>					<td class="check">&#10004;</td>					<td class="check">&#10004;</td>				</tr>				<tr class="grisfonce">					<td><strong>Module anti-fraude</strong>&nbsp;: 3-D Secure sélectif (à partir d'un montant de commande)<br/>filtres sur nationalités carte et IP</td>					<td class="check">&#10004;</td>					<td class="check">&#10004;</td>				</tr>				<tr class="grisclair">					<td><strong>Paiement en 3 fois sans frais</strong> (à partir d'un montant de commande)</td>					<td class="option">Option</td>					<td class="check">&#10004;</td>				</tr>				<tr class="grisfonce">					<td><strong>Débit total / partiel</strong> à validation de commande</td>					<td class="dash">-</td>					<td class="check">&#10004;</td>				</tr>				<tr class="grisclair">					<td><strong>Fonctionnalités avancées, depuis le Back-Office Magento</strong> :					<br/>-Débit au changement de statut commande					<br/>-Débit partiel / total					<br/>-Remboursement partiel / total</td>					<td class="dash">-</td>					<td class="check">&#10004;</td>				</tr>				<tr class="grisfonce">					<td><strong>Moyens de paiement complémentaires</strong> :<br/>American Express, JCB, Diners, Paypal, Leetchi, Bancontact/Mistercash, Maestro, Cofinoga, etc.</td>					<td class="option">Option</td>					<td class="option">Option</td>				</tr>			</tbody>		</table>	</div>   <h3>Les solutions Paybox</h3>    <p>Paybox met à votre disposition des solutions de paiement sécurisées quels que soient vos canaux de vente :</p>    <img src="<?php echo $this->getViewFileUrl('Paybox_Epayment::images/multicanal.png'); ?>"></div>
+<div id="paybox-pres">
+   <div class="col-xs-4 col-md-3 col-lg-2">     <img width="20%" height="20%" src="<?php echo $this->getViewFileUrl('Paybox_Epayment::images/verifone-ecommerce-lg.png'); ?>"> </div>
+</div>
+<div class="pbx_clear">&nbsp;</div>
+<div id="paybox-pres">
+   <div class="col-lg-6">
+      <p><em>With Verifone e-commerce, you can accept many different payment means with only one install, access a secured payment page, multi language and currency, offer deffered debit on order validation or upon expedition/delivery and payment in 3 installments.</em></p>      <h2>Verifone e-commerce provides</h2>
+      <ul  class="check-list">
+         <li><em>&#10004;</em><strong>Freedom of choice for your Bank</strong> in order to accept sales in france and many european countries.</li>
+         <li><em>&#10004;</em><strong>Many payment means</strong>,   without additional module install: CB, Visa, Mastercard, American   Express, Paypal, Leetchi, Bancontact/Mistercash,   Maestro, Cofinoga, iDeal, etc.</li>
+         <li><em>&#10004;</em><strong>Debit flexibility</strong> partial / total upon order validation/ exp&eacute;dition , from the Magento Back-Office .</li>
+         <li><em>&#10004;</em><strong>A refund functionality</strong> partial or total of an order from the Magento Back-Office</li>
+         <li><em>&#10004;</em><strong>Fraud prevention tools</strong> '&agrave; la carte': <strong>Selective 3-D Secure on the order's amount</strong>, Card and/or IP filtering.</li>
+         <li><em>&#10004;</em>Ability to accept Payment <strong>over the phone</strong> (through the Verifone e-commerce Back-Office).</li>
+         <li><em>&#10004;</em>Propose <strong>charge-free 3 installments payment, activated on an order amount</strong> for your customers.</li>
+         <li><em>&#10004;</em><strong>Access to the Verifone e-commerce Back-Office </strong> with reporting functions: real time tracking  and transactions reports export.</li>
+      </ul>
+      <br>
+      <h2>How to subscribe ?</h2>
+      <ol>
+         <li>Ask to you own bank <strong>a VAD contract</strong>.</li>
+         <li>Access to a <strong>test account</strong> freely , pre configured in the extension.</li>
+         <li>Migrate from the test account to your<strong>production account</strong> with the credentials provided by Verifone e-commerce when you open your account.</li>
+      </ol>
+      <div class="col-sm-6">
+         <div class="pbx_bloc">
+            <br>
+            <h2>A question ?</h2>
+            The Verifone e-commerce team is at your disposal from monday to friday 9am to 6pm:
+            <ul>
+               <li>By phone: <strong><a href="tel:0033825305004"><img width="250px" alt="0033825305004: 0.15 €/min + CALL COST" src="<?php echo $this->getViewFileUrl('Paybox_Epayment::images/verifone_phone_international.png'); ?>" /></a></strong></li>
+               <li>By e-mail: <a href="mailto:contact-paybox@verifone.com">contact-paybox@verifone.com</a></li>
+               <li>By the contact form:<a href="http://www1.paybox.com/contact/?lang=en/">http://www1.paybox.com/contact/?lang=en</a></li>
+            </ul>
+            Dedicated Magento integration Tech support: <a href="magento-paybox@verifone.com">magento-paybox@verifone.com</a>
+         </div>
+      </div>
+      <div class="col-sm-6">
+         <div class="pbx_bloc">
+            <br>
+            <h2>New!</h2>
+            <p>manage your order debits and refunds directly from your Magento Back-Office ! <br>this service is available when you subscribe to the Flexible Pack (Paybox System + Paybox Direct).</p>
+         </div>
+      </div>
+   </div>
+   <div class="col-lg-6">
+      <table class="pbx_offers">
+         <thead>
+            <tr>
+               <th>Verifone e-commerce Extension<br/>for Magento</th>
+               <th class="pbx_pack">Essential Pack <br/>(Paybox System)</th>
+               <th class="pbx_pack">Flexible Pack<br/>(Paybox System + Paybox Direct)</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="grisclair">
+               <td>
+                  <h4>100 free transactions each month</h4>
+               </td>
+               <td class="check">&#10004;</td>
+               <td class="check">&#10004;</td>
+            </tr>
+            <tr class="grisfonce">
+               <td><strong> Web &amp; Mobile payment page</strong></td>
+               <td class="check">&#10004;</td>
+               <td class="check">&#10004;</td>
+            </tr>
+            <tr class="grisclair">
+               <td><strong>CB, Visa, Mastercard</strong>Acceptation (VAD contract with any bank) et <strong>free bank move</strong></td>
+               <td class="check">&#10004;</td>
+               <td class="check">&#10004;</td>
+            </tr>
+            <tr class="grisfonce">
+               <td><strong>Payment page customisation</strong> (logo, buttons, language, currency)</td>
+               <td class="check">&#10004;</td>
+               <td class="check">&#10004;</td>
+            </tr>
+            <tr class="grisclair">
+               <td><strong>Verifone e-commerce Back-Office</strong></td>
+               <td class="check">&#10004;</td>
+               <td class="check">&#10004;</td>
+            </tr>
+            <tr class="grisfonce">
+               <td><strong>fraud prevention Module</strong>: selective 3-D Secure (from a custom-set order amount)<br/>filters on card country of origin and IP</td>
+               <td class="check">&#10004;</td>
+               <td class="check">&#10004;</td>
+            </tr>
+            <tr class="grisclair">
+               <td><strong>Charge-free 3 installments payment</strong> (from a custom-set order amount)</td>
+               <td class="option">Option</td>
+               <td class="check">&#10004;</td>
+            </tr>
+            <tr class="grisfonce">
+               <td><strong>Total / partial debit</strong> on order validation</td>
+               <td class="dash">-</td>
+               <td class="check">&#10004;</td>
+            </tr>
+            <tr class="grisclair">
+               <td><strong>Advanced functionalities, from your Magento Back-Office</strong>:                   <br/>-Debit upon change of order status                    <br/>-Total / partial debit                 <br/>-Total / partial refund</td>
+               <td class="dash">-</td>
+               <td class="check">&#10004;</td>
+            </tr>
+            <tr class="grisfonce">
+               <td><strong>Additional payment means</strong>:<br/>American Express, JCB, Diners, Paypal, Leetchi, Bancontact/Mistercash, Maestro, Cofinoga, etc.</td>
+               <td class="option">Option</td>
+               <td class="option">Option</td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+   <h3>The Verifone e-commerce solutions</h3>
+   <p>Verifone e-commerce puts at your disposal secured payment solutions for any selling channel you need:</p>
+   <img src="<?php echo $this->getViewFileUrl('Paybox_Epayment::images/multicanal.png'); ?>">
+</div>
