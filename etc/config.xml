@@ -49,7 +49,7 @@
             <pbxep_cb>
                 <active>1</active>
                 <model>Paybox\Epayment\Model\Payment\Cb</model>
-                <title>Paiement par carte bancaire</title>
+                <title>Pay by Bank Card</title>
                 <group>pbxep</group>
                 <is_gateway>1</is_gateway>
                 <can_order>1</can_order>
@@ -93,7 +93,7 @@
             <pbxep_threetime>
                 <active>0</active>
                 <model>Paybox\Epayment\Model\Payment\Threetime</model>
-                <title>Paiement en trois fois par carte bancaire</title>
+                <title>Pay by Card Three Times</title>
                 <group>pbxep</group>
                 <allowspecific>0</allowspecific>
                 <cctypes>CB,VISA,EUROCARD_MASTERCARD,E_CARD</cctypes>
@@ -133,7 +133,7 @@
             <pbxep_private>
                 <pv_active>0</pv_active>
                 <model>Paybox\Epayment\Model\Payment\PrivateCard</model>
-                <title>Paiement par carte privative</title>
+                <title>Pay by Private Card</title>
                 <group>pbxep</group>
                 <pv_allowspecific>0</pv_allowspecific>
                 <pv_status>
@@ -166,7 +166,7 @@
             <pbxep_paypal>
                 <pp_active>0</pp_active>
                 <model>Paybox\Epayment\Model\Payment\Paypal</model>
-                <title>Paiement par Paypal</title>
+                <title>Pay by Paypal</title>
                 <group>pbxep</group>
                 <pp_allowspecific>0</pp_allowspecific>
                 <pp_action>immediate</pp_action>
@@ -186,7 +186,7 @@
             <pbxep_prepaid>
                 <pre_active>0</pre_active>
                 <model>Paybox\Epayment\Model\Payment\Prepaid</model>
-                <title>Paiement par cagnotte ou ticket prépayé</title>
+                <title>Pay by Saving or Prepaid Ticket</title>
                 <group>pbxep</group>
                 <pre_allowspecific>0</pre_allowspecific>
                 <pre_action>immediate</pre_action>
@@ -212,7 +212,7 @@
             <pbxep_financial>
                 <active>0</active>
                 <model>Paybox\Epayment\Model\Payment\Financial</model>
-                <title>Paiement par carte et moyen de financement</title>
+                <title>Pay by Card and Means of Financing</title>
                 <group>pbxep</group>
                 <allowspecific>0</allowspecific>
                 <action>immediate</action>
@@ -244,7 +244,7 @@
             <pbxep_bcmc>
                 <active>0</active>
                 <model>Paybox\Epayment\Model\Payment\Bcmc</model>
-                <title>Paiement par Bancontact/Mistercash</title>
+                <title>Pay by Bancontact Mister Cash</title>
                 <group>pbxep</group>
                 <allowspecific>0</allowspecific>
                 <action>immediate</action>
@@ -265,7 +265,7 @@
             <pbxep_maestro>
                 <active>0</active>
                 <model>Paybox\Epayment\Model\Payment\Maestro</model>
-                <title>Paiement par carte Maestro</title>
+                <title>Pay by Maestro</title>
                 <group>pbxep</group>
                 <allowspecific>0</allowspecific>
                 <action>immediate</action>
@@ -287,7 +287,7 @@
             <pbxep_paybuttons>
                 <active>0</active>
                 <model>Paybox\Epayment\Model\Payment\Paybuttons</model>
-                <title>Paiement par Paybutton</title>
+                <title>Pay by Paybutton</title>
                 <group>pbxep</group>
                 <allowspecific>0</allowspecific>
                 <action>immediate</action>
