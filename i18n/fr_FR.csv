@@ -125,9 +125,9 @@
 "A coma separated list of Verifone e-commerce IPs.","Une liste des IPs Verifone e-commerce séparées par des virgules."
 "Enable some debugging information.","Active l'affichage d'informations de débogage supplémentaires."
 
-"Paybox System (Essential Pack)","Paybox System (Essential Pack)"
-"Paybox System + Paybox Direct (Flexible Pack)","Paybox System + Paybox Direct (Flexible Pack)"
-"Paybox System + Paybox Direct Plus (Flexible Pack)","Paybox System + Paybox Direct Plus (Flexible Pack)"
+"Paybox System (Essential Pack)","Pack Essentiel (Paybox System)"
+"Paybox System + Paybox Direct (Flexible Pack)","Pack Flexible (Paybox System + Direct)"
+"Paybox System + Paybox Direct Plus (Flexible Pack)","Pack Plus (Paybox System + Direct plus)"
 "Production","Production"
 "Test","Test"
 "Conditionnal","Sélectif"
