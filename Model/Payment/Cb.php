@@ -41,33 +41,33 @@ class Cb extends AbstractPayment
 
     public function toOptionArray()
     {
-        $result = array();
+        $result = [];
         $configPath = $this->getConfigPath();
         $cards = $this->_getConfigValue($configPath);
         if (!empty($cards)) {
             foreach ($cards as $code => $card) {
-                $result[] = array(
+                $result[] = [
                     'label' => __($card['label']),
                     'value' => $code,
-                );
+                ];
             }
         } else {
-            $result[] = array(
+            $result[] = [
                 'label' => __('CB'),
                 'value' => 'CB',
-            );
-            $result[] = array(
+            ];
+            $result[] = [
                 'label' => __('Visa'),
                 'value' => 'VISA',
-            );
-            $result[] = array(
+            ];
+            $result[] = [
                 'label' => __('Mastercard'),
                 'value' => 'EUROCARD_MASTERCARD',
-            );
-            $result[] = array(
+            ];
+            $result[] = [
                 'label' => __('E-Carte Bleue'),
                 'value' => 'E_CARD',
-            );
+            ];
         }
         return $result;
     }

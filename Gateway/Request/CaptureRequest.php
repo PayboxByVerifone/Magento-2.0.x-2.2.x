@@ -88,25 +88,24 @@ class CaptureRequest implements BuilderInterface
 
             switch ($txn->getTxnType()) {
                 // Already captured
-            case Transaction::TYPE_CAPTURE:
-                $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
-                if (!is_array($trxData)) {
-                    throw new \LogicException('No transaction found.');
-                }
+                case Transaction::TYPE_CAPTURE:
+                    $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
+                    if (!is_array($trxData)) {
+                        throw new \LogicException('No transaction found.');
+                    }
 
-                $payment->setTransactionId($txn->getTransactionId());
-                $payment->setIsTransactionClosed(0);
-                return $this;
+                    $payment->setTransactionId($txn->getTransactionId());
+                    $payment->setIsTransactionClosed(0);
+                    return $this;
 
-            case Transaction::TYPE_AUTH:
-                // Nothing to do
-                break;
+                case Transaction::TYPE_AUTH:
+                    // Nothing to do
+                    break;
 
-            default:
-                throw new \LogicException('Unsupported transaction type '.$txn->getTxnType());
+                default:
+                    throw new \LogicException('Unsupported transaction type '.$txn->getTxnType());
             }
-        }
-        else {
+        } else {
             // Otherwise, find the good transaction
             // Find capture transaction
             $txn = $this->getPayboxTransaction($payment, Transaction::TYPE_CAPTURE);
@@ -152,10 +151,15 @@ class CaptureRequest implements BuilderInterface
         // Transaction
         $type = Transaction::TYPE_CAPTURE;
         $captureTxn = $this->_addPayboxDirectTransaction(
-            $order, $type, $data, $close, [
+            $order,
+            $type,
+            $data,
+            $close,
+            [
                 self::CALL_NUMBER => $data['NUMTRANS'],
                 self::TRANSACTION_NUMBER => $data['NUMAPPEL'],
-            ], $txn
+            ],
+            $txn
         );
         $captureTxn->save();
         if ($close) {

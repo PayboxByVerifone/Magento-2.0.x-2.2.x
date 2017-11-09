@@ -30,10 +30,10 @@ class Status extends \Magento\Sales\Model\ResourceModel\Order\Status
         $result = [];
         if (is_array($this->_stateStatuses)) {
             foreach ($this->_stateStatuses as $status) {
-                $result[] = array('value' => $status, 'label' => __($status));
+                $result[] = ['value' => $status, 'label' => __($status)];
             }
         } else {
-            $result[] = array('value' => $this->_stateStatuses, 'label' => __($this->_stateStatuses));
+            $result[] = ['value' => $this->_stateStatuses, 'label' => __($this->_stateStatuses)];
         }
         return $result;
     }

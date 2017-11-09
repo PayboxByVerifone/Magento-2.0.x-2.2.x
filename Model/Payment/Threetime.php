@@ -45,33 +45,33 @@ class Threetime extends AbstractPayment
 
     public function toOptionArray()
     {
-        $result = array();
+        $result = [];
         $configPath = $this->getConfigPath();
         $cards = $this->_getConfigValue($configPath);
         if (!empty($cards)) {
             foreach ($cards as $code => $card) {
-                $result[] = array(
+                $result[] = [
                     'label' => __($card['label']),
                     'value' => $code,
-                );
+                ];
             }
         } else {
-            $result[] = array(
+            $result[] = [
                 'label' => __('CB'),
                 'value' => 'CB',
-            );
-            $result[] = array(
+            ];
+            $result[] = [
                 'label' => __('Visa'),
                 'value' => 'VISA',
-            );
-            $result[] = array(
+            ];
+            $result[] = [
                 'label' => __('Mastercard'),
                 'value' => 'EUROCARD_MASTERCARD',
-            );
-            $result[] = array(
+            ];
+            $result[] = [
                 'label' => __('E-Carte Bleue'),
                 'value' => 'E_CARD',
-            );
+            ];
         }
         return $result;
     }
@@ -89,10 +89,14 @@ class Threetime extends AbstractPayment
         // Create transaction
         $type = Transaction::TYPE_CAPTURE;
         $txn = $this->_addPayboxTransaction(
-            $order, $type, $data, true, array(
+            $order,
+            $type,
+            $data,
+            true,
+            [
             self::CALL_NUMBER => $data['call'],
             self::TRANSACTION_NUMBER => $data['transaction'],
-            )
+            ]
         );
 
         if (is_null($payment->getPbxepFirstPayment())) {
@@ -104,11 +108,11 @@ class Threetime extends AbstractPayment
             // Status
             $status = $this->getConfigPaidStatus();
             $state = Order::STATE_PROCESSING;
-            $allowedStates = array(
+            $allowedStates = [
                 Order::STATE_NEW,
                 Order::STATE_PENDING_PAYMENT,
                 Order::STATE_PROCESSING,
-            );
+            ];
             $current = $order->getState();
             if (in_array($current, $allowedStates)) {
                 $this->logDebug(sprintf('Order %s: Change status to %s', $order->getIncrementId(), $state));

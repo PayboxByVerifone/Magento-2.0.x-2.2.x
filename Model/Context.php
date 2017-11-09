@@ -37,7 +37,7 @@ class Context
 
     public static function generateToken(\Magento\Sales\Model\Order $order)
     {
-        $reference = array();
+        $reference = [];
         $reference[] = $order->getRealOrderId();
         $reference[] = $order->getCustomerName();
         $reference = implode(' - ', $reference);

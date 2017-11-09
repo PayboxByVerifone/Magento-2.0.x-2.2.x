@@ -41,7 +41,8 @@ define(
              */
             if (!customer.isLoggedIn()) {
                 serviceUrl = urlBuilder.createUrl(
-                    '/guest-carts/:cartId/selected-payment-method', {
+                    '/guest-carts/:cartId/selected-payment-method',
+                    {
                         cartId: quote.getQuoteId()
                     }
                 );
@@ -62,7 +63,8 @@ define(
             fullScreenLoader.startLoader();
 
             return storage.put(
-                serviceUrl, JSON.stringify(payload)
+                serviceUrl,
+                JSON.stringify(payload)
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);

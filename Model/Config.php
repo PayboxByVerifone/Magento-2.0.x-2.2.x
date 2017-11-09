@@ -32,8 +32,8 @@ class Config extends \Magento\Payment\Model\Config
     const SUBSCRIPTION_OFFER3 = 'plus';
 
     private $_store;
-    private $_configCache = array();
-    private $_configMapping = array(
+    private $_configCache = [];
+    private $_configMapping = [
         'allowedIps' => 'allowedips',
         'environment' => 'environment',
         'debug' => 'debug',
@@ -46,57 +46,62 @@ class Config extends \Magento\Payment\Model\Config
         'site' => 'merchant/site',
         'subscription' => 'merchant/subscription',
         'kwixoShipping' => 'kwixo/shipping'
-    );
-    private $_urls = array(
-        'system' => array(
-            'test' => array(
+    ];
+    private $_urls = [
+        'system' => [
+            'test' => [
                 'https://preprod-tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi'
-            ),
-            'production' => array(
+            ],
+            'production' => [
                 'https://tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi',
                 'https://tpeweb1.paybox.com/cgi/MYchoix_pagepaiement.cgi',
-            ),
-        ),
-        'responsive' => array(
-            'test' => array(
+            ],
+        ],
+        'responsive' => [
+            'test' => [
                 'https://preprod-tpeweb.paybox.com/cgi/FramepagepaiementRWD.cgi'
-            ),
-            'production' => array(
+            ],
+            'production' => [
                 'https://tpeweb.paybox.com/cgi/FramepagepaiementRWD.cgi',
                 'https://tpeweb1.paybox.com/cgi/FramepagepaiementRWD.cgi',
-            ),
-        ),
-        'kwixo' => array(
-            'test' => array(
+            ],
+        ],
+        'kwixo' => [
+            'test' => [
                 'https://preprod-tpeweb.paybox.com/php/'
-            ),
-            'production' => array(
+            ],
+            'production' => [
                 'https://tpeweb.paybox.com/php/',
                 'https://tpeweb1.paybox.com/php/',
-            ),
-        ),
-        'mobile' => array(
-            'test' => array(
+            ],
+        ],
+        'mobile' => [
+            'test' => [
                 'https://preprod-tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi'
-            ),
-            'production' => array(
+            ],
+            'production' => [
                 'https://tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi',
                 'https://tpeweb1.paybox.com/cgi/MYframepagepaiement_ip.cgi',
-            ),
-        ),
-        'direct' => array(
-            'test' => array(
+            ],
+        ],
+        'direct' => [
+            'test' => [
                 'https://preprod-ppps.paybox.com/PPPS.php'
-            ),
-            'production' => array(
+            ],
+            'production' => [
                 'https://ppps.paybox.com/PPPS.php',
                 'https://ppps1.paybox.com/PPPS.php',
-            ),
-        )
-    );
+            ],
+        ]
+    ];
 
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig, \Magento\Payment\Model\Method\Factory $paymentMethodFactory, \Magento\Framework\Locale\ResolverInterface $localeResolver, \Magento\Framework\Config\DataInterface $dataStorage, \Magento\Framework\Stdlib\DateTime\DateTime $date, \Magento\Framework\ObjectManagerInterface $objectManager
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Config\DataInterface $dataStorage,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
+        \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         parent::__construct($scopeConfig, $paymentMethodFactory, $localeResolver, $dataStorage, $date);
         $this->_dataStorage = $dataStorage;
@@ -153,7 +158,7 @@ class Config extends \Magento\Payment\Model\Config
         if (isset($this->_urls[$type][$environment])) {
             return $this->_urls[$type][$environment];
         }
-        return array();
+        return [];
     }
 
     public function getEnvironment()

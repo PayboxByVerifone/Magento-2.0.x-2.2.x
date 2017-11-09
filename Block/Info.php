@@ -50,8 +50,8 @@ class Info extends ConfigurableInfo
     protected function getValueView($field, $value)
     {
         switch ($field) {
-        case FraudHandler::FRAUD_MSG_LIST:
-            return implode('; ', $value);
+            case FraudHandler::FRAUD_MSG_LIST:
+                return implode('; ', $value);
         }
         return parent::getValueView($field, $value);
     }

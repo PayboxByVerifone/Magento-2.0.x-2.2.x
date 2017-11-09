@@ -32,36 +32,36 @@ class InstallSchema implements InstallSchemaInterface
         $setup->startSetup();
 
         $tableName = $setup->getTable('sales_order_payment');
-        $columns = array(
-            'pbxep_action' => array(
+        $columns = [
+            'pbxep_action' => [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                  'comment' => 'generic_suffix action',
-            ),
-            'pbxep_delay' => array(
+            ],
+            'pbxep_delay' => [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'comment' => 'generic_suffix delay',
-            ),
-            'pbxep_authorization' => array(
+            ],
+            'pbxep_authorization' => [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'comment' => 'generic_suffix _authorization',
-            ),
-            'pbxep_capture' => array(
+            ],
+            'pbxep_capture' => [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'comment' => 'generic_suffix capture',
-            ),
-            'pbxep_first_payment' => array(
+            ],
+            'pbxep_first_payment' => [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'comment' => 'generic_suffix first payment',
-            ),
-            'pbxep_second_payment' => array(
+            ],
+            'pbxep_second_payment' => [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'comment' => 'generic_suffix second _payment',
-            ),
-            'pbxep_third_payment' => array(
+            ],
+            'pbxep_third_payment' => [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'comment' => 'generic_suffix third _payment',
-            ),
-        );
+            ],
+        ];
 
         $connection = $setup->getConnection();
         foreach ($columns as $name => $definition) {

@@ -23,7 +23,7 @@ namespace Paybox\Epayment\Model;
 
 class Iso4217Currency
 {
-    private $_mapping = array(
+    private $_mapping = [
         'AED' => '784',
         'AFN' => '971',
         'ALL' => '008',
@@ -201,7 +201,7 @@ class Iso4217Currency
         'ZAR' => '710',
         'ZMK' => '894',
         'ZWL' => '932',
-    );
+    ];
 
     /**
      * Return ISO 4217 currency code from Magento currency code

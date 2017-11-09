@@ -27,7 +27,7 @@ use Paybox\Epayment\Model\Payment\AbstractPayment;
 
 class Paybox
 {
-    private $_currencyDecimals = array(
+    private $_currencyDecimals = [
         '008' => 2,
         '012' => 2,
         '032' => 2,
@@ -198,8 +198,8 @@ class Paybox
         '990' => 0,
         '997' => 2,
         '998' => 2,
-    );
-    private $_errorCode = array(
+    ];
+    private $_errorCode = [
         '00000' => 'Successful operation',
         '00001' => 'Payment system not available',
         '00003' => 'Paybor error',
@@ -216,8 +216,8 @@ class Paybox
         '00030' => 'Timeout',
         '00033' => 'Unauthorized IP country',
         '00040' => 'No 3-D Secure',
-    );
-    private $_resultMapping = array(
+    ];
+    private $_resultMapping = [
         'M' => 'amount',
         'R' => 'reference',
         'T' => 'call',
@@ -242,7 +242,7 @@ class Paybox
         'W' => 'date',
         'Y' => 'country',
         'Z' => 'paymentIndex',
-    );
+    ];
     protected $_objectManager = null;
     protected $_storeManager = null;
     protected $_urlInterface = null;
@@ -250,7 +250,10 @@ class Paybox
     protected $_logger = null;
 
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager, \Magento\Framework\UrlInterface $urlInterface, \Paybox\Epayment\Helper\Data $helper, \Psr\Log\LoggerInterface $logger
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\UrlInterface $urlInterface,
+        \Paybox\Epayment\Helper\Data $helper,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->_objectManager = $objectManager;
         $this->_urlInterface = $urlInterface;
@@ -262,7 +265,7 @@ class Paybox
 
     protected function _buildUrl($url)
     {
-        $url = $this->_urlInterface->getUrl($url, array('_secure' => true));
+        $url = $this->_urlInterface->getUrl($url, ['_secure' => true]);
         $url = $this->_urlInterface->sessionUrlVar($url);
         return $url;
     }
@@ -286,7 +289,7 @@ class Paybox
         }
 
         $now = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-        $fields = array(
+        $fields = [
             'ACTIVITE' => '024',
             'VERSION' => '00103',
             'CLE' => $config->getPassword(),
@@ -301,14 +304,14 @@ class Paybox
             'REFERENCE' => $this->tokenizeOrder($order),
             'SITE' => sprintf('%07d', $config->getSite()),
             'TYPE' => sprintf('%05d', (int) $type),
-        );
+        ];
 
         // Specific Paypal
         $details = $transaction->getAdditionalInformation(Transaction::RAW_DETAILS);
         switch ($details['cardType']) {
-        case 'PAYPAL':
-            $fields['ACQUEREUR'] = 'PAYPAL';
-            break;
+            case 'PAYPAL':
+                $fields['ACQUEREUR'] = 'PAYPAL';
+                break;
         }
 
         $urls = $config->getDirectUrls();
@@ -316,11 +319,12 @@ class Paybox
 
         // Init client
         $clt = new \Magento\Framework\HTTP\ZendClient(
-            $url, array(
+            $url,
+            [
             'maxredirects' => 0,
             'useragent' => 'Magento Verifone e-commerce module',
             'timeout' => 5,
-            )
+            ]
         );
         $clt->setMethod(\Magento\Framework\HTTP\ZendClient::POST);
         $clt->setRawData(http_build_query($fields));
@@ -330,7 +334,7 @@ class Paybox
 
         if ($response->isSuccessful()) {
             // Process result
-            $result = array();
+            $result = [];
             parse_str($response->getBody(), $result);
             return $result;
         }
@@ -345,12 +349,12 @@ class Paybox
 
         // URLs
         $baseUrl = 'pbxep/payment';
-        $values = array(
+        $values = [
             'PBX_ANNULE' => $this->_buildUrl($baseUrl . '/cancel'),
             'PBX_EFFECTUE' => $this->_buildUrl($baseUrl . '/success'),
             'PBX_REFUSE' => $this->_buildUrl($baseUrl . '/failed'),
             'PBX_REPONDRE_A' => $this->_buildUrl($baseUrl . '/ipn'),
-        );
+        ];
 
         // Merchant information
         $values['PBX_SITE'] = $config->getSite();
@@ -397,19 +401,19 @@ class Paybox
         } else {
             $values['PBX_TOTAL'] = sprintf('%03d', round($orderAmount * $amountScale));
             switch ($payment->getPayboxAction()) {
-            case AbstractPayment::PBXACTION_MANUAL:
-                $values['PBX_AUTOSEULE'] = 'O';
-                break;
+                case AbstractPayment::PBXACTION_MANUAL:
+                    $values['PBX_AUTOSEULE'] = 'O';
+                    break;
 
-            case AbstractPayment::PBXACTION_DEFERRED:
-                $delay = (int) $payment->getConfigData('delay');
-                if ($delay < 1) {
-                    $delay = 1;
-                } elseif ($delay > 7) {
-                    $delay = 7;
-                }
-                $values['PBX_DIFF'] = sprintf('%02d', $delay);
-                break;
+                case AbstractPayment::PBXACTION_DEFERRED:
+                    $delay = (int) $payment->getConfigData('delay');
+                    if ($delay < 1) {
+                        $delay = 1;
+                    } elseif ($delay > 7) {
+                        $delay = 7;
+                    }
+                        $values['PBX_DIFF'] = sprintf('%02d', $delay);
+                    break;
             }
         }
 
@@ -465,7 +469,7 @@ class Paybox
             $data_Paypal .= $this->cleanForPaypalData($address->getTelephone(), 20);
             $data_Paypal .= $separator;
             $items = $order->getAllVisibleItems();
-            $products = array();
+            $products = [];
             foreach ($items as $item) {
                 $products[] = $item->getName();
             }
@@ -524,11 +528,12 @@ class Paybox
     {
         // Init client
         $client = new \Magento\Framework\HTTP\ZendClient(
-            null, array(
+            null,
+            [
             'maxredirects' => 0,
             'useragent' => 'Magento Verifone e-commerce module',
             'timeout' => 5,
-            )
+            ]
         );
         $client->setMethod(\Magento\Framework\HTTP\ZendClient::GET);
 
@@ -553,7 +558,7 @@ class Paybox
 
     public function computeThreetimePayments($orderAmount, $amountScale)
     {
-        $values = array();
+        $values = [];
         // Compute each payment amount
         $step = round($orderAmount * $amountScale / 3);
         $firstStep = ($orderAmount * $amountScale) - 2 * $step;
@@ -576,7 +581,7 @@ class Paybox
 
     public function convertParams(array $params)
     {
-        $result = array();
+        $result = [];
         foreach ($this->_resultMapping as $param => $key) {
             if (isset($params[$param])) {
                 $result[$key] = utf8_encode($params[$param]);
@@ -667,7 +672,7 @@ class Paybox
         // Check signature if needed
         if ($checkSign) {
             // Extract signature
-            $matches = array();
+            $matches = [];
             if (!preg_match('#^(.*)&K=(.*)$#', $data, $matches)) {
                 throw new \LogicException("Error Processing Request");
                 (__('An unexpected error in Verifone e-commerce call has occured: missing signature.'));
@@ -691,7 +696,7 @@ class Paybox
             }
         }
 
-        $rawParams = array();
+        $rawParams = [];
         parse_str($data, $rawParams);
 
         // Decrypt params
@@ -770,7 +775,7 @@ class Paybox
         $config = $this->getConfig();
 
         // Serialize values
-        $query = array();
+        $query = [];
         foreach ($values as $name => $value) {
             $query[] = $name . '=' . $value;
         }
@@ -800,7 +805,7 @@ class Paybox
 
     public function tokenizeOrder(Order $order)
     {
-        $reference = array();
+        $reference = [];
         $reference[] = $order->getRealOrderId();
         $reference[] = $this->getBillingName($order);
         $reference = implode(' - ', $reference);

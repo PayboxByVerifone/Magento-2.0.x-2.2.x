@@ -61,7 +61,7 @@ abstract class AbstractPayment extends AbstractMethod
     protected $_countryFactory;
     protected $_minAmount = null;
     protected $_maxAmount = null;
-    protected $_supportedCurrencyCodes = array('USD', 'EUR');
+    protected $_supportedCurrencyCodes = ['USD', 'EUR'];
     protected $_debugReplacePrivateDataKeys = ['number', 'exp_month', 'exp_year', 'cvc'];
     // ! basics
 
@@ -92,10 +92,28 @@ abstract class AbstractPayment extends AbstractMethod
     protected $_logger = null;
 
     public function __construct(
-        \Magento\Framework\Model\Context $context, \Magento\Framework\Registry $registry, \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory, \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory, \Magento\Payment\Helper\Data $paymentData, \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig, \Magento\Payment\Model\Method\Logger $logger, \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null, \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null, array $data = []
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Payment\Model\Method\Logger $logger,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         parent::__construct(
-            $context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $resource, $resourceCollection, $data
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $paymentData,
+            $scopeConfig,
+            $logger,
+            $resource,
+            $resourceCollection,
+            $data
         );
 
         $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -126,7 +144,7 @@ abstract class AbstractPayment extends AbstractMethod
      * @param array                  $infos
      * @return Mage_Sales_Model_Order_Payment_Transaction
      */
-    protected function _addPayboxTransaction(Order $order, $type, array $data, $closed, array $infos = array())
+    protected function _addPayboxTransaction(Order $order, $type, array $data, $closed, array $infos = [])
     {
         $withCapture = $this->getConfigPaymentAction() != AbstractMethod::ACTION_AUTHORIZE;
 
@@ -291,27 +309,25 @@ abstract class AbstractPayment extends AbstractMethod
 
             switch ($txn->getTxnType()) {
                 // Already captured
-            case Transaction::TYPE_CAPTURE:
-                $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
-                if (!is_array($trxData)) {
-                    throw new \LogicException('No transaction found.');
-                }
+                case Transaction::TYPE_CAPTURE:
+                    $trxData = $txn->getAdditionalInformation(Transaction::RAW_DETAILS);
+                    if (!is_array($trxData)) {
+                        throw new \LogicException('No transaction found.');
+                    }
 
-                $payment->setTransactionId($txn->getTransactionId());
-                // $payment->setSkipTransactionCreation(true);
-                $payment->setIsTransactionClosed(0);
-                return $this;
+                    $payment->setTransactionId($txn->getTransactionId());
+                    // $payment->setSkipTransactionCreation(true);
+                    $payment->setIsTransactionClosed(0);
+                    return $this;
 
-            case Transaction::TYPE_AUTH:
-                // Nothing to do
-                break;
+                case Transaction::TYPE_AUTH:
+                    // Nothing to do
+                    break;
 
-            default:
-                throw new \LogicException('Unsupported transaction type ' . $txn->getTxnType());
+                default:
+                    throw new \LogicException('Unsupported transaction type ' . $txn->getTxnType());
             }
-        }
-
-        // Otherwise, find the good transaction
+        } // Otherwise, find the good transaction
         else {
             // Find capture transaction
             $txn = $this->getPayboxTransaction($payment, Transaction::TYPE_CAPTURE);
@@ -358,10 +374,15 @@ abstract class AbstractPayment extends AbstractMethod
         // Transaction
         $type = Transaction::TYPE_CAPTURE;
         $captureTxn = $this->_addPayboxDirectTransaction(
-            $order, $type, $data, $close, array(
+            $order,
+            $type,
+            $data,
+            $close,
+            [
             self::CALL_NUMBER => $data['NUMTRANS'],
             self::TRANSACTION_NUMBER => $data['NUMAPPEL'],
-            ), $txn
+            ],
+            $txn
         );
         $captureTxn->save();
         if ($close) {
@@ -398,7 +419,7 @@ abstract class AbstractPayment extends AbstractMethod
     public function checkIpnParams(Order $order, array $params)
     {
         // Check required parameters
-        $requiredParams = array('amount', 'transaction', 'error', 'reference', 'sign', 'date', 'time');
+        $requiredParams = ['amount', 'transaction', 'error', 'reference', 'sign', 'date', 'time'];
         foreach ($requiredParams as $requiredParam) {
             if (!isset($params[$requiredParam])) {
                 $message = __('Missing ' . $requiredParam . ' parameter in Verifone e-commerce call');
@@ -473,7 +494,7 @@ abstract class AbstractPayment extends AbstractMethod
 
     public function getOrderPlaceRedirectUrl()
     {
-        return $this->getUrl('pbxep/payment/redirect', array('_secure' => true));
+        return $this->getUrl('pbxep/payment/redirect', ['_secure' => true]);
     }
 
     public function getPayboxAction()
@@ -481,27 +502,27 @@ abstract class AbstractPayment extends AbstractMethod
         $config = $this->getPayboxConfig();
         $action = $this->getConfigData('action');
         switch ($action) {
-        case self::PBXACTION_DEFERRED:
-            if (!$this->getAllowDeferredDebit()) {
-                return self::PBXACTION_IMMEDIATE;
-            }
-            break;
-        case self::PBXACTION_IMMEDIATE:
-            if (!$this->getAllowImmediatDebit()) {
-                // Not possible
-                throw new \LogicException('Unexpected condition in getPayboxAction');
-            }
-            break;
-        case self::PBXACTION_MANUAL:
-            if ((($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER2)
+            case self::PBXACTION_DEFERRED:
+                if (!$this->getAllowDeferredDebit()) {
+                    return self::PBXACTION_IMMEDIATE;
+                }
+                break;
+            case self::PBXACTION_IMMEDIATE:
+                if (!$this->getAllowImmediatDebit()) {
+                    // Not possible
+                    throw new \LogicException('Unexpected condition in getPayboxAction');
+                }
+                break;
+            case self::PBXACTION_MANUAL:
+                if ((($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER2)
                 && ($config->getSubscription() != \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER3))
                 || !$this->getAllowManualDebit()
-            ) {
-                return self::PBXACTION_IMMEDIATE;
-            }
-            break;
-        default:
-            $action = self::PBXACTION_IMMEDIATE;
+                    ) {
+                        return self::PBXACTION_IMMEDIATE;
+                }
+                break;
+            default:
+                $action = self::PBXACTION_IMMEDIATE;
         }
         return $action;
     }
@@ -561,18 +582,18 @@ abstract class AbstractPayment extends AbstractMethod
 
         // Otherwise lets see the configuration
         switch ($this->getConfigData('tds_active')) {
-        case 'always':
-            return true;
-        case 'condition':
-            // Minimum order total
-            $value = $this->getConfigData('tds_min_order_total');
-            if (!empty($value)) {
-                $total = round($order->getGrandTotal(), 2);
-                if ($total >= round($value, 2)) {
-                    return true;
+            case 'always':
+                return true;
+            case 'condition':
+                // Minimum order total
+                $value = $this->getConfigData('tds_min_order_total');
+                if (!empty($value)) {
+                    $total = round($order->getGrandTotal(), 2);
+                    if ($total >= round($value, 2)) {
+                        return true;
+                    }
                 }
-            }
-            return false;
+                return false;
         }
 
         // Always off
@@ -673,7 +694,7 @@ abstract class AbstractPayment extends AbstractMethod
         $data['status'] = $message;
 
         // Transaction
-        $transaction = $this->_addPayboxDirectTransaction($order, Transaction::TYPE_REFUND, $data, true, array(), $txn);
+        $transaction = $this->_addPayboxDirectTransaction($order, Transaction::TYPE_REFUND, $data, true, [], $txn);
         $transaction->save();
 
         // Avoid automatic transaction creation
@@ -802,11 +823,9 @@ abstract class AbstractPayment extends AbstractMethod
             }
 
             // Payment success
-            if (in_array($params['error'], array('00000', '00200', '00201', '00300', '00301', '00302', '00303'))) {
+            if (in_array($params['error'], ['00000', '00200', '00201', '00300', '00301', '00302', '00303'])) {
                 $this->onIPNSuccess($order, $params);
-            }
-
-            // Payment refused
+            } // Payment refused
             else {
                 $this->onIPNFailed($order, $params);
             }
@@ -890,19 +909,19 @@ abstract class AbstractPayment extends AbstractMethod
             $message = 'Payment was authorized and captured by Verifone e-commerce.';
             $status = $this->getConfigPaidStatus();
             $state = Order::STATE_PROCESSING;
-            $allowedStates = array(
+            $allowedStates = [
                 Order::STATE_NEW,
                 Order::STATE_PENDING_PAYMENT,
                 Order::STATE_PROCESSING,
-            );
+            ];
         } else {
             $message = 'Payment was authorized by Verifone e-commerce.';
             $status = $this->getConfigAuthorizedStatus();
             $state = Order::STATE_PENDING_PAYMENT;
-            $allowedStates = array(
+            $allowedStates = [
                 Order::STATE_NEW,
                 Order::STATE_PENDING_PAYMENT,
-            );
+            ];
         }
         $data['status'] = $message;
 
@@ -915,10 +934,14 @@ abstract class AbstractPayment extends AbstractMethod
                 Transaction::TYPE_CAPTURE :
                 Transaction::TYPE_AUTH;
         $txn = $this->_addPayboxTransaction(
-            $order, $type, $data, $withCapture, array(
+            $order,
+            $type,
+            $data,
+            $withCapture,
+            [
             self::CALL_NUMBER => $data['call'],
             self::TRANSACTION_NUMBER => $data['transaction'],
-            )
+            ]
         );
 
         // Associate data to payment
