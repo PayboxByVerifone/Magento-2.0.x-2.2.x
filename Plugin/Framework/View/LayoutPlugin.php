@@ -12,7 +12,8 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- * @version   1.0.7-psr
+ * @version   1.0.8
+ * @since     1.0.8
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0

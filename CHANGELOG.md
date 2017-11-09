@@ -1,5 +1,20 @@
 # Change Log
 
+## [1.0.8] 2017-11-09
+
+### Corrections
+- Code : suppression des classes dans "Model/Resource/Payment" inutiles avec un namespace incorrect
+- FO - Cache : gestion mise en cache des pages (problématique si page en cache est une 404)
+- Code - Injection de dépendances : correction erreur de compilation et utilisation
+
+### Modifications
+- Branding : passage "Paybox by Verifone" à "Verifone e-commerce"
+- Traductions : termes manquants en anglais dans la configuration du module
+- Code : nettoyage PSR-2 et Magento Extension Quality Program Coding Standard
+
+### Ajouts
+- FO - Paiement : gabarit pour informations de paiement dans le détail commande et les e-mails client
+
 ## [1.0.7] 2017-07-04
 
 ### Corrections

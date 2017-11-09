@@ -12,7 +12,7 @@
  * support@paybox.com so we can mail you a copy immediately.
  *
  *
- * @version   1.0.5
+ * @version   1.0.8-meqp
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
