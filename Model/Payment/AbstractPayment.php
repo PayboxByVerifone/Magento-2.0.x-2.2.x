@@ -495,6 +495,8 @@ abstract class AbstractPayment extends AbstractMethod
     public function getOrderPlaceRedirectUrl()
     {
         return $this->getUrl('pbxep/payment/redirect', ['_secure' => true]);
+        // To not send *invoice* email (invoice != order)
+        // return false;
     }
 
     public function getPayboxAction()
