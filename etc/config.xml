@@ -29,8 +29,8 @@
                 <site>1999888</site>
                 <rank>77</rank>
                 <identifier>3262411</identifier>
-                <password>1999888I</password>
-                <hmackey>0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF</hmackey>
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted">1999888I</password>
+                <hmackey backend_model="Magento\Config\Model\Config\Backend\Encrypted">0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF</hmackey>
                 <hmacalgo>SHA512</hmacalgo>
             </merchant>
             <languages>
