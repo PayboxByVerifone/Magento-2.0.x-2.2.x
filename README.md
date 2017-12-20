@@ -36,3 +36,12 @@ En une seule intégration, offrez plusieurs méthodes de paiement, bénéficiez 
 Le paramétrage par défaut correspond à l'environnement de test Paybox où tous les modes de paiement sont disponibles et où toutes les cartes sont activables, aucun paiement réel ne sera effectué.
 
 Pour utiliser le module en réel en environnement de production, vous devez avoir souscrit un contrat auprès de Paybox, disposer de vos identifiants, configurer les options, modes de paiement et cartes en fonction de votre contrat.
+
+## Problèmes connus (known issues) 
+
+### Versions 2.2.1, 2.2.2
+La sauvegarde des paramètres du module dans le BackOffice pose problème (Account Settings): les champs `password` et `hmacalgo` étant réencryptés à chaque sauvegarde.
+
+### Problème en partie résolu sur Magento 2.3.x (2.3-dev)
+Commit 305bf94b7401065ea0aaf2c18af93ce7b8dfca15)
+Ces champs ne sont en effet plus réencryptés à la sauvegarde, mais ils ne sont plus lus du fichier de configuration (etc/config.xml)

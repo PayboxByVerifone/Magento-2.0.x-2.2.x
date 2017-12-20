@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.0.9] 2017-12-20
+
+### Modifications
+- Composer : Toutes versions de PHP 7.x
+- Composer : Suppression du 'require' pour magento/framework
+
 ## [1.0.8] 2017-11-09
 
 ### Corrections
