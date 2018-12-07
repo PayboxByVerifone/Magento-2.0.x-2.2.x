@@ -12,7 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- * @version   1.0.8-meqp
+ * @version   1.0.10
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -132,7 +132,7 @@ class Info extends ConfigurableInfo
         $config = $this->getPayboxConfig();
         if ($config->getSubscription() == \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER2 ||
             $config->getSubscription() == \Paybox\Epayment\Model\Config::SUBSCRIPTION_OFFER3) {
-            if ($info->getPbxepAction() == \Paybox\GenericPayment\Model\Payment\AbstractPayment::PBXACTION_MANUAL) {
+            if ($info->getPbxepAction() == \Paybox\Epayment\Model\Payment\AbstractPayment::PBXACTION_MANUAL) {
                 $order = $info->getOrder();
                 return empty($capture) && $order->canInvoice();
             }
