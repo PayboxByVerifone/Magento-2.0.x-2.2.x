@@ -841,8 +841,12 @@ abstract class AbstractPayment extends AbstractMethod
 
     /**
      * When an error has occured in the IPN handler
+     *
+     * 1.0.10 Fix incoherent Exception
+     *
+     * @version 1.0.10
      */
-    public function onIPNError(Order $order, array $data, \LogicException $e = null)
+    public function onIPNError(Order $order, array $data, \Exception $e = null)
     {
         $withCapture = $this->getConfigPaymentAction() != AbstractMethod::ACTION_AUTHORIZE;
 
