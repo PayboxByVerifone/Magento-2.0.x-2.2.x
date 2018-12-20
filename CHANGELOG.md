@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.0.10] 2018-12-20
+
+### Corrections
+- Code : Correction d'une erreur d'exception dans onIPNError()
+- Branding : Correction d'une classe nom colorisée
+
 ## [1.0.9] 2017-12-20
 
 ### Modifications
