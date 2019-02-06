@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.11] 2019-02-06
+
+### Corrections
+- BO : Correction du problème d'encryption des champs hmackey et password
+
 ## [1.0.10] 2018-12-20
 
 ### Corrections
