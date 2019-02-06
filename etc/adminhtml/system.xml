@@ -13,7 +13,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- * @version   1.0.5
+ * @version   1.0.11-hmac
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -83,7 +83,7 @@
                     <validate>required-entry validate-digits validate-length maximum-length-9</validate>
                     <config_path>pbxep/merchant/identifier</config_path>
                 </field>
-                <field id="hmackey" translate="label comment" type="text" sortOrder="50" showInDefault="1"
+                <field id="hmackey" translate="label comment" type="obscure" sortOrder="50" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>HMAC</label>
                     <comment><![CDATA[Secrete HMAC key to create using the Verifone e-commerce interface.]]></comment>
@@ -91,7 +91,7 @@
                     <config_path>pbxep/merchant/hmackey</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="password" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="password" translate="label comment" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Verifone e-commerce Back Office password</label>
                     <comment><![CDATA[Back Office password provided by Verifone e-commerce.]]></comment>
                     <validate>required-entry</validate>
@@ -101,7 +101,7 @@
                     <config_path>pbxep/merchant/password</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="passwordplus" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="passwordplus" translate="label comment" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Verifone e-commerce Back Office password</label>
                     <comment><![CDATA[Back Office password provided by Verifone e-commerce.]]></comment>
                     <validate>required-entry</validate>

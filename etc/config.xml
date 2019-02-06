@@ -13,7 +13,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- * @version   1.0.8
+ * @version   1.0.11-hmac
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -29,8 +29,8 @@
                 <site>1999888</site>
                 <rank>77</rank>
                 <identifier>3262411</identifier>
-                <password>1999888I</password>
-                <hmackey>0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF</hmackey>
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted">1999888I</password>
+                <hmackey backend_model="Magento\Config\Model\Config\Backend\Encrypted">0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF</hmackey>
                 <hmacalgo>SHA512</hmacalgo>
             </merchant>
             <languages>

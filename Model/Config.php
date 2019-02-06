@@ -12,7 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- * @version   1.0.8-meqp
+ * @version   1.0.11-hmac
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -174,13 +174,13 @@ class Config extends \Magento\Payment\Model\Config
     public function getHmacKey()
     {
         $value = $this->_getConfigValue('pbxep/merchant/hmackey');
-        return $this->_objectManager->get('Magento\Framework\Encryption\Encryptor')->decrypt($value);
+        return $value;
     }
 
     public function getPassword()
     {
         $value = $this->_getConfigValue('pbxep/merchant/password');
-        return $this->_objectManager->get('Magento\Framework\Encryption\Encryptor')->decrypt($value);
+        return $value;
     }
 
     public function getSystemUrls($environment = null)
