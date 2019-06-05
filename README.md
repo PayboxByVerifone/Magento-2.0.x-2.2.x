@@ -29,7 +29,7 @@ En une seule intégration, offrez plusieurs méthodes de paiement, bénéficiez 
     php bin/magento setup:static-content:deploy <lang> (exemple : fr_FR)
     ```
 
-5. Vous pouvez alors configurer le module dans votre Back Office via le nouvel onglet Paybox du menu Boutiques \ Configuration
+5. Vous pouvez alors configurer le module dans votre Back Office via le nouvel onglet Paybox du menu Boutiques \ Configuration. Il est important de bien rentrer vos identifants (mot de passe, clé HMAC) sans quoi il est possible qu'une erreur 500 s'affiche.
 
 ## Configuration
 
