@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.12] 2019-03-07
+
+### Corrections
+- [#] README Add note about error 500
+
 ## [1.0.11] 2019-02-06
 
 ### Corrections
