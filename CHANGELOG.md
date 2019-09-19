@@ -1,9 +1,10 @@
 # Change Log
 
-## [1.0.12] 2019-03-07
+## [1.0.13] 2019-09-19
 
 ### Corrections
-- [#] README Add note about error 500
+- FO : Correction de l'affichage des couleurs des logos de cartes
+- FO : Correction du message d'erreur si aucun moyen de paiement sélectionné
 
 ## [1.0.11] 2019-02-06
 
