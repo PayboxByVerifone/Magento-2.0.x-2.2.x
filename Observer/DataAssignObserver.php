@@ -12,7 +12,7 @@
  * to obtain it through the web, please send a note to
  * support@paybox.com so we can mail you a copy immediately.
  *
- * @version   1.0.7
+ * @version   1.0.13-exception
  * @author    BM Services <contact@bm-services.com>
  * @copyright 2012-2017 Verifone e-commerce
  * @license   http://opensource.org/licenses/OSL-3.0
@@ -50,15 +50,17 @@ class DataAssignObserver extends AbstractDataAssignObserver
 
         $cctype = $payment->getCcType();
         if (empty($cctype)) {
-            $errorMsg = 'Please select a valid credit card type';
-            throw new \LogicException(__($errorMsg));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please select a valid credit card type')
+            );
         }
 
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $selected = explode(',', $objectManager->get('Paybox\Epayment\Model\Ui\PbxepcbConfig')->getCards());
         if (!in_array($cctype, $selected)) {
-            $errorMsg = 'Please select a valid credit card type';
-            throw new \LogicException(__($errorMsg));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please select a valid credit card type')
+            );
         }
     }
 }
