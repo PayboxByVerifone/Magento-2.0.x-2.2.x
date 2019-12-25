@@ -21,7 +21,7 @@
 
 namespace Paybox\Epayment\Block\Checkout;
 
-class Payment
+class Payment extends \Magento\Framework\View\Element\Template
 {
     protected function _construct()
     {
